@@ -10,8 +10,6 @@ import net.thucydides.core.annotations.Step;
 @Component
 public class SanityAPI extends BaseAPI {
 
-  private RequestSpecification base;
-
   @Step
   public Response get() {
 
