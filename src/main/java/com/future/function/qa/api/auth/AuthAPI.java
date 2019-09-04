@@ -1,7 +1,10 @@
 package com.future.function.qa.api.auth;
 
+import static com.future.function.qa.util.Path.AUTH;
+
 import com.future.function.qa.api.BaseAPI;
 import com.future.function.qa.model.request.auth.AuthWebRequest;
+import io.restassured.http.ContentType;
 import io.restassured.http.Cookie;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -34,7 +37,7 @@ public class AuthAPI extends BaseAPI {
   public Response login(AuthWebRequest request) {
 
     return base.body(request)
-        .contentType("application/json")
+        .contentType(ContentType.JSON)
         .post();
   }
 
@@ -50,7 +53,7 @@ public class AuthAPI extends BaseAPI {
   public RequestSpecification prepare() {
 
     base = super.prepare()
-        .basePath("/api/core/auth");
+        .basePath(AUTH);
 
     return base;
   }
