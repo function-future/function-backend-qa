@@ -17,11 +17,18 @@ public abstract class BaseAPI extends ScenarioSteps {
   @Autowired
   private FunctionProperties functionProperties;
 
+  protected RequestSpecification base;
+
   protected RequestSpecification prepare() {
 
     return SerenityRest.given()
         .baseUri(String.format("%s:%s", functionProperties.getHost(), functionProperties.getPort()))
         .log()
         .all();
+  }
+
+  public String getCookieName() {
+
+    return functionProperties.getCookieName();
   }
 }
