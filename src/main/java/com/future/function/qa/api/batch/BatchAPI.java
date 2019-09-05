@@ -38,6 +38,52 @@ public class BatchAPI extends BaseAPI {
   }
 
   @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    if (cookie == null) {
+      return getWithoutCookie(page, size);
+    }
+
+    return getWithCookie(page, size, cookie);
+  }
+
+  private Response getWithCookie(int page, int size, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .queryParam("page", page)
+        .queryParam("size", size)
+        .get();
+  }
+
+  private Response getWithoutCookie(int page, int size) {
+
+    return base.queryParam("page", page)
+        .queryParam("size", size)
+        .get();
+  }
+
+  @Step
+  public Response getDetail(String id, Cookie cookie) {
+
+    if (cookie == null) {
+      return getDetailWithoutCookie(id);
+    }
+
+    return getDetailWithCookie(id, cookie);
+  }
+
+  private Response getDetailWithCookie(String id, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get(String.format(PATH_ID, id));
+  }
+
+  private Response getDetailWithoutCookie(String id) {
+
+    return base.get(String.format(PATH_ID, id));
+  }
+
+  @Step
   @Override
   public RequestSpecification prepare() {
 

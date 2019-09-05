@@ -14,6 +14,8 @@ import net.thucydides.core.steps.ScenarioSteps;
     initializers = ConfigFileApplicationContextInitializer.class)
 public abstract class BaseAPI extends ScenarioSteps {
 
+  protected static final String PATH_ID = "/%s";
+
   protected RequestSpecification base;
 
   @Autowired
