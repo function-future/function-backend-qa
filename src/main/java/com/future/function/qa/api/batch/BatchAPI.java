@@ -38,6 +38,31 @@ public class BatchAPI extends BaseAPI {
   }
 
   @Step
+  public Response edit(BatchWebRequest request, Cookie cookie) {
+
+    if (cookie == null) {
+      return editBatchWithoutCookie(request);
+    }
+
+    return editBatchWithCookie(request, cookie);
+  }
+
+  private Response editBatchWithCookie(BatchWebRequest request, Cookie cookie) {
+
+    return base.body(request)
+        .contentType(ContentType.JSON)
+        .cookie(cookie)
+        .put(String.format(PATH_ID, request.getId()));
+  }
+
+  private Response editBatchWithoutCookie(BatchWebRequest request) {
+
+    return base.body(request)
+        .contentType(ContentType.JSON)
+        .put(String.format(PATH_ID, request.getId()));
+  }
+
+  @Step
   public Response get(int page, int size, Cookie cookie) {
 
     if (cookie == null) {

@@ -120,6 +120,18 @@ public class BatchSteps extends BaseSteps {
     batchData.setResponse(response);
   }
 
+  @And("^user hit edit batch endpoint with recorded id and name \"([^\"]*)\" and code \"([^\"]*)\"$")
+  public void userHitEditBatchEndpointWithRecordedIdAndNameAndCode(String name, String code) throws Throwable {
+
+    DataResponse<BatchWebResponse> createdResponse = batchData.getSingleResponse();
+    BatchWebResponse createdResponseData = createdResponse.getData();
+
+    Response response =
+        batchAPI.edit(batchData.createRequest(createdResponseData.getId(), name, code), authData.getCookie());
+
+    batchData.setResponse(response);
+  }
+
   @Given("^user prepare batch request$")
   public void userPrepareBatchRequest() throws Throwable {
 
