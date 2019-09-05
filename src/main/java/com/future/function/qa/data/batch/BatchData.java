@@ -44,7 +44,7 @@ public class BatchData extends BaseData {
   }
 
   @Override
-  protected void setResponse(Response response) {
+  public void setResponse(Response response) {
 
     super.setResponse(response);
     this.pagedResponse = asPagingResponse(response, new TypeReference<PagingResponse<BatchWebResponse>>() {});
