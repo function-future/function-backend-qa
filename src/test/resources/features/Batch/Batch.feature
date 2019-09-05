@@ -118,3 +118,18 @@ Feature: Batch
     Then batch response code should be 200
     And batch response's name should be "Batch Name 6 Updated"
     And batch response's code should be "Batch6Updated"
+
+  @Negative @Batch
+  Scenario: Delete batch without being logged in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit delete batch endpoint with recorded id
+    Then batch response code should be 401
+
+  @Positive @Batch
+  Scenario: Delete batch after logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "Batch Name 7" and code "Batch7"
+    And user hit delete batch endpoint with recorded id
+    Then batch response code should be 200

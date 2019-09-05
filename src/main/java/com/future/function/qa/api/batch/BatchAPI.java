@@ -38,6 +38,27 @@ public class BatchAPI extends BaseAPI {
   }
 
   @Step
+  public Response delete(String id, Cookie cookie) {
+
+    if (cookie == null) {
+      return deleteBatchWithoutCookie(id);
+    }
+
+    return deleteBatchWithCookie(id, cookie);
+  }
+
+  private Response deleteBatchWithCookie(String id, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .delete(String.format(PATH_ID, id));
+  }
+
+  private Response deleteBatchWithoutCookie(String id) {
+
+    return base.delete(String.format(PATH_ID, id));
+  }
+
+  @Step
   public Response edit(BatchWebRequest request, Cookie cookie) {
 
     if (cookie == null) {

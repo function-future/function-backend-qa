@@ -120,6 +120,17 @@ public class BatchSteps extends BaseSteps {
     batchData.setResponse(response);
   }
 
+  @And("^user hit delete batch endpoint with recorded id$")
+  public void userHitDeleteBatchEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<BatchWebResponse> createdResponse = batchData.getSingleResponse();
+    BatchWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = batchAPI.delete(createdResponseData.getId(), authData.getCookie());
+
+    batchData.setResponse(response);
+  }
+
   @And("^user hit edit batch endpoint with recorded id and name \"([^\"]*)\" and code \"([^\"]*)\"$")
   public void userHitEditBatchEndpointWithRecordedIdAndNameAndCode(String name, String code) throws Throwable {
 
