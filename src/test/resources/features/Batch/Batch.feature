@@ -6,7 +6,9 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Create batch without logging in
-    When user hit create batch endpoint with name "Batch Name" and code "Batch3"
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit create batch endpoint with name "Batch Name" and code "Batch3"
     Then batch response code should be 401
 
   @Negative @Batch
@@ -77,3 +79,42 @@ Feature: Batch
     Then batch response code should be 200
     And batch response's name should be "Batch Name 5"
     And batch response's code should be "Batch5"
+
+  @Negative @Batch
+  Scenario: Edit batch without being logged in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit edit batch endpoint with recorded id and name "Batch Name 5 Updated" and code "Batch5Updated"
+    Then batch response code should be 401
+
+  @Negative @Batch
+  Scenario: Edit batch with empty name and empty code after logging in as admin
+    And user prepare auth request
+    When user hit logout endpoint
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "" and code ""
+    Then batch response code should be 400
+    And batch error response has key "name" and value "NotBlank"
+    And batch error response has key "code" and value "NotBlank"
+    And batch error response has key "code" and value "Alphanumeric"
+
+  @Negative @Batch
+  Scenario: Edit batch with name and code has space and non alphanumeric after logging in as admin
+    And user prepare auth request
+    When user hit logout endpoint
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "Batch Name 6" and code "Batch 6~"
+    Then batch response code should be 400
+    And batch error response has key "code" and value "NoSpace"
+    And batch error response has key "code" and value "Alphanumeric"
+
+  @Positive @Batch
+  Scenario: Edit batch after logging in as admin
+    And user prepare auth request
+    And user hit logout endpoint
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "Batch Name 6" and code "Batch6"
+    And user hit edit batch endpoint with recorded id and name "Batch Name 6 Updated" and code "Batch6Updated"
+    Then batch response code should be 200
+    And batch response's name should be "Batch Name 6 Updated"
+    And batch response's code should be "Batch6Updated"
