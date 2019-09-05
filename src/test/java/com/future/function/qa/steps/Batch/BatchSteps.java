@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.future.function.qa.api.batch.BatchAPI;
 import com.future.function.qa.data.auth.AuthData;
 import com.future.function.qa.data.batch.BatchData;
+import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
+import com.future.function.qa.model.response.batch.BatchWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -47,6 +49,67 @@ public class BatchSteps extends BaseSteps {
   public void batchResponseCodeShouldBe(int responseCode) throws Throwable {
 
     assertThat(batchData.getResponseCode(), equalTo(responseCode));
+  }
+
+  @And("^batch response's code should be \"([^\"]*)\"$")
+  public void batchResponseSCodeShouldBe(String expectedCode) throws Throwable {
+
+    DataResponse<BatchWebResponse> retrievedResponse = batchData.getSingleResponse();
+    BatchWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getCode(), equalTo(expectedCode));
+  }
+
+  @And("^batch response's name should be \"([^\"]*)\"$")
+  public void batchResponseSNameShouldBe(String expectedName) throws Throwable {
+
+    DataResponse<BatchWebResponse> retrievedResponse = batchData.getSingleResponse();
+    BatchWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getName(), equalTo(expectedName));
+  }
+
+  @And("^batch response should contain code \"([^\"]*)\"$")
+  public void batchResponseShouldContainCode(String expectedCode) throws Throwable {
+
+    boolean isAnyCodeMatchingExpectedCode = batchData.getPagedResponse()
+        .getData()
+        .stream()
+        .map(BatchWebResponse::getCode)
+        .anyMatch(batchCode -> batchCode.equals(expectedCode));
+
+    assertThat(isAnyCodeMatchingExpectedCode, equalTo(true));
+  }
+
+  @And("^batch response should contain name \"([^\"]*)\"$")
+  public void batchResponseShouldContainName(String expectedName) throws Throwable {
+
+    boolean isAnyNameMatchingExpectedName = batchData.getPagedResponse()
+        .getData()
+        .stream()
+        .map(BatchWebResponse::getName)
+        .anyMatch(batchName -> batchName.equals(expectedName));
+
+    assertThat(isAnyNameMatchingExpectedName, equalTo(true));
+  }
+
+  @When("^user hit batch detail endpoint with recorded id$")
+  public void userHitBatchDetailEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<BatchWebResponse> createdResponse = batchData.getSingleResponse();
+    BatchWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = batchAPI.getDetail(createdResponseData.getId(), authData.getCookie());
+
+    batchData.setResponse(response);
+  }
+
+  @When("^user hit batch endpoint with page (\\d+) and size (\\d+)$")
+  public void userHitBatchEndpointWithPageAndSize(int page, int size) throws Throwable {
+
+    Response response = batchAPI.get(page, size, authData.getCookie());
+
+    batchData.setResponse(response);
   }
 
   @When("^user hit create batch endpoint with name \"([^\"]*)\" and code \"([^\"]*)\"$")
