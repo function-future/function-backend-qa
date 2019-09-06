@@ -15,11 +15,7 @@ public class AuthAPI extends BaseAPI {
   @Step
   public Response getLoginStatus(Cookie cookie) {
 
-    if (cookie == null) {
-      return getLoginStatusWithoutCookie();
-    }
-
-    return getLoginStatusWithCookie(cookie);
+    return doByCookiePresent(cookie, () -> getLoginStatusWithCookie(cookie), this::getLoginStatusWithoutCookie);
   }
 
   private Response getLoginStatusWithCookie(Cookie cookie) {
