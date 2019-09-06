@@ -32,7 +32,7 @@ public abstract class BaseAPI extends ScenarioSteps {
       return supplierWithoutCookie.get();
     }
 
-    return supplierWithoutCookie.get();
+    return supplierWithCookie.get();
   }
 
   public String getCookieName() {
