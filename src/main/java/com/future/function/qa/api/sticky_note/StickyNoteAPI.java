@@ -15,11 +15,8 @@ public class StickyNoteAPI extends BaseAPI {
   @Step
   public Response createStickyNote(StickyNoteWebRequest request, Cookie cookie) {
 
-    if (cookie == null) {
-      return createStickyNoteWithoutCookie(request);
-    }
-
-    return createStickyNoteWithCookie(request, cookie);
+    return doByCookiePresent(cookie, () -> createStickyNoteWithCookie(request, cookie),
+        () -> createStickyNoteWithoutCookie(request));
   }
 
   private Response createStickyNoteWithCookie(StickyNoteWebRequest request, Cookie cookie) {

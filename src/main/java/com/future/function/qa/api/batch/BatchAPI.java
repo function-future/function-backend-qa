@@ -15,11 +15,8 @@ public class BatchAPI extends BaseAPI {
   @Step
   public Response create(BatchWebRequest request, Cookie cookie) {
 
-    if (cookie == null) {
-      return createBatchWithoutCookie(request);
-    }
-
-    return createBatchWithCookie(request, cookie);
+    return doByCookiePresent(cookie, () -> createBatchWithCookie(request, cookie),
+        () -> createBatchWithoutCookie(request));
   }
 
   private Response createBatchWithCookie(BatchWebRequest request, Cookie cookie) {
@@ -40,11 +37,7 @@ public class BatchAPI extends BaseAPI {
   @Step
   public Response delete(String id, Cookie cookie) {
 
-    if (cookie == null) {
-      return deleteBatchWithoutCookie(id);
-    }
-
-    return deleteBatchWithCookie(id, cookie);
+    return doByCookiePresent(cookie, () -> deleteBatchWithCookie(id, cookie), () -> deleteBatchWithoutCookie(id));
   }
 
   private Response deleteBatchWithCookie(String id, Cookie cookie) {
@@ -61,11 +54,7 @@ public class BatchAPI extends BaseAPI {
   @Step
   public Response edit(BatchWebRequest request, Cookie cookie) {
 
-    if (cookie == null) {
-      return editBatchWithoutCookie(request);
-    }
-
-    return editBatchWithCookie(request, cookie);
+    return doByCookiePresent(cookie, () -> editBatchWithCookie(request, cookie), () -> editBatchWithoutCookie(request));
   }
 
   private Response editBatchWithCookie(BatchWebRequest request, Cookie cookie) {
@@ -86,11 +75,7 @@ public class BatchAPI extends BaseAPI {
   @Step
   public Response get(int page, int size, Cookie cookie) {
 
-    if (cookie == null) {
-      return getWithoutCookie(page, size);
-    }
-
-    return getWithCookie(page, size, cookie);
+    return doByCookiePresent(cookie, () -> getWithCookie(page, size, cookie), () -> getWithoutCookie(page, size));
   }
 
   private Response getWithCookie(int page, int size, Cookie cookie) {
@@ -111,11 +96,7 @@ public class BatchAPI extends BaseAPI {
   @Step
   public Response getDetail(String id, Cookie cookie) {
 
-    if (cookie == null) {
-      return getDetailWithoutCookie(id);
-    }
-
-    return getDetailWithCookie(id, cookie);
+    return doByCookiePresent(cookie, () -> getDetailWithCookie(id, cookie), () -> getDetailWithoutCookie(id));
   }
 
   private Response getDetailWithCookie(String id, Cookie cookie) {
