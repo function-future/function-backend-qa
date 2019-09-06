@@ -1,7 +1,5 @@
 package com.future.function.qa.steps.Auth;
 
-import static com.future.function.qa.data.BaseData.asBaseResponse;
-import static com.future.function.qa.data.BaseData.asDataResponse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -9,8 +7,10 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.api.auth.AuthAPI;
 import com.future.function.qa.data.auth.AuthData;
+import com.future.function.qa.model.response.auth.AuthWebResponse;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.java.en.Given;
@@ -53,7 +53,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.login(authData.createRequest(email, password));
 
-    authData.setResponse(asDataResponse(response));
+    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
     authData.setCookie(response.getDetailedCookie(authAPI.getCookieName()));
   }
 
@@ -62,7 +62,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.getLoginStatus(authData.getCookie());
 
-    authData.setResponse(asDataResponse(response));
+    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
   }
 
   @When("^user hit auth endpoint with cookie$")
@@ -70,7 +70,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.getLoginStatus(authData.getCookie());
 
-    authData.setResponse(asDataResponse(response));
+    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
     authData.setCookie(response.getDetailedCookie(authAPI.getCookieName()));
   }
 
@@ -79,7 +79,8 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.logout(authData.getCookie());
 
-    authData.setResponseCode(asBaseResponse(response).getCode());
+    authData.setResponseCode(authData.asBaseResponse(response)
+        .getCode());
     authData.setCookie(response.getDetailedCookie(authAPI.getCookieName()));
   }
 

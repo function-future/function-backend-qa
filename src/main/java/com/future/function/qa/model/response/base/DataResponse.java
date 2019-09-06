@@ -10,7 +10,9 @@ public class DataResponse<T> extends BaseResponse {
 
   private T data;
 
-  public DataResponse() {}
+  public DataResponse() {
+
+  }
 
   @Builder
   private DataResponse(int code, String status, T data) {
@@ -18,5 +20,4 @@ public class DataResponse<T> extends BaseResponse {
     super(code, status);
     this.data = data;
   }
-
 }
