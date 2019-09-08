@@ -1,0 +1,2 @@
+@Resource @Regression
+Feature: Resource
