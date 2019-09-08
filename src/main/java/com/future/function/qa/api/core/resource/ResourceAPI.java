@@ -14,6 +14,12 @@ import net.thucydides.core.annotations.Step;
 public class ResourceAPI extends BaseAPI {
 
   @Step
+  public Response get(String uri) {
+
+    return base.get(uri);
+  }
+
+  @Step
   public Response post(String varName, File file, String origin, Cookie cookie) {
 
     return doByCookiePresent(cookie, postResourceWithCookie(varName, file, origin, cookie),
