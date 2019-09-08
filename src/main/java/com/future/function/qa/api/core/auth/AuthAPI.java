@@ -2,6 +2,8 @@ package com.future.function.qa.api.core.auth;
 
 import static com.future.function.qa.util.Path.AUTH;
 
+import java.util.function.Supplier;
+
 import com.future.function.qa.api.BaseAPI;
 import com.future.function.qa.model.request.core.auth.AuthWebRequest;
 import io.restassured.http.ContentType;
@@ -15,18 +17,18 @@ public class AuthAPI extends BaseAPI {
   @Step
   public Response getLoginStatus(Cookie cookie) {
 
-    return doByCookiePresent(cookie, () -> getLoginStatusWithCookie(cookie), this::getLoginStatusWithoutCookie);
+    return doByCookiePresent(cookie, getLoginStatusWithCookie(cookie), getLoginStatusWithoutCookie());
   }
 
-  private Response getLoginStatusWithCookie(Cookie cookie) {
+  private Supplier<Response> getLoginStatusWithCookie(Cookie cookie) {
 
-    return base.cookie(cookie)
+    return () -> base.cookie(cookie)
         .get();
   }
 
-  private Response getLoginStatusWithoutCookie() {
+  private Supplier<Response> getLoginStatusWithoutCookie() {
 
-    return base.get();
+    return () -> base.get();
   }
 
   @Step
@@ -40,8 +42,18 @@ public class AuthAPI extends BaseAPI {
   @Step
   public Response logout(Cookie cookie) {
 
-    return base.cookie(cookie)
+    return doByCookiePresent(cookie, logoutWithCookie(cookie), logoutWithoutCookie());
+  }
+
+  private Supplier<Response> logoutWithCookie(Cookie cookie) {
+
+    return () -> base.cookie(cookie)
         .delete();
+  }
+
+  private Supplier<Response> logoutWithoutCookie() {
+
+    return () -> base.delete();
   }
 
   @Step
