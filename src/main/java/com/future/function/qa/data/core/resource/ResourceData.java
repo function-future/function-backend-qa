@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class ResourceData extends BaseData {
 
+  private byte[] bytes;
+
   private DataResponse<FileContentWebResponse> createdResponse = new DataResponse<>();
 
   private File file;
@@ -40,5 +42,12 @@ public class ResourceData extends BaseData {
 
     super.setResponse(response);
     this.createdResponse = asDataResponse(response, new TypeReference<DataResponse<FileContentWebResponse>>() {});
+    this.bytes = asBytes(response);
+  }
+
+  private byte[] asBytes(Response response) {
+
+    return response.body()
+        .asByteArray();
   }
 }

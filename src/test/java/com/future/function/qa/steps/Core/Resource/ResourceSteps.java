@@ -1,11 +1,14 @@
 package com.future.function.qa.steps.Core.Resource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,12 @@ public class ResourceSteps extends BaseSteps {
   @Autowired
   private ResourceData resourceData;
 
+  @Then("^resource response body as bytes should not be empty$")
+  public void resourceResponseBodyAsBytesShouldNotBeEmpty() throws Throwable {
+
+    assertThat(Arrays.asList(resourceData.getBytes()), not(empty()));
+  }
+
   @Then("^resource response code should be (\\d+)$")
   public void resourceResponseCodeShouldBe(int responseCode) throws Throwable {
 
@@ -61,6 +70,19 @@ public class ResourceSteps extends BaseSteps {
     Map<String, String> fileData = (Map<String, String>) createdResponseData.getFile();
 
     assertThat(fileData.get(path), nullValue());
+  }
+
+  @And("^user get last uploaded file path \"([^\"]*)\"$")
+  public void userGetLastUploadedFilePath(String path) throws Throwable {
+
+    DataResponse<FileContentWebResponse> createdResponse = resourceData.getCreatedResponse();
+    FileContentWebResponse createdResponseData = createdResponse.getData();
+
+    Map<String, String> fileData = (Map<String, String>) createdResponseData.getFile();
+
+    Response response = resourceAPI.get(fileData.get(path));
+
+    resourceData.setResponse(response);
   }
 
   @And("^user hit post resource endpoint$")
