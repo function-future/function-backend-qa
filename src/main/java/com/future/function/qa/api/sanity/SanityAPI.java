@@ -17,6 +17,7 @@ public class SanityAPI extends BaseAPI {
   }
 
   @Step
+  @Override
   public RequestSpecification prepare() {
 
     base = super.prepare()
