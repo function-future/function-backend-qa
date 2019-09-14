@@ -13,7 +13,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.future.function.qa.api.core.sticky_note.StickyNoteAPI;
-import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.core.sticky_note.StickyNoteData;
 import com.future.function.qa.model.response.base.ErrorResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
@@ -27,9 +26,6 @@ import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
 
 public class StickyNoteSteps extends BaseSteps {
-
-  @Autowired
-  private AuthData authData;
 
   @Steps
   private StickyNoteAPI stickyNoteAPI;
