@@ -9,4 +9,6 @@ public interface Path {
   String RESOURCE = "/api/core/resources";
 
   String STICKY_NOTE = "/api/core/sticky-notes";
+
+  String USER = "/api/core/users";
 }
