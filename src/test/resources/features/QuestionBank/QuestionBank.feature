@@ -9,14 +9,14 @@ Feature: Question Bank
     And user prepare auth request
     When user hit logout endpoint
     And user hit create question bank endpoint with title "QA Title" and description "QA Description"
-    Then question bank response code should be 401
+    Then question bank error response code should be 401
 
   @Negative @QuestionBank
   Scenario: Create question bank with empty title and description after logging in as admin
     And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create question bank endpoint with title "" and description ""
-    Then question bank response code should be 400
+    Then question bank error response code should be 400
     And question bank error response has key "title" and value "NotBlank"
     And question bank error response has key "description" and value "NotBlank"
 
@@ -30,6 +30,21 @@ Feature: Question Bank
     And question bank response data has description "QA Description 1"
     And question bank response data has id that should not be blank or null
 
+  @Negative @QuestionBank
+  Scenario: Get question bank without logging in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit get question bank endpoint with id of previous created data
+    Then question bank error response code should be 401
+
+  @Negative @QuestionBank
+  Scenario: Get question bank with random id
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get question bank endpoint with id "id"
+    Then question bank error response code should be 404
+    And question bank error response status should be "NOT_FOUND"
+
   @Positive @QuestionBank
   Scenario: Get question bank after logging in as admin
     And user prepare auth request
@@ -40,26 +55,36 @@ Feature: Question Bank
     And question bank response data has description "QA Description 1"
 
   @Negative @QuestionBank
-  Scenario: Get question bank without logging in
+  Scenario: Update question bank without logging in
     And user prepare auth request
     When user hit logout endpoint
-    And user hit get question bank endpoint with id of previous created data
-    Then question bank response code should be 401
+    And user hit update question bank endpoint with id of previous created data, title "", and description ""
+    Then question bank error response code should be 401
 
-  @Negative @QuestionBank
-  Scenario: Get question bank with random id
+  @Positive @QuestionBank
+  Scenario: Update question bank after logging in as admin
     And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And user hit get question bank endpoint with id "id"
-    Then question bank response code should be 404
-    And question bank response status should be "NOT_FOUND"
+    And user hit update question bank endpoint with id of previous created data, title "QA Title 2", and description "QA Description 2"
+    Then question bank response code should be 200
+    And question bank response data has title "QA Title 2"
+    And question bank response data has description "QA Description 2"
+
+  @Negative @QuestionBank
+  Scenario: Update question bank with empty title and description after logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit update question bank endpoint with id of previous created data, title "", and description ""
+    Then question bank error response code should be 400
+    And question bank error response has key "title" and value "NotBlank"
+    And question bank error response has key "description" and value "NotBlank"
 
   @Negative @QuestionBank
   Scenario: Get all question banks without logging in
     And user prepare auth request
     When user hit logout endpoint
     And user hit get all question banks endpoint
-    Then question bank paging response code should be 401
+    Then question bank error response code should be 401
 
   @Positive @QuestionBank
   Scenario: Get all question banks with logging in as admin

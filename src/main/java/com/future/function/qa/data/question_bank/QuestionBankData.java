@@ -7,6 +7,8 @@ import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;
 import io.restassured.response.Response;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,7 +45,13 @@ public class QuestionBankData extends BaseData {
   @Override
   public void setResponse(Response response) {
     super.setResponse(response);
-    this.pagedResponse = asPagingResponse(response, new TypeReference<PagingResponse<QuestionBankWebResponse>>() {});
-    this.singleResponse = asDataResponse(response, new TypeReference<DataResponse<QuestionBankWebResponse>>() {});
+    this.pagedResponse = Optional.of(response)
+        .map(res -> asPagingResponse(res, new TypeReference<PagingResponse<QuestionBankWebResponse>>() {}))
+        .filter(res -> Objects.nonNull(res.getData()))
+        .orElse(this.pagedResponse);
+    this.singleResponse = Optional.of(response)
+        .map(res -> asDataResponse(res, new TypeReference<DataResponse<QuestionBankWebResponse>>() {}))
+        .filter(res -> Objects.nonNull(res.getData()))
+        .orElse(this.singleResponse);
   }
 }

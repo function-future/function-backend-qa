@@ -3,6 +3,7 @@ package com.future.function.qa.steps.Scoring.QuestionBank;
 import com.future.function.qa.api.question_bank.QuestionBankAPI;
 import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.question_bank.QuestionBankData;
+import com.future.function.qa.model.request.question_bank.QuestionBankWebRequest;
 import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.PendingException;
@@ -124,5 +125,23 @@ public class QuestionBankSteps extends BaseSteps {
   public void questionBankPagingResponseDataSizeShouldBeMoreThan(int arg0) {
     boolean isSizeZero = questionBankData.getPagedResponse().getData().size() > 0;
     assertTrue(isSizeZero);
+  }
+
+  @And("^user hit update question bank endpoint with id of previous created data, title \"([^\"]*)\", and description \"([^\"]*)\"$")
+  public void userHitUpdateQuestionBankEndpointWithIdOfPreviousCreatedDataTitleAndDescription(String arg0, String arg1) throws Throwable {
+    QuestionBankWebRequest request = questionBankData.createRequest(null, arg0, arg1);
+    String id = questionBankData.getSingleResponse().getData().getId();
+    Response response = questionBankAPI.updateQuestionBank(id, request, authData.getCookie());
+    questionBankData.setResponse(response);
+  }
+
+  @Then("^question bank error response code should be (\\d+)$")
+  public void questionBankErrorResponseCodeShouldBe(int arg0) {
+    assertEquals(arg0, questionBankData.getErrorResponse().getCode());
+  }
+
+  @And("^question bank error response status should be \"([^\"]*)\"$")
+  public void questionBankErrorResponseStatusShouldBe(String arg0) throws Throwable {
+    assertEquals(arg0, questionBankData.getErrorResponse().getStatus());
   }
 }

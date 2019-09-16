@@ -76,4 +76,27 @@ public class QuestionBankAPI extends BaseAPI {
   private Response getAllWithoutCookie() {
     return base.get();
   }
+
+  @Step
+  public Response updateQuestionBank(String id, QuestionBankWebRequest request, Cookie cookie) {
+    return doByCookiePresent(cookie,
+        () -> updateWithCookie(id, request, cookie),
+        () -> updateWithoutCookie(id, request));
+  }
+
+  private Response updateWithCookie(String id, QuestionBankWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .body(request)
+        .contentType(ContentType.JSON)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Response updateWithoutCookie(String id, QuestionBankWebRequest request) {
+
+    return base
+        .body(request)
+        .contentType(ContentType.JSON)
+        .put(String.format(PATH_ID, id));
+  }
 }
