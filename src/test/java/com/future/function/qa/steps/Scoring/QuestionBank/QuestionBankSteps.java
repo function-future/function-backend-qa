@@ -3,6 +3,7 @@ package com.future.function.qa.steps.Scoring.QuestionBank;
 import com.future.function.qa.api.question_bank.QuestionBankAPI;
 import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.question_bank.QuestionBankData;
+import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
@@ -90,5 +91,38 @@ public class QuestionBankSteps extends BaseSteps {
   @And("^question bank response status should be \"([^\"]*)\"$")
   public void questionBankResponseStatusShouldBe(String arg0) throws Throwable {
     assertEquals(arg0, questionBankData.getSingleResponse().getStatus());
+  }
+
+  @And("^user hit get all question banks endpoint$")
+  public void userHitGetAllQuestionBanksEndpoint() {
+    Response response = questionBankAPI.getAllQuestionBank(authData.getCookie());
+    questionBankData.setResponse(response);
+  }
+
+  @Then("^question bank paging response code should be (\\d+)$")
+  public void questionBankPagingResponseCodeShouldBe(int arg0) {
+    assertEquals(arg0, questionBankData.getPagedResponse().getCode());
+  }
+
+  @And("^question bank paging response data should contains title \"([^\"]*)\"$")
+  public void questionBankPagingResponseFirstDataTitleShouldBe(String arg0) throws Throwable {
+    boolean isAnyMatch = questionBankData.getPagedResponse().getData()
+        .stream().map(QuestionBankWebResponse::getTitle)
+        .anyMatch(title -> title.matches(arg0));
+    assertTrue(isAnyMatch);
+  }
+
+  @And("^question bank paging response data should contains description \"([^\"]*)\"$")
+  public void questionBankPagingResponseFirstDataDescriptionShouldBe(String arg0) throws Throwable {
+    boolean isAnyMatch = questionBankData.getPagedResponse().getData()
+        .stream().map(QuestionBankWebResponse::getDescription)
+        .anyMatch(description -> description.matches(arg0));
+    assertTrue(isAnyMatch);
+  }
+
+  @And("^question bank paging response data size should be more than (\\d+)$")
+  public void questionBankPagingResponseDataSizeShouldBeMoreThan(int arg0) {
+    boolean isSizeZero = questionBankData.getPagedResponse().getData().size() > 0;
+    assertTrue(isSizeZero);
   }
 }

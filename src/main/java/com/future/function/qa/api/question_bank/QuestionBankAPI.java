@@ -60,4 +60,20 @@ public class QuestionBankAPI extends BaseAPI {
   private Response getWithoutCookie(String id) {
     return base.get(String.format(PATH_ID, id));
   }
+
+  @Step
+  public Response getAllQuestionBank(Cookie cookie) {
+    return doByCookiePresent(cookie,
+        () -> getAllWithCookie(cookie),
+        this::getAllWithoutCookie);
+  }
+
+  private Response getAllWithCookie(Cookie cookie) {
+    return base.cookie(cookie)
+        .get();
+  }
+
+  private Response getAllWithoutCookie() {
+    return base.get();
+  }
 }

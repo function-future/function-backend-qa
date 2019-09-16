@@ -53,3 +53,20 @@ Feature: Question Bank
     And user hit get question bank endpoint with id "id"
     Then question bank response code should be 404
     And question bank response status should be "NOT_FOUND"
+
+  @Negative @QuestionBank
+  Scenario: Get all question banks without logging in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit get all question banks endpoint
+    Then question bank paging response code should be 401
+
+  @Positive @QuestionBank
+  Scenario: Get all question banks with logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get all question banks endpoint
+    Then question bank paging response code should be 200
+    And question bank paging response data size should be more than 0
+    And question bank paging response data should contains title "QA Title 1"
+    And question bank paging response data should contains description "QA Description 1"
