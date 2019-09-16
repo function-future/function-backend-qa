@@ -29,3 +29,27 @@ Feature: Question Bank
     And question bank response data has title "QA Title 1"
     And question bank response data has description "QA Description 1"
     And question bank response data has id that should not be blank or null
+
+  @Positive @QuestionBank
+  Scenario: Get question bank after logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get question bank endpoint with id of previous created data
+    Then question bank response code should be 200
+    And question bank response data has title "QA Title 1"
+    And question bank response data has description "QA Description 1"
+
+  @Negative @QuestionBank
+  Scenario: Get question bank without logging in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit get question bank endpoint with id of previous created data
+    Then question bank response code should be 401
+
+  @Negative @QuestionBank
+  Scenario: Get question bank with random id
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get question bank endpoint with id "id"
+    Then question bank response code should be 404
+    And question bank response status should be "NOT_FOUND"

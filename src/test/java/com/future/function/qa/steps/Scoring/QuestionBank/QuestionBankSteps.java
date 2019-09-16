@@ -73,4 +73,22 @@ public class QuestionBankSteps extends BaseSteps {
     assertNotEquals(questionBankData.getSingleResponse().getData().getId(), "");
 
   }
+
+  @And("^user hit get question bank endpoint with id of previous created data$")
+  public void userHitGetQuestionBankEndpointWithIdOfPreviousCreatedData() {
+    String id = questionBankData.getSingleResponse().getData().getId();
+    Response response = questionBankAPI.getQuestionBank(id, authData.getCookie());
+    questionBankData.setResponse(response);
+  }
+
+  @And("^user hit get question bank endpoint with id \"([^\"]*)\"$")
+  public void userHitGetQuestionBankEndpointWithId(String arg0) throws Throwable {
+    Response response = questionBankAPI.getQuestionBank(arg0, authData.getCookie());
+    questionBankData.setResponse(response);
+  }
+
+  @And("^question bank response status should be \"([^\"]*)\"$")
+  public void questionBankResponseStatusShouldBe(String arg0) throws Throwable {
+    assertEquals(arg0, questionBankData.getSingleResponse().getStatus());
+  }
 }
