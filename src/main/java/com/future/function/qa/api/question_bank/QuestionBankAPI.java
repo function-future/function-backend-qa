@@ -99,4 +99,23 @@ public class QuestionBankAPI extends BaseAPI {
         .contentType(ContentType.JSON)
         .put(String.format(PATH_ID, id));
   }
+
+  @Step
+  public Response deleteQuestionBank(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> deleteWithCookie(id, cookie),
+        () -> deleteWithoutCookie(id));
+  }
+
+  private Response deleteWithCookie(String id, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .delete(String.format(PATH_ID, id));
+  }
+
+  private Response deleteWithoutCookie(String id) {
+
+    return base.delete(String.format(PATH_ID, id));
+  }
 }

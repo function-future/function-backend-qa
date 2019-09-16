@@ -144,4 +144,16 @@ public class QuestionBankSteps extends BaseSteps {
   public void questionBankErrorResponseStatusShouldBe(String arg0) throws Throwable {
     assertEquals(arg0, questionBankData.getErrorResponse().getStatus());
   }
+
+  @And("^user hit delete question bank endpoint with id of previous created data$")
+  public void userHitDeleteQuestionBankEndpointWithIdOfPreviousCreatedData() {
+    Response response = questionBankAPI.deleteQuestionBank(questionBankData.getSingleResponse().getData().getId(),
+        authData.getCookie());
+    questionBankData.setResponse(response);
+  }
+
+  @Then("^question bank base response code should be (\\d+)$")
+  public void questionBankBaseResponseCodeShouldBe(int arg0) {
+    assertEquals(arg0, questionBankData.getBaseResponse().getCode());
+  }
 }

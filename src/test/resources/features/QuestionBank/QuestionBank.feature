@@ -80,6 +80,23 @@ Feature: Question Bank
     And question bank error response has key "description" and value "NotBlank"
 
   @Negative @QuestionBank
+  Scenario: Delete question bank without logging in
+    And user prepare auth request
+    When user hit logout endpoint
+    And user hit delete question bank endpoint with id of previous created data
+    Then question bank error response code should be 401
+
+  @Positive @QuestionBank
+  Scenario: Delete question bank with logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit delete question bank endpoint with id of previous created data
+    Then question bank base response code should be 200
+    And user hit get question bank endpoint with id of previous created data
+    Then question bank error response code should be 404
+    And question bank error response status should be "NOT_FOUND"
+
+  @Negative @QuestionBank
   Scenario: Get all question banks without logging in
     And user prepare auth request
     When user hit logout endpoint
