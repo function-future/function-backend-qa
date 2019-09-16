@@ -19,3 +19,13 @@ Feature: Question Bank
     Then question bank response code should be 400
     And question bank error response has key "title" and value "NotBlank"
     And question bank error response has key "description" and value "NotBlank"
+
+  @Positive @QuestionBank
+  Scenario: Create question bank after logging in as admin
+    And user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create question bank endpoint with title "QA Title 1" and description "QA Description 1"
+    Then question bank response code should be 201
+    And question bank response data has title "QA Title 1"
+    And question bank response data has description "QA Description 1"
+    And question bank response data has id that should not be blank or null
