@@ -29,3 +29,17 @@ Feature: Question in Question Bank
     And question response body label should be "Question Label"
     And question response body options size should be inputted options size
     And question response body id should not be null
+
+  @Negative @Question
+  Scenario: Get all question without logging in
+    Given user hit logout endpoint
+    When user hit get all question endpoint
+    Then question error response code should be 401
+
+  @Positive @Question
+  Scenario: Get all question with logging in as admin
+    Given user hit get all question endpoint
+    Then question paging response data size should not be zero
+    And question paging response data should contains label "Question Label"
+    And question paging response data should contains id from previous created question
+    And question paging response paging object should not be null

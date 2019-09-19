@@ -7,7 +7,9 @@ import com.future.function.qa.data.scoring.option.OptionData;
 import com.future.function.qa.data.scoring.question.QuestionData;
 import com.future.function.qa.model.request.scoring.option.OptionWebRequest;
 import com.future.function.qa.model.response.scoring.option.OptionWebResponse;
+import com.future.function.qa.model.response.scoring.question.QuestionWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -19,6 +21,7 @@ import net.thucydides.core.annotations.Steps;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -50,7 +53,9 @@ public class QuestionSteps extends BaseSteps {
     List<OptionWebRequest> options = optionData.createRequest(null, "Option", false, false, true, false);
     Response response = questionAPI.createQuestion(questionData.createRequest(questionLabel, options), authData.getCookie());
     questionData.setResponse(response);
-    optionData.setResponse(questionData.getSingleResponse().getData().getOptions());
+    if(questionData.getSingleResponse().getData() != null) {
+      optionData.setResponse(questionData.getSingleResponse().getData().getOptions());
+    }
   }
 
   @Then("^question error response code should be (\\d+)$")
@@ -99,5 +104,40 @@ public class QuestionSteps extends BaseSteps {
   @And("^get first question bank data id$")
   public void getFirstQuestionBankDataId() {
     questionData.setQuestionBankId(questionBankData.getPagedResponse().getData().get(0).getId());
+  }
+
+  @When("^user hit get all question endpoint$")
+  public void userHitGetAllQuestionEndpoint() {
+    Response response = questionAPI.getAllQuestion(authData.getCookie());
+    questionData.setResponse(response);
+  }
+
+  @Then("^question paging response data size should not be zero$")
+  public void questionPagingResponseDataSizeShouldNotBeZero() {
+    assertNotEquals(0, questionData.getPagedResponse().getData().size());
+  }
+
+  @And("^question paging response data should contains label \"([^\"]*)\"$")
+  public void questionPagingResponseDataShouldContainsLabel(String expectedLabel) throws Throwable {
+
+    boolean result = questionData.getPagedResponse().getData().stream()
+        .map(QuestionWebResponse::getLabel)
+        .anyMatch(label -> label.equals(expectedLabel));
+    assertTrue(result);
+  }
+
+  @And("^question paging response data should contains id from previous created question$")
+  public void questionPagingResponseDataShouldContainsIdFromPreviousCreatedQuestion() {
+
+    boolean result = questionData.getPagedResponse().getData().stream()
+        .map(QuestionWebResponse::getId)
+        .anyMatch(id -> id.equals(questionData.getSingleResponse().getData().getId()));
+    assertTrue(result);
+  }
+
+  @And("^question paging response paging object should not be null$")
+  public void questionPagingResponsePagingObjectShouldNotBeNull() {
+
+    assertNotNull(questionData.getPagedResponse().getPaging());
   }
 }

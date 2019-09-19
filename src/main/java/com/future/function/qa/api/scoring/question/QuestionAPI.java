@@ -40,4 +40,23 @@ public class QuestionAPI extends BaseAPI {
         .contentType(ContentType.JSON)
         .post();
   }
+
+  @Step
+  public Response getAllQuestion(Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getAllWithCookie(cookie),
+        () -> getAllWithoutCookie(cookie));
+  }
+
+  private Response getAllWithCookie(Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get();
+  }
+
+  private Response getAllWithoutCookie(Cookie cookie) {
+
+    return base.get();
+  }
 }
