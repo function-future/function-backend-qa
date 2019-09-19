@@ -140,4 +140,22 @@ public class QuestionSteps extends BaseSteps {
 
     assertNotNull(questionData.getPagedResponse().getPaging());
   }
+
+  @When("^user hit get question endpoint$")
+  public void userHitGetQuestionEndpoint() {
+    Response response = questionAPI.getQuestion(questionData.getSingleResponse().getData().getId(), authData.getCookie());
+    questionData.setResponse(response);
+  }
+
+  @When("^user hit get question endpoint with random id$")
+  public void userHitGetQuestionEndpointWithRandomId() {
+    Response response = questionAPI.getQuestion("random-id", authData.getCookie());
+    questionData.setResponse(response);
+  }
+
+  @And("^question error response status should be \"([^\"]*)\"$")
+  public void questionErrorResponseStatusShouldBe(String expectedStatus) throws Throwable {
+
+    assertEquals(questionData.getErrorResponse().getStatus(), expectedStatus);
+  }
 }

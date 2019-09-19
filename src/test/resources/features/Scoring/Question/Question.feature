@@ -43,3 +43,21 @@ Feature: Question in Question Bank
     And question paging response data should contains label "Question Label"
     And question paging response data should contains id from previous created question
     And question paging response paging object should not be null
+
+  @Negative @Question
+  Scenario: Get question without logging in
+    Given user hit logout endpoint
+    When user hit get question endpoint
+    Then question error response code should be 401
+
+  @Negative @Question
+  Scenario: Get question by random id
+    When user hit get question endpoint with random id
+    Then question error response code should be 404
+    And question error response status should be "NOT_FOUND"
+
+  @Positive @Question
+  Scenario: Get question by previous created id
+    When user hit get question endpoint
+    Then question response body label should be "Question Label"
+    And question response body id should not be null
