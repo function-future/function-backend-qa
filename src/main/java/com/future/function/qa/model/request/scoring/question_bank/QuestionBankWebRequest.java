@@ -1,4 +1,4 @@
-package com.future.function.qa.model.request.question_bank;
+package com.future.function.qa.model.request.scoring.question_bank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

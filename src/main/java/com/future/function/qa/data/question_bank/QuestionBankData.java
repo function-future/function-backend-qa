@@ -2,7 +2,7 @@ package com.future.function.qa.data.question_bank;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
-import com.future.function.qa.model.request.question_bank.QuestionBankWebRequest;
+import com.future.function.qa.model.request.scoring.question_bank.QuestionBankWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;

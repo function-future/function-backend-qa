@@ -1,15 +1,13 @@
-package com.future.function.qa.api.question_bank;
+package com.future.function.qa.api.scoring.question_bank;
 
 import com.future.function.qa.api.BaseAPI;
-import com.future.function.qa.model.request.question_bank.QuestionBankWebRequest;
+import com.future.function.qa.model.request.scoring.question_bank.QuestionBankWebRequest;
 import com.future.function.qa.util.Path;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookie;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
-import org.springframework.stereotype.Component;
 
 public class QuestionBankAPI extends BaseAPI {
 
