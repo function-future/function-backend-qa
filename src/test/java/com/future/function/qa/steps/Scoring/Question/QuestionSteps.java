@@ -127,15 +127,6 @@ public class QuestionSteps extends BaseSteps {
     assertTrue(result);
   }
 
-  @And("^question paging response data should contains id from previous created question$")
-  public void questionPagingResponseDataShouldContainsIdFromPreviousCreatedQuestion() {
-
-    boolean result = questionData.getPagedResponse().getData().stream()
-        .map(QuestionWebResponse::getId)
-        .anyMatch(id -> id.equals(questionData.getSingleResponse().getData().getId()));
-    assertTrue(result);
-  }
-
   @And("^question paging response paging object should not be null$")
   public void questionPagingResponsePagingObjectShouldNotBeNull() {
 
@@ -180,5 +171,28 @@ public class QuestionSteps extends BaseSteps {
         .map(OptionWebResponse::getLabel)
         .allMatch(label -> label.contains(optionLabel));
     assertTrue(result);
+  }
+
+  @When("^user hit delete question endpoint with persisted id$")
+  public void userHitDeleteQuestionEndpointWithPersistedId() {
+    Response response = questionAPI.deleteQuestion(questionData.getSingleResponse().getData().getId(), authData.getCookie());
+    questionData.setResponse(response);
+  }
+
+  @When("^user hit delete question endpoint with \"([^\"]*)\"$")
+  public void userHitDeleteQuestionEndpointWith(String arg0) throws Throwable {
+
+    Response response = questionAPI.deleteQuestion(arg0, authData.getCookie());
+    questionData.setResponse(response);
+  }
+
+  @Then("^question base response code should be (\\d+)$")
+  public void questionBaseResponseCodeShouldBe(int expectedCode) {
+    assertEquals(expectedCode, questionData.getBaseResponse().getCode());
+  }
+
+  @And("^question base response status should be \"([^\"]*)\"$")
+  public void questionBaseResponseStatusShouldBe(String expectedStatus) throws Throwable {
+    assertEquals(expectedStatus, questionData.getBaseResponse().getStatus());
   }
 }

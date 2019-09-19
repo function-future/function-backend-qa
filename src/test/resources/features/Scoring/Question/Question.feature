@@ -41,7 +41,6 @@ Feature: Question in Question Bank
     Given user hit get all question endpoint
     Then question paging response data size should not be zero
     And question paging response data should contains label "Question Label"
-    And question paging response data should contains id from previous created question
     And question paging response paging object should not be null
 
   @Negative @Question
@@ -77,3 +76,24 @@ Feature: Question in Question Bank
     Then question response code should be 200
     And question response body label should be "Question Label 2"
     And question response body options should contains prefix "PREFIX-"
+
+  @Negative @Question
+  Scenario: Delete question without logging in
+    Given user hit logout endpoint
+    When user hit delete question endpoint with persisted id
+    Then question error response code should be 401
+
+  @Positive @Question
+  Scenario: Delete question with random id
+    When user hit delete question endpoint with "id"
+    Then question base response code should be 200
+    And question base response status should be "OK"
+
+  @Positive @Question
+  Scenario: Delete question with logging as admin
+    When user hit delete question endpoint with persisted id
+    Then question base response code should be 200
+    And question base response status should be "OK"
+    When user hit get question endpoint
+    Then question error response code should be 404
+    And question error response status should be "NOT_FOUND"
