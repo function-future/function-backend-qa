@@ -61,3 +61,19 @@ Feature: Question in Question Bank
     When user hit get question endpoint
     Then question response body label should be "Question Label"
     And question response body id should not be null
+
+  Scenario: Update question without logging in
+    Given user hit logout endpoint
+    When user hit update question endpoint with persisted id, label "Question Label 2", and options label prefix "PREFIX-"
+    Then question error response code should be 401
+
+  Scenario: Update question with empty attributes
+    When user hit update question endpoint with persisted id, label "", and options label prefix ""
+    Then question error response code should be 400
+    And question error response body with key "label" should be with value "NotBlank"
+
+  Scenario: Update question with logging in as admin
+    When user hit update question endpoint with persisted id, label "Question Label 2", and options label prefix "PREFIX-"
+    Then question response code should be 200
+    And question response body label should be "Question Label 2"
+    And question response body options should contains prefix "PREFIX-"

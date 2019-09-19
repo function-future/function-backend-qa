@@ -78,4 +78,28 @@ public class QuestionAPI extends BaseAPI {
 
     return base.get(String.format(PATH_ID, id));
   }
+
+  @Step
+  public Response updateQuestion(String id, QuestionWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> updateWithCookie(id, request, cookie),
+        () -> updateWithoutCookie(id, request));
+  }
+
+  private Response updateWithCookie(String id, QuestionWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Response updateWithoutCookie(String id, QuestionWebRequest request) {
+
+    return base
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
 }

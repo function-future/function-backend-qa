@@ -6,6 +6,7 @@ import com.future.function.qa.data.question_bank.QuestionBankData;
 import com.future.function.qa.data.scoring.option.OptionData;
 import com.future.function.qa.data.scoring.question.QuestionData;
 import com.future.function.qa.model.request.scoring.option.OptionWebRequest;
+import com.future.function.qa.model.request.scoring.question.QuestionWebRequest;
 import com.future.function.qa.model.response.scoring.option.OptionWebResponse;
 import com.future.function.qa.model.response.scoring.question.QuestionWebResponse;
 import com.future.function.qa.steps.BaseSteps;
@@ -157,5 +158,27 @@ public class QuestionSteps extends BaseSteps {
   public void questionErrorResponseStatusShouldBe(String expectedStatus) throws Throwable {
 
     assertEquals(questionData.getErrorResponse().getStatus(), expectedStatus);
+  }
+
+  @When("^user hit update question endpoint with persisted id, label \"([^\"]*)\", and options label prefix \"([^\"]*)\"$")
+  public void userHitUpdateQuestionEndpointWithPersistedIdLabelAndOptionsLabelPrefix(String label, String optionLabel) throws Throwable {
+
+    List<OptionWebRequest> options = optionData.createRequest(null, optionLabel, false, false, false, true);
+    QuestionWebRequest request = questionData.createRequest(label, options);
+    Response response = questionAPI.updateQuestion(questionData.getSingleResponse().getData().getId(),
+        request, authData.getCookie());
+    questionData.setResponse(response);
+    if(questionData.getSingleResponse().getData() != null) {
+      optionData.setResponse(questionData.getSingleResponse().getData().getOptions());
+    }
+  }
+
+  @And("^question response body options should contains prefix \"([^\"]*)\"$")
+  public void questionResponseBodyOptionsShouldContainsPrefix(String optionLabel) throws Throwable {
+    boolean result = optionData.getOptionWebResponses()
+        .stream()
+        .map(OptionWebResponse::getLabel)
+        .allMatch(label -> label.contains(optionLabel));
+    assertTrue(result);
   }
 }
