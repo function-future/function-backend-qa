@@ -2,7 +2,7 @@ package com.future.function.qa.steps.Scoring.QuestionBank;
 
 import com.future.function.qa.api.scoring.question_bank.QuestionBankAPI;
 import com.future.function.qa.data.core.auth.AuthData;
-import com.future.function.qa.data.question_bank.QuestionBankData;
+import com.future.function.qa.data.scoring.question_bank.QuestionBankData;
 import com.future.function.qa.model.request.scoring.question_bank.QuestionBankWebRequest;
 import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;
 import com.future.function.qa.steps.BaseSteps;

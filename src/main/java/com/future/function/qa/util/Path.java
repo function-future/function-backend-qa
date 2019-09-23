@@ -13,4 +13,6 @@ public interface Path {
   String QUESTION_BANK = "/api/scoring/question-banks";
 
   String QUESTION = "/questions";
+
+  String QUIZ = "/api/scoring/batches/%s/quizzes";
 }

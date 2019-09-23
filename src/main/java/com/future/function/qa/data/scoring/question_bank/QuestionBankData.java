@@ -1,4 +1,4 @@
-package com.future.function.qa.data.question_bank;
+package com.future.function.qa.data.scoring.question_bank;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
