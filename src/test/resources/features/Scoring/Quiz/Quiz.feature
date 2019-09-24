@@ -65,3 +65,27 @@ Feature: Quiz
     And quiz response body should have title "Quiz Title"
     And quiz response body should have description "Quiz Description"
     And quiz response body should have trials 3
+
+  @Negative @Quiz
+  Scenario: Update quiz without logging in
+    Given user hit logout endpoint
+    When user hit update quiz endpoint with previous get id, title "Quiz Title 2", description "Quiz Description 2", trials 30, timeLimit 300,endDate 150000000, startDate 150000000, questionCount 3, and first question bank data
+    Then quiz error response code should be 401
+
+  @Negative @Quiz
+  Scenario: Update quiz with empty title, description, trials, and timeLimit
+    When user hit update quiz endpoint with previous get id, title "", description "", trials 0, timeLimit 0,endDate 150000000, startDate 150000000, questionCount 3, and first question bank data
+    Then quiz error response code should be 400
+    And quiz error response code body should have key "title" and value "NotBlank"
+    And quiz error response code body should have key "description" and value "NotBlank"
+    And quiz error response code body should have key "trials" and value "MinimalOnePositiveNumber"
+    And quiz error response code body should have key "timeLimit" and value "MinimalOnePositiveNumber"
+
+  @Positive @Quiz
+  Scenario: Update quiz with previous get id and logging in as admin
+    When user hit update quiz endpoint with previous get id, title "Quiz Title 2", description "Quiz Description 2", trials 30, timeLimit 300,endDate 150000000, startDate 150000000, questionCount 3, and first question bank data
+    Then quiz response code should be 200
+    And quiz response body should have trials 30
+    And quiz response body should have description "Quiz Description 2"
+    And quiz response body should have title "Quiz Title 2"
+    And quiz response body should have id of first data in question bank list

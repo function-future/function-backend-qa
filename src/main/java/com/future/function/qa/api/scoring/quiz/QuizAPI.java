@@ -77,4 +77,28 @@ public class QuizAPI extends BaseAPI {
 
     return base.get(String.format(PATH_ID, id));
   }
+
+  @Step
+  public Response updateQuiz(String id, QuizWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> updateWithCookie(id, request, cookie),
+        () -> updateWithoutCookie(id, request));
+  }
+
+  private Response updateWithCookie(String id, QuizWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Response updateWithoutCookie(String id, QuizWebRequest request) {
+
+    return base
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
 }
