@@ -45,3 +45,23 @@ Feature: Quiz
     When user hit get all quiz endpoint
     Then quiz paging response code should be 200
     And quiz paging response body should contains title "Quiz Title" and description "Quiz Description"
+
+  @Negative @Quiz
+  Scenario: Get quiz without logging in
+    Given user hit logout endpoint
+    When user hit get quiz endpoint with previous created id
+    Then quiz error response code should be 401
+
+  @Negative @Quiz
+  Scenario: Get quiz with random id
+    When user hit get quiz endpoint with random id
+    Then quiz error response code should be 404
+    And quiz error response status should be "NOT_FOUND"
+
+  @Positive @Quiz
+  Scenario: Get quiz with previous created id and logging in as admin
+    When user hit get quiz endpoint with previous created id
+    Then quiz response code should be 200
+    And quiz response body should have title "Quiz Title"
+    And quiz response body should have description "Quiz Description"
+    And quiz response body should have trials 3

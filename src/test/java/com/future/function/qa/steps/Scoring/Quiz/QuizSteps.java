@@ -118,4 +118,21 @@ public class QuizSteps extends BaseSteps {
         .anyMatch(quiz -> quiz.getTitle().equals(title) && quiz.getDescription().equals(description));
     assertTrue(result);
   }
+
+  @When("^user hit get quiz endpoint with previous created id$")
+  public void userHitGetQuizEndpointWithPreviousCreatedId() {
+    Response response = quizAPI.getQuiz(quizData.getSingleResponse().getData().getId(), authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @When("^user hit get quiz endpoint with random id$")
+  public void userHitGetQuizEndpointWithRandomId() {
+    Response response = quizAPI.getQuiz("random-id", authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @And("^quiz error response status should be \"([^\"]*)\"$")
+  public void quizErrorResponseStatusShouldBe(String status) throws Throwable {
+    assertEquals(quizData.getErrorResponse().getStatus(), status);
+  }
 }
