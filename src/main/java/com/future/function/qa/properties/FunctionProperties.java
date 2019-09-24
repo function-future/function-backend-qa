@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @ConfigurationProperties("function")
 public class FunctionProperties {
 
+  private String cookieName;
+
   private String host;
 
   private String port;

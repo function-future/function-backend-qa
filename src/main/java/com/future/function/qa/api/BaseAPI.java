@@ -14,8 +14,15 @@ import net.thucydides.core.steps.ScenarioSteps;
     initializers = ConfigFileApplicationContextInitializer.class)
 public abstract class BaseAPI extends ScenarioSteps {
 
+  protected RequestSpecification base;
+
   @Autowired
   private FunctionProperties functionProperties;
+
+  public String getCookieName() {
+
+    return functionProperties.getCookieName();
+  }
 
   protected RequestSpecification prepare() {
 

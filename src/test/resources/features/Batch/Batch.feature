@@ -1,0 +1,2 @@
+@Batch @Regression
+Feature: Batch
