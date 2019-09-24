@@ -89,3 +89,22 @@ Feature: Quiz
     And quiz response body should have description "Quiz Description 2"
     And quiz response body should have title "Quiz Title 2"
     And quiz response body should have id of first data in question bank list
+
+  @Negative @Quiz
+  Scenario: Delete quiz with previous updated id without logging in
+    Given user hit logout endpoint
+    When user hit delete quiz endpoint with previous updated id
+    Then quiz error response code should be 401
+
+  @Negative @Quiz
+  Scenario: Delete quiz with random id
+    When user hit delete quiz endpoint with random id
+    Then quiz base response code should be 200
+
+  @Positive @Quiz
+  Scenario: Delete quiz with previous updated data and logging in as admin
+    When user hit delete quiz endpoint with previous updated id
+    Then quiz base response code should be 200
+    When user hit get quiz endpoint with previous created id
+    Then quiz error response code should be 404
+    And quiz error response status should be "NOT_FOUND"

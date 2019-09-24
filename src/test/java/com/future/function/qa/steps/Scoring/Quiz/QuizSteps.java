@@ -156,4 +156,23 @@ public class QuizSteps extends BaseSteps {
         .allMatch(id -> id.equals(firstQuestionBankId));
     assertTrue(result);
   }
+
+  @When("^user hit delete quiz endpoint with previous updated id$")
+  public void userHitDeleteQuizEndpointWithPreviousUpdatedId() {
+    String quizId = quizData.getSingleResponse().getData().getId();
+    Response response = quizAPI.deleteQuiz(quizId, authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @When("^user hit delete quiz endpoint with random id$")
+  public void userHitDeleteQuizEndpointWithRandomId() {
+
+    Response response = quizAPI.deleteQuiz("random-id", authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @Then("^quiz base response code should be (\\d+)$")
+  public void quizBaseResponseCodeShouldBe(int code) {
+    assertEquals(quizData.getBaseResponse().getCode(), code);
+  }
 }
