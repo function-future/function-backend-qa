@@ -17,7 +17,10 @@ import com.future.function.qa.data.core.user.UserData;
 import com.future.function.qa.model.request.core.user.UserWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
+import com.future.function.qa.model.response.base.paging.Paging;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
+import com.future.function.qa.model.response.core.user.UserWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -66,6 +69,33 @@ public class UserSteps extends BaseSteps {
     userData.setResponse(response);
   }
 
+  @And("^user hit get user detail endpoint with recorded id$")
+  public void userHitGetUserDetailEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<UserWebResponse> createdResponse = userData.getCreatedResponse();
+    UserWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = userAPI.getUser(createdResponseData.getId(), authData.getCookie());
+
+    userData.setResponse(response);
+  }
+
+  @And("^user hit get users by name endpoint with name part \"([^\"]*)\", page (\\d+), size (\\d+)$")
+  public void userHitGetUsersByNameEndpointWithNamePartPageSize(String namePart, int page, int size) throws Throwable {
+
+    Response response = userAPI.getUsersByName(namePart, page, size, authData.getCookie());
+
+    userData.setResponse(response);
+  }
+
+  @And("^user hit get users endpoint with role \"([^\"]*)\", page (\\d+), size (\\d+)$")
+  public void userHitGetUsersEndpointWithRolePageSize(String role, int page, int size) throws Throwable {
+
+    Response response = userAPI.getUsers(role, page, size, authData.getCookie());
+
+    userData.setResponse(response);
+  }
+
   @Given("^user prepare user request$")
   public void userPrepareUserRequest() throws Throwable {
 
@@ -76,5 +106,23 @@ public class UserSteps extends BaseSteps {
   public void userResponseCodeShouldBe(int responseCode) throws Throwable {
 
     assertThat(userData.getResponseCode(), equalTo(responseCode));
+  }
+
+  @And("^user response's email should be \"([^\"]*)\"$")
+  public void userResponseSEmailShouldBe(String email) throws Throwable {
+
+    DataResponse<UserWebResponse> retrievedResponse = userData.getRetrievedResponse();
+    UserWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getEmail(), equalTo(email));
+  }
+
+  @And("^user response's total elements should be (\\d+)$")
+  public void userResponseSTotalElementsShouldBe(int totalElementSize) throws Throwable {
+
+    PagingResponse<UserWebResponse> pagingResponse = userData.getPagingResponse();
+    Paging paging = pagingResponse.getPaging();
+
+    assertThat(paging.getTotalRecords(), equalTo(Integer.toUnsignedLong(totalElementSize)));
   }
 }

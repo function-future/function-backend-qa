@@ -27,10 +27,10 @@ Feature: User
     And user error response has key "avatar" and value "FileMustExist"
     And user hit delete batch endpoint with recorded id
     Examples:
-      | email | name | role | address | phone | avatar | batch_code | university |
-      | qa.admmailinator | Admin Admin 1 | ADMIN | | 0815123123123asd | sample-id | BatchUserAutomation | University |
-      | qa.judgemailinator | Judge Judge 1 | JUDGE | | 0815123123123asd | sample-id | BatchUserAutomation | University |
-      | qa.mentormailinator | Mentor Mentor 1 | MENTOR | | 0815123123123asd | sample-id | BatchUserAutomation | University |
+      | email               | name            | role   | address | phone            | avatar    | batch_code          | university |
+      | qa.admmailinator    | Admin Admin 1   | ADMIN  |         | 0815123123123asd | sample-id | BatchUserAutomation | University |
+      | qa.judgemailinator  | Judge Judge 1   | JUDGE  |         | 0815123123123asd | sample-id | BatchUserAutomation | University |
+      | qa.mentormailinator | Mentor Mentor 1 | MENTOR |         | 0815123123123asd | sample-id | BatchUserAutomation | University |
 
   @Positive @User
   Scenario Outline: Create user with non-student role after logging in as admin
@@ -40,10 +40,10 @@ Feature: User
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "<avatar>", batch code "<batch_code>", university "<university>"
     Then user response code should be 201
     Examples:
-      | email | name | role | address | phone | avatar | batch_code | university |
-      | qa.adm@mailinator.com | Admin Admin | ADMIN | Address | 0815123123123 | | | |
-      | qa.judge@mailinator.com | Judge Judge | JUDGE | Address | 0815123123123 | | | |
-      | qa.mentor@mailinator.com | Mentor Mentor | MENTOR | Address | 0815123123123 | | | |
+      | email                    | name          | role   | address | phone         | avatar | batch_code | university |
+      | qa.adm@mailinator.com    | Admin Admin   | ADMIN  | Address | 0815123123123 |        |            |            |
+      | qa.judge@mailinator.com  | Judge Judge   | JUDGE  | Address | 0815123123123 |        |            |            |
+      | qa.mentor@mailinator.com | Mentor Mentor | MENTOR | Address | 0815123123123 |        |            |            |
 
   @Negative @User
   Scenario: Create user with role mentor after logging in as mentor
@@ -76,3 +76,65 @@ Feature: User
     And user hit create user endpoint with email "qa.student@mailinator.com", name "Student First", role "STUDENT", address "Address", phone "0815123123123", avatar "", batch code "BatchUserAutomation", university "University"
     Then user response code should be 201
     And user hit delete batch endpoint with recorded id
+
+  @Negative @User
+  Scenario: Get user without being logged in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.judge.2@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user hit get user detail endpoint with recorded id
+    Then user response code should be 401
+
+  @Positive @User
+  Scenario: Get user after logging in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.mentor.2@mailinator.com", name "Mentor", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit get user detail endpoint with recorded id
+    Then user response code should be 200
+    And user response's email should be "qa.mentor.2@mailinator.com"
+
+  @Negative @User
+  Scenario: Get users without being logged in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.judge.3@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.judge.4@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user hit get users endpoint with role "JUDGE", page 1, size 10
+    Then user response code should be 401
+
+  @Positive @User
+  Scenario: Get users after logging in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.judge.5@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.judge.6@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit get users endpoint with role "JUDGE", page 1, size 10
+    Then user response code should be 200
+    And user response's total elements should be 6
+    #And user response's total elements should be 2 || Uncomment this after implementing delete user mechanism
+
+  @Negative @User
+  Scenario: Get users by name without being logged in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.judge.7@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.judge.8@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user hit get users by name endpoint with name part "dge", page 1, size 10
+    Then user response code should be 401
+
+  @Positive @User
+  Scenario Outline: Get users by name after logging in as non-judge role
+    When user do login with email "<email>" and password "<password>"
+    And user hit create user endpoint with email "qa.judge.9@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.judge.10@mailinator.com", name "Judge", role "JUDGE", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit get users by name endpoint with name part "dge", page 1, size 10
+    Then user response code should be 200
+    And user response's total elements should be 10
+    #And user response's total elements should be 2 || Uncomment this after implementing delete user mechanism
+    Examples:
+      | email                     | password                 |
+      | admin@admin.com           | administratorfunctionapp |
+      | qa.mentor@mailinator.com  | mentormentorfunctionapp  |
+      | qa.student@mailinator.com | studentfirstfunctionapp  |

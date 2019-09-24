@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.core.user.UserWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.user.UserWebResponse;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,10 @@ public class UserData extends BaseData {
   private DataResponse<UserWebResponse> createdResponse = new DataResponse<>();
 
   private UserWebRequest request;
+
+  private DataResponse<UserWebResponse> retrievedResponse = new DataResponse<>();
+
+  private PagingResponse<UserWebResponse> pagingResponse = new PagingResponse<>();
 
   public UserWebRequest createRequest(String id, String email, String name, String role, String address, String phone,
       String avatar, String batchCode, String university) {
@@ -64,5 +69,7 @@ public class UserData extends BaseData {
 
     super.setResponse(response);
     this.createdResponse = asDataResponse(response, new TypeReference<DataResponse<UserWebResponse>>() {});
+    this.retrievedResponse = asDataResponse(response, new TypeReference<DataResponse<UserWebResponse>>() {});
+    this.pagingResponse = asPagingResponse(response, new TypeReference<PagingResponse<UserWebResponse>>() {});
   }
 }
