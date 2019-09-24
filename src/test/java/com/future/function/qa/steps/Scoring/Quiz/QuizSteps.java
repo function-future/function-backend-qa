@@ -66,6 +66,11 @@ public class QuizSteps extends BaseSteps {
     assertEquals(expectedCode, quizData.getSingleResponse().getCode());
   }
 
+  @Then("^quiz paging response code should be (\\d+)$")
+  public void quizPagingResponseCodeShouldBe(int expectedCode) {
+    assertEquals(expectedCode, quizData.getPagedResponse().getCode());
+  }
+
   @And("^quiz response body should have title \"([^\"]*)\"$")
   public void quizResponseBodyShouldHaveTitle(String expectedTitle) throws Throwable {
     String title = quizData.getSingleResponse().getData().getTitle();
@@ -99,5 +104,18 @@ public class QuizSteps extends BaseSteps {
   @Then("^user prepare quiz request with batchCode \"([^\"]*)\"$")
   public void userPrepareQuizRequestWithBatchCode(String batchCode) throws Throwable {
     quizAPI.prepare(batchCode);
+  }
+
+  @When("^user hit get all quiz endpoint$")
+  public void userHitGetAllQuizEndpoint() {
+    Response response = quizAPI.getAllQuiz(authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @And("^quiz paging response body should contains title \"([^\"]*)\" and description \"([^\"]*)\"$")
+  public void quizResponseBodyShouldContainsTitleAndDescription(String title, String description) throws Throwable {
+    boolean result = quizData.getPagedResponse().getData().stream()
+        .anyMatch(quiz -> quiz.getTitle().equals(title) && quiz.getDescription().equals(description));
+    assertTrue(result);
   }
 }

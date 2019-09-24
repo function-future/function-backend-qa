@@ -33,3 +33,15 @@ Feature: Quiz
     And quiz response body should have description "Quiz Description"
     And quiz response body should have trials 3
     And quiz response body should have all ids of question bank list
+
+  @Negative @Quiz
+  Scenario: Get all quiz without logging in
+    Given user hit logout endpoint
+    When user hit get all quiz endpoint
+    Then quiz error response code should be 401
+
+  @Positive @Quiz
+  Scenario: Get all quiz with logging in as admin
+    When user hit get all quiz endpoint
+    Then quiz paging response code should be 200
+    And quiz paging response body should contains title "Quiz Title" and description "Quiz Description"

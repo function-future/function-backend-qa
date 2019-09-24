@@ -39,4 +39,23 @@ public class QuizAPI extends BaseAPI {
         .body(request)
         .post();
   }
+
+  @Step
+  public Response getAllQuiz(Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getAllWithCookie(cookie),
+        this::getAllWithoutCookie);
+  }
+
+  private Response getAllWithCookie(Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get();
+  }
+
+  private Response getAllWithoutCookie() {
+
+    return base.get();
+  }
 }
