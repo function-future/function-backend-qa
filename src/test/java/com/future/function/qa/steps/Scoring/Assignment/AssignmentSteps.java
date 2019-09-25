@@ -115,4 +115,22 @@ public class AssignmentSteps extends BaseSteps {
     Response response = assignmentAPI.updateAssignment(id, request, authData.getCookie());
     assignmentData.setResponse(response);
   }
+
+  @When("^user hit delete assignment endpoint with previous get id$")
+  public void userHitDeleteAssignmentEndpointWithPreviousGetId() {
+    String id = assignmentData.getSingleResponse().getData().getId();
+    Response response = assignmentAPI.deleteAssignment(id, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @When("^user hit delete assignment endpoint with random id$")
+  public void userHitDeleteAssignmentEndpointWithRandomId() {
+    Response response = assignmentAPI.deleteAssignment("random-id", authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @Then("^assignment base response code should be (\\d+)$")
+  public void assignmentBaseResponseCodeShouldBe(int arg0) {
+    assertEquals(arg0, assignmentData.getBaseResponse().getCode());
+  }
 }

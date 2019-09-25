@@ -77,3 +77,23 @@ Feature: Assignment
     Then assignment response code should be 200
     And assignment response body title should be "Assignment Title 2"
     And assignment response body description should be "Assignment Description 2"
+
+  @Negative @Assignment
+  Scenario: user delete assignment without logging in
+    Given user hit logout endpoint
+    When user hit delete assignment endpoint with previous get id
+    Then assignment error response code should be 401
+
+  @Negative @Assignment
+  Scenario: user delete assignment with random id
+    When user hit delete assignment endpoint with random id
+    Then assignment error response code should be 404
+    And assignment error response status should be "NOT_FOUND"
+
+  @Positive @Assignment
+  Scenario: user delete assignment with previous get id and logging in as admin
+    When user hit delete assignment endpoint with previous get id
+    Then assignment base response code should be 200
+    When user hit get assignment endpoint with previous created id
+    Then assignment error response code should be 404
+    And assignment error response status should be "NOT_FOUND"
