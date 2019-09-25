@@ -57,3 +57,23 @@ Feature: Assignment
     And assignment response body title should be "Assignment Title"
     And assignment response body description should be "Assignment Description"
     And assignment response body deadline should be 1500000
+
+  @Negative @Assignment
+  Scenario: user update assignment without logging in
+    Given user hit logout endpoint
+    When user hit update assignment endpoint with previous get id, title "Assignment Title", description "Assignment Description", deadline 1500000, and empty list of files
+    Then assignment error response code should be 401
+
+  @Negative @Assignment
+  Scenario: user update assignment with empty title and description
+    When user hit update assignment endpoint with previous get id, title "", description "", deadline 1500000, and empty list of files
+    Then assignment error response code should be 400
+    And assignment error response body should have key "title" and value "NotBlank"
+    And assignment error response body should have key "description" and value "NotBlank"
+
+  @Positive @Assignment
+  Scenario: user update assignment with logging in as admin
+    When user hit update assignment endpoint with previous get id, title "Assignment Title 2", description "Assignment Description 2", deadline 1500000, and empty list of files
+    Then assignment response code should be 200
+    And assignment response body title should be "Assignment Title 2"
+    And assignment response body description should be "Assignment Description 2"

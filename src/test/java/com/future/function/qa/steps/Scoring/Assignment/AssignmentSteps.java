@@ -107,4 +107,12 @@ public class AssignmentSteps extends BaseSteps {
   public void assignmentErrorResponseStatusShouldBe(String status) throws Throwable {
     assertEquals(assignmentData.getErrorResponse().getStatus(), status);
   }
+
+  @When("^user hit update assignment endpoint with previous get id, title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and empty list of files$")
+  public void userHitUpdateAssignmentEndpointWithPreviousGetIdTitleDescriptionDeadlineAndEmptyListOfFiles(String arg0, String arg1, int arg2) throws Throwable {
+    AssignmentWebRequest request = assignmentData.createRequest(arg0, arg1, (long) arg2, null);
+    String id = assignmentData.getSingleResponse().getData().getId();
+    Response response = assignmentAPI.updateAssignment(id, request, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
 }

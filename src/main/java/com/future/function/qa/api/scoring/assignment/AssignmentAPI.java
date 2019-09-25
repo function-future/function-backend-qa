@@ -80,4 +80,28 @@ public class AssignmentAPI extends BaseAPI {
     return base.get(String.format(PATH_ID, id));
   }
 
+  @Step
+  public Response updateAssignment(String id, AssignmentWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> updateWithCookie(id, request, cookie),
+        () -> updateWithoutCookie(id, request));
+  }
+
+  private Response updateWithCookie(String id, AssignmentWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Response updateWithoutCookie(String id, AssignmentWebRequest request) {
+
+    return base
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
 }
