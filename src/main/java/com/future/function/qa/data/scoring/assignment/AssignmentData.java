@@ -3,6 +3,7 @@ package com.future.function.qa.data.scoring.assignment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.scoring.assignment.AssignmentWebRequest;
+import com.future.function.qa.model.request.scoring.assignment.CopyAssignmentWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.scoring.assignment.AssignmentWebResponse;
@@ -34,6 +35,14 @@ public class AssignmentData extends BaseData {
         .description(description)
         .deadline(deadline)
         .files(files)
+        .build();
+  }
+
+  public CopyAssignmentWebRequest createCopyRequest(String assignmentId, String batchCode) {
+
+    return CopyAssignmentWebRequest.builder()
+        .assignmentId(assignmentId)
+        .batchCode(batchCode)
         .build();
   }
 

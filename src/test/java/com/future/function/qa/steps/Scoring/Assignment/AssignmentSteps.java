@@ -4,6 +4,7 @@ import com.future.function.qa.api.scoring.assignment.AssignmentAPI;
 import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.scoring.assignment.AssignmentData;
 import com.future.function.qa.model.request.scoring.assignment.AssignmentWebRequest;
+import com.future.function.qa.model.request.scoring.assignment.CopyAssignmentWebRequest;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
@@ -132,5 +133,19 @@ public class AssignmentSteps extends BaseSteps {
   @Then("^assignment base response code should be (\\d+)$")
   public void assignmentBaseResponseCodeShouldBe(int arg0) {
     assertEquals(arg0, assignmentData.getBaseResponse().getCode());
+  }
+
+  @When("^user hit copy assignment with batchCode \"([^\"]*)\" and assignment id of previous get id$")
+  public void userHitCopyAssignmentWithBatchCodeAndQuizIdOfPreviousGetId(String batchCode) throws Throwable {
+    CopyAssignmentWebRequest request = assignmentData.createCopyRequest(assignmentData.getSingleResponse().getData().getId(), batchCode);
+    Response response = assignmentAPI.copyAssignment(request, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @When("^user hit copy assignment with batchCode\"([^\"]*)\" and random assignment id$")
+  public void userHitCopyAssignmentWithBatchCodeAndRandomAssignmentId(String batchCode) throws Throwable {
+    CopyAssignmentWebRequest request = assignmentData.createCopyRequest("random-id", batchCode);
+    Response response = assignmentAPI.copyAssignment(request, authData.getCookie());
+    assignmentData.setResponse(response);
   }
 }

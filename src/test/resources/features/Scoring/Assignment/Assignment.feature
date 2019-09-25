@@ -79,6 +79,34 @@ Feature: Assignment
     And assignment response body description should be "Assignment Description 2"
 
   @Negative @Assignment
+  Scenario: Copy assignment without logging in
+    Given user hit logout endpoint
+    When user hit copy assignment with batchCode "futur4" and assignment id of previous get id
+    Then assignment error response code should be 401
+
+  @Negative @Assignment
+  Scenario: Copy assignment with random assignment id
+    When user hit copy assignment with batchCode"futur4" and random assignment id
+    Then assignment error response code should be 404
+    And assignment error response status should be "NOT_FOUND"
+
+  @Negative @Assignment
+  Scenario: Copy assignment with random batch code
+    When user hit copy assignment with batchCode "random" and assignment id of previous get id
+    Then assignment error response code should be 404
+    And assignment error response status should be "NOT_FOUND"
+
+  @Positive @Assignment
+  Scenario: Copy assignment with logging in as admin
+    When user hit copy assignment with batchCode "futur4" and assignment id of previous get id
+    Then assignment response code should be 201
+    And assignment response body title should be "Assignment Title 2"
+    And assignment response body description should be "Assignment Description 2"
+    When user prepare assignment request with batchCode "futur4"
+    And user hit get all assignment endpoint
+    Then assignment paging response body should contains title "Assignment Title 2" and description "Assignment Description 2"
+
+  @Negative @Assignment
   Scenario: user delete assignment without logging in
     Given user hit logout endpoint
     When user hit delete assignment endpoint with previous get id
