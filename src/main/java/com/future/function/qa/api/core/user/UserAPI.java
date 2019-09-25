@@ -17,7 +17,7 @@ public class UserAPI extends BaseAPI {
   private static final String SEARCH = "/_search";
 
   @Step
-  public Response createUser(UserWebRequest request, Cookie cookie) {
+  public Response create(UserWebRequest request, Cookie cookie) {
 
     return doByCookiePresent(cookie, createUserWithCookie(request, cookie), createUserWithoutCookie(request));
   }
@@ -38,7 +38,7 @@ public class UserAPI extends BaseAPI {
   }
 
   @Step
-  public Response getUser(String id, Cookie cookie) {
+  public Response getDetail(String id, Cookie cookie) {
 
     return doByCookiePresent(cookie, getUserWithCookie(id, cookie), getUserWithoutCookie(id));
   }
@@ -55,7 +55,7 @@ public class UserAPI extends BaseAPI {
   }
 
   @Step
-  public Response getUsers(String role, int page, int size, Cookie cookie) {
+  public Response get(String role, int page, int size, Cookie cookie) {
 
     return doByCookiePresent(cookie, getUsersWithCookie(role, page, size, cookie),
         getUsersWithoutCookie(role, page, size));
@@ -79,7 +79,7 @@ public class UserAPI extends BaseAPI {
   }
 
   @Step
-  public Response getUsersByName(String namePart, int page, int size, Cookie cookie) {
+  public Response getByName(String namePart, int page, int size, Cookie cookie) {
 
     return doByCookiePresent(cookie, getUsersByNameWithCookie(namePart, page, size, cookie),
         getUsersByNameWithoutCookie(namePart, page, size));
@@ -100,6 +100,27 @@ public class UserAPI extends BaseAPI {
         .queryParam("page", page)
         .queryParam("size", size)
         .get(SEARCH);
+  }
+
+  @Step
+  public Response update(UserWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie, updateUserWithCookie(request, cookie), updateUserWithoutCookie(request));
+  }
+
+  private Supplier<Response> updateUserWithCookie(UserWebRequest request, Cookie cookie) {
+
+    return () -> base.body(request)
+        .contentType(ContentType.JSON)
+        .cookie(cookie)
+        .put(String.format(PATH_ID, request.getId()));
+  }
+
+  private Supplier<Response> updateUserWithoutCookie(UserWebRequest request) {
+
+    return () -> base.body(request)
+        .contentType(ContentType.JSON)
+        .put(String.format(PATH_ID, request.getId()));
   }
 
   @Step

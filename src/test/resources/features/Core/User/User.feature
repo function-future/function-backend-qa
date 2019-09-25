@@ -138,3 +138,37 @@ Feature: User
       | admin@admin.com           | administratorfunctionapp |
       | qa.mentor@mailinator.com  | mentormentorfunctionapp  |
       | qa.student@mailinator.com | studentfirstfunctionapp  |
+
+  @Negative @User
+  Scenario: Update user without being logged in
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.mentor.3@mailinator.com", name "Mentor Three", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user hit update user endpoint with email "qa.mentor.3.update@mailinator.com", name "Mentor Three Update", role "MENTOR", address "Address Update", phone "0815321321321", avatar "", batch code "", university ""
+    Then user response code should be 401
+
+  @Negative @User
+  Scenario: Update user without being logged in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.mentor.4@mailinator.com", name "Mentor Four", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.mentor.5@mailinator.com", name "Mentor Five", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user do login with email "qa.mentor.4@mailinator.com" and password "mentorfourfunctionapp"
+    And user hit update user endpoint with email "qa.mentor.5.update@mailinator.com", name "Mentor Five Update", role "MENTOR", address "Address Update", phone "0815321321321", avatar "", batch code "", university ""
+    Then user response code should be 403
+    And user hit logout endpoint
+
+  @Positive @User
+  Scenario: Update user after logging in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.mentor.6@mailinator.com", name "Mentor Six", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.mentor.7@mailinator.com", name "Mentor Seven", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit logout endpoint
+    And user prepare user request
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit update user endpoint with email "qa.mentor.7.update@mailinator.com", name "Mentor Seven Update", role "MENTOR", address "Address Update", phone "0815321321321", avatar "", batch code "", university ""
+    Then user response code should be 200
+    And user response's email should be "qa.mentor.7.update@mailinator.com"
+    And user hit logout endpoint

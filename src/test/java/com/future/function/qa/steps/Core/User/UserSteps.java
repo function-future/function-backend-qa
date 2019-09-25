@@ -64,7 +64,7 @@ public class UserSteps extends BaseSteps {
     UserWebRequest request =
         userData.createRequest(null, email, name, role, address, phone, requestAvatarId, batchCode, university);
 
-    Response response = userAPI.createUser(request, authData.getCookie());
+    Response response = userAPI.create(request, authData.getCookie());
 
     userData.setResponse(response);
   }
@@ -75,7 +75,7 @@ public class UserSteps extends BaseSteps {
     DataResponse<UserWebResponse> createdResponse = userData.getCreatedResponse();
     UserWebResponse createdResponseData = createdResponse.getData();
 
-    Response response = userAPI.getUser(createdResponseData.getId(), authData.getCookie());
+    Response response = userAPI.getDetail(createdResponseData.getId(), authData.getCookie());
 
     userData.setResponse(response);
   }
@@ -83,7 +83,7 @@ public class UserSteps extends BaseSteps {
   @And("^user hit get users by name endpoint with name part \"([^\"]*)\", page (\\d+), size (\\d+)$")
   public void userHitGetUsersByNameEndpointWithNamePartPageSize(String namePart, int page, int size) throws Throwable {
 
-    Response response = userAPI.getUsersByName(namePart, page, size, authData.getCookie());
+    Response response = userAPI.getByName(namePart, page, size, authData.getCookie());
 
     userData.setResponse(response);
   }
@@ -91,7 +91,24 @@ public class UserSteps extends BaseSteps {
   @And("^user hit get users endpoint with role \"([^\"]*)\", page (\\d+), size (\\d+)$")
   public void userHitGetUsersEndpointWithRolePageSize(String role, int page, int size) throws Throwable {
 
-    Response response = userAPI.getUsers(role, page, size, authData.getCookie());
+    Response response = userAPI.get(role, page, size, authData.getCookie());
+
+    userData.setResponse(response);
+  }
+
+  @And("^user hit update user endpoint with email \"([^\"]*)\", name \"([^\"]*)\", role \"([^\"]*)\", address \"" +
+      "([^\"]*)\", phone \"([^\"]*)\", avatar \"([^\"]*)\", batch code \"([^\"]*)\", university \"([^\"]*)\"$")
+  public void userHitUpdateUserEndpointWithEmailNameRoleAddressPhoneAvatarBatchCodeUniversity(String email, String name,
+      String role, String address, String phone, String avatar, String batchCode, String university) throws Throwable {
+
+    DataResponse<UserWebResponse> createdResponse = userData.getCreatedResponse();
+    UserWebResponse createdResponseData = createdResponse.getData();
+    String createdUserId = createdResponseData.getId();
+
+    UserWebRequest request =
+        userData.createRequest(createdUserId, email, name, role, address, phone, avatar, batchCode, university);
+
+    Response response = userAPI.update(request, authData.getCookie());
 
     userData.setResponse(response);
   }
