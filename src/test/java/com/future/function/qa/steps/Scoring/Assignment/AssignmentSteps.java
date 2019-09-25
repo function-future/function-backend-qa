@@ -36,7 +36,7 @@ public class AssignmentSteps extends BaseSteps {
 
   @When("^user hit create assignment endpoint with title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and empty list of files$")
   public void userHitCreateAssignmentEndpointWithTitleDescriptionDeadlineLAndEmptyListOfFiles(String title, String description, int deadline) throws Throwable {
-    AssignmentWebRequest request = assignmentData.createRequest(title, description, (long) deadline, Collections.emptyList());
+    AssignmentWebRequest request = assignmentData.createRequest(title, description, (long) deadline, null);
     Response response = assignmentAPI.createAssignment(request, authData.getCookie());
     assignmentData.setResponse(response);
   }
@@ -70,5 +70,23 @@ public class AssignmentSteps extends BaseSteps {
   @And("^assignment response body deadline should be (\\d+)$")
   public void assignmentResponseBodyDeadlineShouldBe(int deadline) {
     assertEquals(assignmentData.getSingleResponse().getData().getDeadline(), (long) deadline);
+  }
+
+  @When("^user hit get all assignment endpoint$")
+  public void userHitGetAllAssignmentEndpoint() {
+    Response response = assignmentAPI.getAllAssignment(authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @Then("^assignment paging response code should be (\\d+)$")
+  public void assignmentPagingResponseCodeShouldBe(int code) {
+    assertEquals(assignmentData.getPagedResponse().getCode(), code);
+  }
+
+  @And("^assignment paging response body should contains title \"([^\"]*)\" and description \"([^\"]*)\"$")
+  public void assignmentPagingResponseBodyShouldContainsTitleAndDescription(String title, String description) throws Throwable {
+    boolean result = assignmentData.getPagedResponse().getData().stream()
+        .anyMatch(assignment -> assignment.getTitle().equals(title) && assignment.getDescription().equals(description));
+    assertTrue(result);
   }
 }

@@ -42,4 +42,23 @@ public class AssignmentAPI extends BaseAPI {
         .post();
   }
 
+  @Step
+  public Response getAllAssignment(Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getAllWithCookie(cookie),
+        this::getAllWithoutCookie);
+  }
+
+  private Response getAllWithCookie(Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get();
+  }
+
+  private Response getAllWithoutCookie() {
+
+    return base.get();
+  }
+
 }
