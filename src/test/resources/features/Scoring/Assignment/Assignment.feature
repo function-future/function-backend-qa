@@ -1,0 +1,27 @@
+Feature: Assignment
+
+  Background:
+    Given user prepare auth request
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user prepare assignment request with batchCode "futur3"
+
+  @Negative @Assignment
+  Scenario: user create assignment without logging in
+    Given user hit logout endpoint
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1500000, and empty list of files
+    Then assignment error response code should be 401
+
+  @Negative @Assignment
+  Scenario: user create assignment with empty title and description
+    When user hit create assignment endpoint with title "", description "", deadline 1500000, and empty list of files
+    Then assignment error response code should be 400
+    And assignment error response body should have key "title" and value "NotBlank"
+    And assignment error response body should have key "description" and value "NotBlank"
+
+  @Positive @Assignment
+  Scenario: user create assignment with logging in as admin
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1500000, and empty list of files
+    Then assignment response code should be 201
+    And assignment response body title should be "Assignment Title"
+    And assignment response body description should be "Assignment Description"
+    And assignment response body deadline should be 1500000

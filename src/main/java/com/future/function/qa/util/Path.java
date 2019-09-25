@@ -17,4 +17,6 @@ public interface Path {
   String QUIZ = "/api/scoring/batches/%s/quizzes";
 
   String COPY = "/copy";
+
+  String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
 }
