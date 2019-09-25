@@ -61,4 +61,23 @@ public class AssignmentAPI extends BaseAPI {
     return base.get();
   }
 
+  @Step
+  public Response getAssignment(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getWithCookie(id, cookie),
+        () -> getWithoutCookie(id));
+  }
+
+  private Response getWithCookie(String id, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get(String.format(PATH_ID, id));
+  }
+
+  private Response getWithoutCookie(String id) {
+
+    return base.get(String.format(PATH_ID, id));
+  }
+
 }

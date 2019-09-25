@@ -89,4 +89,22 @@ public class AssignmentSteps extends BaseSteps {
         .anyMatch(assignment -> assignment.getTitle().equals(title) && assignment.getDescription().equals(description));
     assertTrue(result);
   }
+
+  @When("^user hit get assignment endpoint with previous created id$")
+  public void userHitGetAssignmentEndpointWithPreviousCreatedId() {
+    String id = assignmentData.getSingleResponse().getData().getId();
+    Response response = assignmentAPI.getAssignment(id, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @When("^user get assignment endpoint with random id$")
+  public void userGetAssignmentEndpointWithRandomId() {
+    Response response = assignmentAPI.getAssignment("random-id", authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @And("^assignment error response status should be \"([^\"]*)\"$")
+  public void assignmentErrorResponseStatusShouldBe(String status) throws Throwable {
+    assertEquals(assignmentData.getErrorResponse().getStatus(), status);
+  }
 }
