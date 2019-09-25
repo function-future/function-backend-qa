@@ -2,6 +2,7 @@ package com.future.function.qa.data.scoring.quiz;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
+import com.future.function.qa.model.request.scoring.quiz.CopyQuizWebRequest;
 import com.future.function.qa.model.request.scoring.quiz.QuizWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
@@ -39,6 +40,14 @@ public class QuizData extends BaseData {
         .endDate(endDate)
         .questionCount(questionCount)
         .questionBanks(questionBanks)
+        .build();
+  }
+
+  public CopyQuizWebRequest createCopyRequest(String batchCode, String quizId) {
+
+    return CopyQuizWebRequest.builder()
+        .quizId(quizId)
+        .batchCode(batchCode)
         .build();
   }
 

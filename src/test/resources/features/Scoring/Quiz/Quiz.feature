@@ -91,6 +91,34 @@ Feature: Quiz
     And quiz response body should have id of first data in question bank list
 
   @Negative @Quiz
+  Scenario: Copy quiz without logging in
+    Given user hit logout endpoint
+    When user hit copy quiz with batchCode "futur4" and quiz id of previous get id
+    Then quiz error response code should be 401
+
+  @Negative @Quiz
+  Scenario: Copy quiz with random quiz id
+    When user hit copy quiz with batchCode"futur4" and random quiz id
+    Then quiz error response code should be 404
+    And quiz error response status should be "NOT_FOUND"
+
+  @Negative @Quiz
+  Scenario: Copy quiz with random batch code
+    When user hit copy quiz with batchCode "random" and quiz id of previous get id
+    Then quiz error response code should be 404
+    And quiz error response status should be "NOT_FOUND"
+
+  @Positive @Quiz
+  Scenario: Copy quiz with logging in as admin
+    When user hit copy quiz with batchCode "futur4" and quiz id of previous get id
+    Then quiz response code should be 201
+    And quiz response body should have title "Quiz Title 2"
+    And quiz response body should have description "Quiz Description 2"
+    When user prepare quiz request with batchCode "futur4"
+    And user hit get all quiz endpoint
+    Then quiz paging response body should contains title "Quiz Title 2" and description "Quiz Description 2"
+
+  @Negative @Quiz
   Scenario: Delete quiz with previous updated id without logging in
     Given user hit logout endpoint
     When user hit delete quiz endpoint with previous updated id
@@ -108,3 +136,4 @@ Feature: Quiz
     When user hit get quiz endpoint with previous created id
     Then quiz error response code should be 404
     And quiz error response status should be "NOT_FOUND"
+

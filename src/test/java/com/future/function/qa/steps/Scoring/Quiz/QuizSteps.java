@@ -4,6 +4,7 @@ import com.future.function.qa.api.scoring.quiz.QuizAPI;
 import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.scoring.question_bank.QuestionBankData;
 import com.future.function.qa.data.scoring.quiz.QuizData;
+import com.future.function.qa.model.request.scoring.quiz.CopyQuizWebRequest;
 import com.future.function.qa.model.request.scoring.quiz.QuizWebRequest;
 import com.future.function.qa.model.response.question_bank.QuestionBankWebResponse;
 import com.future.function.qa.steps.BaseSteps;
@@ -174,5 +175,26 @@ public class QuizSteps extends BaseSteps {
   @Then("^quiz base response code should be (\\d+)$")
   public void quizBaseResponseCodeShouldBe(int code) {
     assertEquals(quizData.getBaseResponse().getCode(), code);
+  }
+
+  @When("^user hit copy quiz with batchCode \"([^\"]*)\" and quiz id of previous get id$")
+  public void userHitCopyQuizWithBatchCodeAndQuizIdOfPreviousGetId(String batchCode) throws Throwable {
+    CopyQuizWebRequest webRequest = quizData.createCopyRequest(batchCode, quizData.getSingleResponse().getData().getId());
+    Response response = quizAPI.copyQuiz(webRequest, authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @When("^user hit copy quiz with batchCode\"([^\"]*)\" and random quiz id$")
+  public void userHitCopyQuizWithBatchCodeAndRandomQuizId(String batchCode) throws Throwable {
+
+    CopyQuizWebRequest webRequest = quizData.createCopyRequest(batchCode, "random-id");
+    Response response = quizAPI.copyQuiz(webRequest, authData.getCookie());
+    quizData.setResponse(response);
+  }
+
+  @And("^quiz response body should have batchCode \"([^\"]*)\"$")
+  public void quizResponseBodyShouldHaveBatchCode(String expectedBatchCode) throws Throwable {
+
+    assertEquals(expectedBatchCode, quizData.getSingleResponse().getData().getBatchCode());
   }
 }

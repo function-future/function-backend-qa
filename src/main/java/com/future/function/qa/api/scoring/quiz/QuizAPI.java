@@ -1,6 +1,7 @@
 package com.future.function.qa.api.scoring.quiz;
 
 import com.future.function.qa.api.BaseAPI;
+import com.future.function.qa.model.request.scoring.quiz.CopyQuizWebRequest;
 import com.future.function.qa.model.request.scoring.quiz.QuizWebRequest;
 import com.future.function.qa.util.Path;
 import io.restassured.http.ContentType;
@@ -119,5 +120,28 @@ public class QuizAPI extends BaseAPI {
   private Response deleteWithoutCookie(String id) {
 
     return base.delete(String.format(PATH_ID, id));
+  }
+
+  @Step
+  public Response copyQuiz(CopyQuizWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> copyWithCookie(request, cookie),
+        () -> copyWithoutCookie(request));
+  }
+
+  private Response copyWithCookie(CopyQuizWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .contentType(ContentType.JSON)
+        .body(request)
+        .post(Path.COPY);
+  }
+
+  private Response copyWithoutCookie(CopyQuizWebRequest request) {
+
+    return base.contentType(ContentType.JSON)
+        .body(request)
+        .post(Path.COPY);
   }
 }
