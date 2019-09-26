@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.future.function.qa.api.core.user.UserAPI;
@@ -22,6 +23,7 @@ import com.future.function.qa.model.response.base.paging.Paging;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.model.response.core.user.UserWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -38,6 +40,14 @@ public class UserSteps extends BaseSteps {
 
   @Autowired
   private UserData userData;
+
+  @And("^qa system do cleanup data for user with name \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void qaSystemDoCleanupDataForUserWithNameAndEmail(String name, String email) throws Throwable {
+
+    userAPI.prepare();
+    userObtainUserIdWithNameAndEmail(name, email);
+    userHitDeleteUserEndpointWithRecordedId();
+  }
 
   @And("^user error response has key \"([^\"]*)\" and value \"([^\"]*)\"$")
   public void userErrorResponseHasKeyAndValue(String key, String value) throws Throwable {
@@ -65,6 +75,14 @@ public class UserSteps extends BaseSteps {
         userData.createRequest(null, email, name, role, address, phone, requestAvatarId, batchCode, university);
 
     Response response = userAPI.create(request, authData.getCookie());
+
+    userData.setResponse(response);
+  }
+
+  @And("^user hit delete user endpoint with recorded target user id$")
+  public void userHitDeleteUserEndpointWithRecordedId() throws Throwable {
+
+    Response response = userAPI.delete(userData.getTargetUserId(), authData.getCookie());
 
     userData.setResponse(response);
   }
@@ -111,6 +129,26 @@ public class UserSteps extends BaseSteps {
     Response response = userAPI.update(request, authData.getCookie());
 
     userData.setResponse(response);
+  }
+
+  @And("^user obtain user id with name \"([^\"]*)\" and email \"([^\"]*)\"$")
+  public void userObtainUserIdWithNameAndEmail(String name, String email) throws Throwable {
+
+    Response getByNameResponse = userAPI.getByName(name, 1, 100, authData.getCookie());
+
+    userData.setResponse(getByNameResponse);
+
+    PagingResponse<UserWebResponse> pagingResponse = userData.getPagingResponse();
+    List<UserWebResponse> pagingResponseData = pagingResponse.getData();
+
+    String targetUserId = pagingResponseData.stream()
+        .filter(userWebResponse -> userWebResponse.getEmail()
+            .equals(email))
+        .map(UserWebResponse::getId)
+        .findFirst()
+        .orElse(StringUtils.EMPTY);
+
+    userData.setTargetUserId(targetUserId);
   }
 
   @Given("^user prepare user request$")

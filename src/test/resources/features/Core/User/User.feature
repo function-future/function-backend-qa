@@ -172,3 +172,47 @@ Feature: User
     Then user response code should be 200
     And user response's email should be "qa.mentor.7.update@mailinator.com"
     And user hit logout endpoint
+
+  @Negative @User
+  Scenario: Delete user without being logged in
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.adm.2@mailinator.com", name "Admin", role "ADMIN", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user obtain user id with name "Admin" and email "qa.adm.2@mailinator.com"
+    And user hit logout endpoint
+    And user prepare user request
+    And user hit delete user endpoint with recorded target user id
+    Then user response code should be 401
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And qa system do cleanup data for user with name "Admin" and email "qa.adm.2@mailinator.com"
+    And user hit logout endpoint
+
+  @Negative @User
+  Scenario: Delete user without being logged in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.mentor.8@mailinator.com", name "Mentor Eight", role "MENTOR", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.adm.3@mailinator.com", name "Admin", role "ADMIN", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user obtain user id with name "Admin" and email "qa.adm.3@mailinator.com"
+    And user hit logout endpoint
+    And user prepare user request
+    And user do login with email "qa.mentor.8@mailinator.com" and password "mentoreightfunctionapp"
+    And user hit delete user endpoint with recorded target user id
+    Then user response code should be 403
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And qa system do cleanup data for user with name "Mentor Eight" and email "qa.mentor.8@mailinator.com"
+    And qa system do cleanup data for user with name "Admin" and email "qa.adm.3@mailinator.com"
+    And user hit logout endpoint
+
+  @Negative @User
+  Scenario: Delete user after logging in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create user endpoint with email "qa.adm.4@mailinator.com", name "Admin", role "ADMIN", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "qa.adm.5@mailinator.com", name "Admin", role "ADMIN", address "Address", phone "0815123123123", avatar "", batch code "", university ""
+    And user obtain user id with name "Admin" and email "qa.adm.5@mailinator.com"
+    And user hit logout endpoint
+    And user prepare user request
+    And user do login with email "qa.adm.4@mailinator.com" and password "adminfunctionapp"
+    And user hit delete user endpoint with recorded target user id
+    Then user response code should be 200
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And qa system do cleanup data for user with name "Admin" and email "qa.adm.4@mailinator.com"
+    And user hit logout endpoint
