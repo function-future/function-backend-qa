@@ -46,7 +46,7 @@ public abstract class BaseData {
     }
   }
 
-  protected void setResponse(Response response) {
+  public void setResponse(Response response) {
 
     this.responseCode = response.getStatusCode();
     this.baseResponse = asBaseResponse(response);
