@@ -26,6 +26,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class UserData extends BaseData {
 
+  private String targetUserId;
+
   private DataResponse<UserWebResponse> createdResponse = new DataResponse<>();
 
   private UserWebRequest request;
