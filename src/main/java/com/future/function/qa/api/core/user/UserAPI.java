@@ -124,6 +124,23 @@ public class UserAPI extends BaseAPI {
   }
 
   @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, deleteUserWithCookie(id, cookie), deleteUserWithoutCookie(id));
+  }
+
+  private Supplier<Response> deleteUserWithCookie(String id, Cookie cookie) {
+
+    return () -> base.cookie(cookie)
+        .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteUserWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
+  @Step
   @Override
   public RequestSpecification prepare() {
 
