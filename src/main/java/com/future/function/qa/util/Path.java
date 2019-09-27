@@ -21,4 +21,6 @@ public interface Path {
   String COPY = "/copy";
 
   String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
+
+  String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
 }
