@@ -24,4 +24,38 @@ Feature: Room
         Then room response code should be 200
         And room response body assignment id should be the previous fetched assignment id
         And room response body student id should be the previous fetched student id;
-        And room response body point should be 0
+
+    @Negative @Room
+    Scenario: Update Room Score without logging in
+        Given user hit logout endpoint
+        When user hit update room score endpoint with score 90
+        Then room error response code should be 401
+
+    @Negative @Room
+    Scenario: Update Room Score as Admin
+        When user hit update room score endpoint with score 90
+        Then room error response code should be 403
+
+    @Negative @Room
+    Scenario: Update Room Score as Mentor with minus point
+        Given user hit logout endpoint
+        When user do login with email "oliver@mentor.com" and password "oliverfunctionapp"
+        And user hit update room score endpoint with score - 10
+        Then room error response code should be 400
+        And room error response body should have key "point" and value "Min"
+
+    @Negative @Room
+    Scenario: Update Room Score as Mentor with minus point
+        Given user hit logout endpoint
+        When user do login with email "oliver@mentor.com" and password "oliverfunctionapp"
+        And user hit update room score endpoint with score null
+        Then room error response code should be 400
+        And room error response body should have key "point" and value "NotNull"
+
+    @Positive @Room
+    Scenario: Update room score as Mentor
+        Given user hit logout endpoint
+        When user do login with email "oliver@mentor.com" and password "oliverfunctionapp"
+        And user hit update room score endpoint with score 90
+        Then room response code should be 200
+        And room response body point should be 90

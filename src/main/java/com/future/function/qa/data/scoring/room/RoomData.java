@@ -2,6 +2,7 @@ package com.future.function.qa.data.scoring.room;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
+import com.future.function.qa.model.request.scoring.room.RoomPointWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.scoring.room.RoomWebResponse;
@@ -28,6 +29,13 @@ public class RoomData extends BaseData {
   private String studentId;
 
   private String assignmentId;
+
+  public RoomPointWebRequest createUpdateScoreRequest(Integer score) {
+
+    return RoomPointWebRequest.builder()
+        .point(score)
+        .build();
+  }
 
   @Override
   public void setResponse(Response response) {

@@ -5,7 +5,9 @@ import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.core.user.UserData;
 import com.future.function.qa.data.scoring.assignment.AssignmentData;
 import com.future.function.qa.data.scoring.room.RoomData;
+import com.future.function.qa.model.request.scoring.room.RoomPointWebRequest;
 import com.future.function.qa.steps.BaseSteps;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,6 +16,7 @@ import net.thucydides.core.annotations.Steps;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RoomSteps extends BaseSteps {
 
@@ -80,9 +83,37 @@ public class RoomSteps extends BaseSteps {
     assertEquals(roomData.getStudentId(), roomData.getSingleResponse().getData().getStudent().getId());
   }
 
-  @And("^room response body point should be 0$")
-  public void roomResponseBodyPointShouldBeZero() {
+  @And("^room response body point should be (\\d+)$")
+  public void roomResponseBodyPointShouldBe(int score) {
 
-    assertEquals(0, roomData.getSingleResponse().getData().getPoint().intValue());
+    assertEquals(score, roomData.getSingleResponse().getData().getPoint().intValue());
+  }
+
+  @When("^user hit update room score endpoint with score (\\d+)$")
+  public void userHitUpdateRoomScoreEndpointWithScore(int score) {
+
+    RoomPointWebRequest request = roomData.createUpdateScoreRequest(score);
+    Response response = roomAPI.updateRoomScore(request, authData.getCookie());
+    roomData.setResponse(response);
+  }
+
+  @And("^user hit update room score endpoint with score - (\\d+)$")
+  public void userHitUpdateRoomScoreEndpointWithScoreMinus(int score) {
+    RoomPointWebRequest request = roomData.createUpdateScoreRequest(-(score));
+    Response response = roomAPI.updateRoomScore(request, authData.getCookie());
+    roomData.setResponse(response);
+  }
+
+  @And("^user hit update room score endpoint with score null$")
+  public void userHitUpdateRoomScoreEndpointWithScoreNull() {
+    RoomPointWebRequest request = roomData.createUpdateScoreRequest(null);
+    Response response = roomAPI.updateRoomScore(request, authData.getCookie());
+    roomData.setResponse(response);
+  }
+
+  @And("^room error response body should have key \"([^\"]*)\" and value \"([^\"]*)\"$")
+  public void roomErrorResponseBodyShouldHaveKeyAndValue(String key, String arg1) throws Throwable {
+    assertTrue(roomData.getErrorResponse().getErrors().containsKey(key));
+    assertEquals(arg1, roomData.getErrorResponse().getErrors().get(key).get(0));
   }
 }
