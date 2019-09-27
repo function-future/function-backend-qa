@@ -59,3 +59,21 @@ Feature: Room
         And user hit update room score endpoint with score 90
         Then room response code should be 200
         And room response body point should be 90
+
+    @Negative @Room
+    Scenario: Delete room without logging in
+        Given user hit logout endpoint
+        When user hit delete room endpoint
+        Then room error response code should be 401
+
+    @Negative @Room
+    Scenario: Delete room with logging in as Mentor
+        Given user hit logout endpoint
+        When user do login with email "oliver@mentor.com" and password "oliverfunctionapp"
+        And user hit delete room endpoint
+        Then room error response code should be 403
+
+    @Positive @Room
+    Scenario: Delete room with logging in as admin
+        When user hit delete room endpoint
+        Then room base response code should be 200

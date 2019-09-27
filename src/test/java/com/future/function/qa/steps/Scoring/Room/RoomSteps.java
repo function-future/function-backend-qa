@@ -112,8 +112,19 @@ public class RoomSteps extends BaseSteps {
   }
 
   @And("^room error response body should have key \"([^\"]*)\" and value \"([^\"]*)\"$")
-  public void roomErrorResponseBodyShouldHaveKeyAndValue(String key, String arg1) throws Throwable {
+  public void roomErrorResponseBodyShouldHaveKeyAndValue(String key, String value) throws Throwable {
     assertTrue(roomData.getErrorResponse().getErrors().containsKey(key));
-    assertEquals(arg1, roomData.getErrorResponse().getErrors().get(key).get(0));
+    assertEquals(value, roomData.getErrorResponse().getErrors().get(key).get(0));
+  }
+
+  @When("^user hit delete room endpoint$")
+  public void userHitDeleteRoomEndpoint() {
+    Response response = roomAPI.deleteRoom(authData.getCookie());
+    roomData.setResponse(response);
+  }
+
+  @Then("^room base response code should be (\\d+)$")
+  public void roomBaseResponseCodeShouldBe(int code) {
+    assertEquals(code, roomData.getBaseResponse().getCode());
   }
 }

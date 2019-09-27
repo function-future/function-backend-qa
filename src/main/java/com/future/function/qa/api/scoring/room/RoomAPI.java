@@ -61,4 +61,23 @@ public class RoomAPI extends BaseAPI {
         .put();
   }
 
+  @Step
+  public Response deleteRoom(Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> deleteWithCookie(cookie),
+        this::deletewithoutCookie);
+  }
+
+  private Response deleteWithCookie(Cookie cookie) {
+
+    return base.cookie(cookie)
+        .delete();
+  }
+
+  private Response deletewithoutCookie() {
+
+    return base.delete();
+  }
+
 }
