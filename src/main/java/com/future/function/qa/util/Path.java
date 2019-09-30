@@ -23,4 +23,6 @@ public interface Path {
   String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
 
   String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
+
+  String COMMENT = "/api/scoring/batches/batchId/assignments/%s/room/%s/comments";
 }
