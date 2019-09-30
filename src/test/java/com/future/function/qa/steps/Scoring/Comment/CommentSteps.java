@@ -17,6 +17,7 @@ import net.thucydides.core.annotations.Steps;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CommentSteps extends BaseSteps {
 
@@ -68,5 +69,25 @@ public class CommentSteps extends BaseSteps {
   @And("^comment response body author name should be \"([^\"]*)\"$")
   public void commentResponseBodyAuthorNameShouldBe(String authorName) throws Throwable {
     assertEquals(authorName, commentData.getSingleResponse().getData().getAuthor().getName());
+  }
+
+  @When("^user hit get all comment endpoint$")
+  public void userHitGetAllCommentEndpoint() {
+    Response response = commentAPI.getAllComment(authData.getCookie());
+    commentData.setResponse(response);
+  }
+
+  @Then("^comment paging response code should be (\\d+)$")
+  public void commentPagingResponseCodeShouldBe(int code) {
+    assertEquals(commentData.getPagedResponse().getCode(), code);
+  }
+
+  @And("^comment paging response body should contains comment \"([^\"]*)\" and author name \"([^\"]*)\"$")
+  public void commentPagingResponseBodyShouldContainsCommentAndAuthorName(String commentText,
+      String authorName) throws Throwable {
+    boolean result = commentData.getPagedResponse().getData().stream()
+        .anyMatch(comment -> comment.getComment().equals(commentText) &&
+            comment.getAuthor().getName().equals(authorName));
+    assertTrue(result);
   }
 }

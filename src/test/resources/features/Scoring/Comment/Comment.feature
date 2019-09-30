@@ -30,3 +30,15 @@ Feature: Comment Feature
     Then comment response code should be 201
     And comment response body comment should be "Comment 1"
     And comment response body author name should be "Oliver"
+
+  @Negative @Comment
+  Scenario: User get all comment without logging in
+    Given user hit logout endpoint
+    And user hit get all comment endpoint
+    Then comment error response code should be 401
+
+  @Positive @Comment
+  Scenario: User get all comment with logging in as admin
+    When user hit get all comment endpoint
+    Then comment paging response code should be 200
+    And comment paging response body should contains comment "Comment 1" and author name "Oliver"
