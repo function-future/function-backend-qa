@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudentQuestionWebRequest {
 
-  private int number;
+  private Integer number;
 
   private String optionId;
 

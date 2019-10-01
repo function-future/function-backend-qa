@@ -29,6 +29,8 @@ public class StudentQuestionData extends BaseData {
   private String batchCode;
   private String quizId;
 
+  private int currentTrials;
+
   private PagingResponse<StudentQuestionWebResponse> pagedResponse;
 
   private DataResponse<StudentQuizDetailWebResponse> quizDetailResponse;
