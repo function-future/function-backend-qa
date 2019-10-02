@@ -116,14 +116,18 @@ public class ReportSteps extends BaseSteps {
   @And("^report response body should have not equal with these data$")
   public void reportResponseBodyShouldHaveNotEqualWithTheseData(DataTable dataTable) {
     Map<String, String> data = dataTable.asMap(String.class, String.class);
-    List<Integer> rangeSize = new ArrayList<>(Arrays.asList(data.get("studentCount").split("-")))
-        .stream()
-        .map(Integer::valueOf)
-        .collect(Collectors.toList());
+    List<Integer> rangeSize = getStudentCountRange(data);
     assertNotEquals(data.get("name"), reportData.getSingleResponse().getData().getName());
     assertNotEquals(data.get("description"), reportData.getSingleResponse().getData().getDescription());
     assertTrue(rangeSize.get(0) < reportData.getSingleResponse().getData().getStudentCount() &&
         rangeSize.get(1) > reportData.getSingleResponse().getData().getStudentCount());
+  }
+
+  private List<Integer> getStudentCountRange(Map<String, String> data) {
+    return new ArrayList<>(Arrays.asList(data.get("studentCount").split("-")))
+        .stream()
+        .map(Integer::valueOf)
+        .collect(Collectors.toList());
   }
 
   @When("^user hit get all report endpoint$")
@@ -135,5 +139,16 @@ public class ReportSteps extends BaseSteps {
   @Then("^report paging response code should be (\\d+)$")
   public void reportPagingResponseCodeShouldBe(int code) {
     assertEquals(code, reportData.getPagedResponse().getCode());
+  }
+
+  @And("^report paging response body should have not equals with these data$")
+  public void reportPagingResponseBodyShouldHaveNotEqualsWithTheseData(DataTable dataTable) {
+    Map<String, String> dataMap = dataTable.asMap(String.class, String.class);
+    reportData.getPagedResponse().getData().forEach(data -> {
+      assertNotEquals(dataMap.get("name"), data.getName());
+      assertNotEquals(dataMap.get("description"), data.getDescription());
+      assertTrue(data.getStudentCount() > getStudentCountRange(dataMap).get(0) &&
+          data.getStudentCount() < getStudentCountRange(dataMap).get(1));
+    });
   }
 }
