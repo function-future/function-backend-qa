@@ -53,6 +53,21 @@ Feature: Report Feature
     And user hit get report with any id from all report response
     Then report response code should be 200
     And report response body should have not equal with these data
-      | name            | "" |
-      | description     | "" |
-      | studentCount    | 1-4  |
+      | name            | ""    |
+      | description     | ""    |
+      | studentCount    | 1-4   |
+
+  @Negative @Report
+  Scenario: User hit get all report without logging in
+    Given user hit logout endpoint
+    When user hit get all report endpoint
+    Then report error response code should be 401
+
+  @Positive @Report
+  Scenario: User hit get all report with logging in as admin
+    When user hit get all report endpoint
+    Then report paging response code should be 200
+    And report paging response body should have not equals with these data
+      | name            | ""    |
+      | description     | ""    |
+      | studentCount    | 1-4   |

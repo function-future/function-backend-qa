@@ -131,4 +131,9 @@ public class ReportSteps extends BaseSteps {
     Response response = reportAPI.getAllReport(authData.getCookie());
     reportData.setResponse(response);
   }
+
+  @Then("^report paging response code should be (\\d+)$")
+  public void reportPagingResponseCodeShouldBe(int code) {
+    assertEquals(code, reportData.getPagedResponse().getCode());
+  }
 }
