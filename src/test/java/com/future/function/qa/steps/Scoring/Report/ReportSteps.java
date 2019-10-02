@@ -14,6 +14,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import net.thucydides.core.annotations.Steps;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -98,5 +100,35 @@ public class ReportSteps extends BaseSteps {
       assertTrue(key, reportData.getErrorResponse().getErrors().containsKey(key));
       assertEquals(value, reportData.getErrorResponse().getErrors().get(key).get(0));
     });
+  }
+
+  @And("^user hit get report with any id from all report response$")
+  public void userHitGetReportWithAnyIdFromAllReportResponse() {
+    String reportId = reportData.getPagedResponse().getData()
+        .stream()
+        .findAny()
+        .get()
+        .getId();
+    Response response = reportAPI.getReport(reportId, authData.getCookie());
+    reportData.setResponse(response);
+  }
+
+  @And("^report response body should have not equal with these data$")
+  public void reportResponseBodyShouldHaveNotEqualWithTheseData(DataTable dataTable) {
+    Map<String, String> data = dataTable.asMap(String.class, String.class);
+    List<Integer> rangeSize = new ArrayList<>(Arrays.asList(data.get("studentCount").split("-")))
+        .stream()
+        .map(Integer::valueOf)
+        .collect(Collectors.toList());
+    assertNotEquals(data.get("name"), reportData.getSingleResponse().getData().getName());
+    assertNotEquals(data.get("description"), reportData.getSingleResponse().getData().getDescription());
+    assertTrue(rangeSize.get(0) < reportData.getSingleResponse().getData().getStudentCount() &&
+        rangeSize.get(1) > reportData.getSingleResponse().getData().getStudentCount());
+  }
+
+  @When("^user hit get all report endpoint$")
+  public void userHitGetAllReportEndpoint() {
+    Response response = reportAPI.getAllReport(authData.getCookie());
+    reportData.setResponse(response);
   }
 }

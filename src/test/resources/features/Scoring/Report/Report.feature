@@ -39,3 +39,20 @@ Feature: Report Feature
     And report response body should have these data
       | name        | Final Judging Session 1             |
       | description | Final Judging Session 1 Description |
+
+  @Negative @Report
+  Scenario: User hit get report without logging in
+    When user hit get all report endpoint
+    And user hit logout endpoint
+    And user hit get report with any id from all report response
+    Then report error response code should be 401
+
+  @Positive @Report
+  Scenario: User hit get report with logging in as admin
+    When user hit get all report endpoint
+    And user hit get report with any id from all report response
+    Then report response code should be 200
+    And report response body should have not equal with these data
+      | name            | "" |
+      | description     | "" |
+      | studentCount    | 1-4  |

@@ -8,6 +8,7 @@ import io.restassured.http.Cookie;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.annotations.Steps;
 
 public class ReportAPI extends BaseAPI {
 
@@ -59,6 +60,44 @@ public class ReportAPI extends BaseAPI {
   private Response getStudentsWithoutCookie() {
 
     return base.get(Path.STUDENTS);
+  }
+
+  @Step
+  public Response getReport(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getWithCookie(id, cookie),
+        () -> getWithoutCookie(id));
+  }
+
+  private Response getWithCookie(String id, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get(String.format(PATH_ID, id));
+  }
+
+  private Response getWithoutCookie(String id) {
+
+    return base.get(String.format(PATH_ID, id));
+  }
+
+  @Step
+  public Response getAllReport(Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> getAllWithCookie(cookie),
+        this::getAllWithoutCookie);
+  }
+
+  private Response getAllWithCookie(Cookie cookie) {
+
+    return base.cookie(cookie)
+        .get();
+  }
+
+  private Response getAllWithoutCookie() {
+
+    return base.get();
   }
 
 }
