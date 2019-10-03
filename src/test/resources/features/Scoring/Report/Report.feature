@@ -50,6 +50,7 @@ Feature: Report Feature
   @Positive @Report
   Scenario: User hit get report with logging in as admin
     When user hit get all report endpoint
+    And user store report id from all report response
     And user hit get report with any id from all report response
     Then report response code should be 200
     And report response body should have not equal with these data
@@ -71,3 +72,42 @@ Feature: Report Feature
       | name            | ""    |
       | description     | ""    |
       | studentCount    | 1-4   |
+
+  @Negative @Report
+  Scenario: User hit update report without logging in
+    When user hit get all report endpoint
+    And user store report id from all report response
+    And user hit logout endpoint
+    And user hit update report endpoint with these data
+      | name          | description               |
+      | Final Judging | Final Judging Description |
+    Then report error response code should be 401
+
+  @Negative @Report
+  Scenario: User hit update report with empty parameters
+    When user hit get all report endpoint
+    And user store report id from all report response
+    And user hit update report endpoint with these data
+      | name          |   |
+      | Final Judging |   |
+    Then report error response code should be 400
+    And report error response body should contains these data
+      | name        | Final Judging             |
+      | description | Final Judging Description |
+
+  @Positive @Report
+  Scenario: User hit update report with logging in as admin
+    When user hit get all report endpoint
+    And user store report id from all report response
+    And user hit update report endpoint with these data
+      | name          | description               |
+      | Final Judging | Final Judging Description |
+    Then report response code should be 200
+    And report response body should have not equal with these data
+      | name            | ""    |
+      | description     | ""    |
+      | studentCount    | 1-4   |
+
+
+
+

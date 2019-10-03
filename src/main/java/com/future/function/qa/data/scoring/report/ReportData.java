@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReportData extends BaseData {
 
+  private String reportId;
+
   private PagingResponse<UserWebResponse> studentPagingResponse;
   private DataResponse<ReportWebResponse> singleResponse;
   private PagingResponse<ReportWebResponse> pagedResponse;

@@ -100,4 +100,28 @@ public class ReportAPI extends BaseAPI {
     return base.get();
   }
 
+  @Step
+  public Response updateReport(String id, ReportWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+        () -> updateWithCookie(id, request, cookie),
+        () -> updateWithoutCookie(id, request));
+  }
+
+  private Response updateWithCookie(String id, ReportWebRequest request, Cookie cookie) {
+
+    return base.cookie(cookie)
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Response updateWithoutCookie(String id, ReportWebRequest request) {
+
+    return base
+        .contentType(ContentType.JSON)
+        .body(request)
+        .put(String.format(PATH_ID, id));
+  }
+
 }

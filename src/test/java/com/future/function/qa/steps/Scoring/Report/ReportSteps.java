@@ -104,12 +104,7 @@ public class ReportSteps extends BaseSteps {
 
   @And("^user hit get report with any id from all report response$")
   public void userHitGetReportWithAnyIdFromAllReportResponse() {
-    String reportId = reportData.getPagedResponse().getData()
-        .stream()
-        .findAny()
-        .get()
-        .getId();
-    Response response = reportAPI.getReport(reportId, authData.getCookie());
+    Response response = reportAPI.getReport(reportData.getReportId(), authData.getCookie());
     reportData.setResponse(response);
   }
 
@@ -150,5 +145,27 @@ public class ReportSteps extends BaseSteps {
       assertTrue(data.getStudentCount() > getStudentCountRange(dataMap).get(0) &&
           data.getStudentCount() < getStudentCountRange(dataMap).get(1));
     });
+  }
+
+  @And("^user store report id from all report response$")
+  public void userStoreReportIdFromAllReportResponse() {
+    String reportId = reportData.getPagedResponse().getData()
+        .stream()
+        .findAny()
+        .get()
+        .getId();
+    reportData.setReportId(reportId);
+  }
+
+  @And("^user hit update report endpoint with these data$")
+  public void userHitUpdateReportEndpointWithTheseData(DataTable dataTable) {
+    ReportWebRequest request = dataTable.asList(ReportWebRequest.class).get(0);
+    List<String> studentIds = reportData.getSingleResponse().getData().getStudents().stream()
+        .map(UserWebResponse::getId)
+        .collect(Collectors.toList());
+    request.setStudents(studentIds);
+    Response response = reportAPI.updateReport(reportData.getReportId(), request, authData.getCookie());
+    reportData.setResponse(response);
+
   }
 }
