@@ -88,12 +88,12 @@ Feature: Report Feature
     When user hit get all report endpoint
     And user store report id from all report response
     And user hit update report endpoint with these data
-      | name          |   |
-      | Final Judging |   |
+      | name        | Description  |
+      |             |              |
     Then report error response code should be 400
     And report error response body should contains these data
-      | name        | Final Judging             |
-      | description | Final Judging Description |
+      | name        | NotBlank |
+      | description | NotBlank |
 
   @Positive @Report
   Scenario: User hit update report with logging in as admin
@@ -107,6 +107,23 @@ Feature: Report Feature
       | name            | ""    |
       | description     | ""    |
       | studentCount    | 1-4   |
+
+  @Negative @Report
+  Scenario: User hit delete report without logging in as admin
+    When user hit get all report endpoint
+    And user store report id from all report response
+    And user hit logout endpoint
+    And user hit delete report endpoint with stored id
+    Then report error response code should be 401
+
+  @Positive @Report
+  Scenario: User hit delete report with logging in as admin
+    When user hit get all report endpoint
+    And user store report id from all report response
+    And user hit delete report endpoint with stored id
+    Then report base response code should be 200
+    When user hit get report with any id from all report response
+    Then report error response code should be 404
 
 
 

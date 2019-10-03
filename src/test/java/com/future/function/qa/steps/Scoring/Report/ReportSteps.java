@@ -168,4 +168,15 @@ public class ReportSteps extends BaseSteps {
     reportData.setResponse(response);
 
   }
+
+  @And("^user hit delete report endpoint with stored id$")
+  public void userHitDeleteReportEndpointWithStoredId() {
+    Response response = reportAPI.deleteReport(reportData.getReportId(), authData.getCookie());
+    reportData.setResponse(response);
+  }
+
+  @Then("^report base response code should be (\\d+)$")
+  public void reportBaseResponseCodeShouldBe(int code) {
+    assertEquals(code, reportData.getBaseResponse().getCode());
+  }
 }
