@@ -2,6 +2,8 @@ package com.future.function.qa.util;
 
 public interface Path {
 
+  String ANNOUNCEMENT = "/api/core/announcements";
+
   String AUTH = "/api/core/auth";
 
   String BATCH = "/api/core/batches";
