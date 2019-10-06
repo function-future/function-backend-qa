@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.core.announcement.AnnouncementWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.announcement.AnnouncementWebResponse;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,11 @@ public class AnnouncementData extends BaseData {
 
   private DataResponse<AnnouncementWebResponse> createdResponse = new DataResponse<>();
 
+  private PagingResponse<AnnouncementWebResponse> pagingResponse = new PagingResponse<>();
+
   private AnnouncementWebRequest request;
+
+  private DataResponse<AnnouncementWebResponse> retrievedResponse = new DataResponse<>();
 
   public void addRequestFiles(String resourceId) {
 
@@ -63,6 +68,10 @@ public class AnnouncementData extends BaseData {
 
     super.setResponse(response);
     this.createdResponse = asDataResponse(response, new TypeReference<DataResponse<AnnouncementWebResponse>>() {
+    });
+    this.retrievedResponse = asDataResponse(response, new TypeReference<DataResponse<AnnouncementWebResponse>>() {
+    });
+    this.pagingResponse = asPagingResponse(response, new TypeReference<PagingResponse<AnnouncementWebResponse>>() {
     });
   }
 }

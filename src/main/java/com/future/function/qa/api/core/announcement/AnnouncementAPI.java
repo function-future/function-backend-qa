@@ -37,6 +37,44 @@ public class AnnouncementAPI extends BaseAPI {
   }
 
   @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    return doByCookiePresent(cookie, getWithCookie(page, size, cookie), getWithoutCookie(page, size));
+  }
+
+  private Supplier<Response> getWithCookie(int page, int size, Cookie cookie) {
+
+    return () -> base.queryParam("page", page)
+        .queryParam("size", size)
+        .cookie(cookie)
+        .get();
+  }
+
+  private Supplier<Response> getWithoutCookie(int page, int size) {
+
+    return () -> base.queryParam("page", page)
+        .queryParam("size", size)
+        .get();
+  }
+
+  @Step
+  public Response getDetail(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, getDetailWithCookie(id, cookie), getDetailWithoutCookie(id));
+  }
+
+  private Supplier<Response> getDetailWithCookie(String id, Cookie cookie) {
+
+    return () -> base.cookie(cookie)
+        .get(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> getDetailWithoutCookie(String id) {
+
+    return () -> base.get(String.format(PATH_ID, id));
+  }
+
+  @Step
   @Override
   public RequestSpecification prepare() {
 
