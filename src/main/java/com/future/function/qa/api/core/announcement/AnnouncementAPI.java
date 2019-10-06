@@ -83,4 +83,25 @@ public class AnnouncementAPI extends BaseAPI {
 
     return base;
   }
+
+  @Step
+  public Response update(String id, AnnouncementWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie, updateWithCookie(id, request, cookie), updateWithoutCookie(id, request));
+  }
+
+  private Supplier<Response> updateWithCookie(String id, AnnouncementWebRequest request, Cookie cookie) {
+
+    return () -> base.body(request)
+        .contentType(ContentType.JSON)
+        .cookie(cookie)
+        .put(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> updateWithoutCookie(String id, AnnouncementWebRequest request) {
+
+    return () -> base.body(request)
+        .contentType(ContentType.JSON)
+        .put(String.format(PATH_ID, id));
+  }
 }
