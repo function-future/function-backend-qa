@@ -156,6 +156,17 @@ public class AnnouncementSteps extends BaseSteps {
     announcementData.setResponse(response);
   }
 
+  @And("^user hit delete announcement endpoint with recorded id$")
+  public void userHitDeleteAnnouncementEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<AnnouncementWebResponse> createdResponse = announcementData.getCreatedResponse();
+    AnnouncementWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = announcementAPI.delete(createdResponseData.getId(), authData.getCookie());
+
+    announcementData.setResponse(response);
+  }
+
   @And("^user hit update announcement endpoint with recorded id$")
   public void userHitUpdateAnnouncementEndpointWithRecordedId() throws Throwable {
 

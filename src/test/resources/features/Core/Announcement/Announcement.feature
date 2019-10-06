@@ -240,3 +240,65 @@ Feature: Announcement
     Then announcement response code should be 200
     And retrieved announcement title should be "Title Updated" and summary "Summary Updated" and description "Description Updated"
     And retrieved announcement files should not be empty
+
+  @Negative @Announcement
+  Scenario: Delete announcement without being logged in
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create announcement request with title "Title" and summary "Summary" and description "Description"
+    And user hit create announcement endpoint
+    And user hit logout endpoint
+    And user prepare announcement request
+    And user hit delete announcement endpoint with recorded id
+    Then announcement response code should be 401
+
+  @Negative @Announcement
+  Scenario Outline: Delete announcement after logging in as non-admin and non-student roles
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "user"
+    And user hit post resource endpoint
+    And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "", batch code "", university ""
+    And user create announcement request with title "Title" and summary "Summary" and description "Description"
+    And user hit create announcement endpoint
+    And user hit logout endpoint
+    And user prepare announcement request
+    And user do login with email "<email>" and password "<password>"
+    And user hit delete announcement endpoint with recorded id
+    Then announcement response code should be 403
+    And user hit logout endpoint
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And qa system do cleanup data for user with name "<name>" and email "<email>"
+    Examples:
+      | email                    | password          | name   | role   | address | phone         |
+      | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
+      | qa.mentor@mailinator.com | mentorfunctionapp | Mentor | MENTOR | Address | 0815123123123 |
+
+  @Negative @Announcement
+  Scenario: Delete announcement after logging in as student role
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "user"
+    And user hit post resource endpoint
+    And user hit create batch endpoint with name "QA Batch Name" and code "BatchCodeAutomation"
+    And user hit create user endpoint with email "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123", avatar "", batch code "BatchCodeAutomation", university "University"
+    And user create announcement request with title "Title" and summary "Summary" and description "Description"
+    And user hit create announcement endpoint
+    And user hit logout endpoint
+    And user prepare announcement request
+    And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
+    And user hit delete announcement endpoint with recorded id
+    Then announcement response code should be 403
+    And user hit logout endpoint
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
+    And user hit delete batch endpoint with recorded id
+
+  @Positive @Announcement
+  Scenario: Delete announcement after logging in as admin
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create announcement request with title "Title" and summary "Summary" and description "Description"
+    And user select file "src/test/resources/samples/UX Function Core.txt" to be uploaded to origin "announcement"
+    And user hit post resource endpoint
+    And user add uploaded resource's id to announcement request
+    And user hit create announcement endpoint
+    And user prepare announcement request
+    And user hit delete announcement endpoint with recorded id
+    Then announcement response code should be 200
