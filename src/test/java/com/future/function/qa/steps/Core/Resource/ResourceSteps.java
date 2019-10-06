@@ -14,7 +14,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.future.function.qa.api.core.resource.ResourceAPI;
-import com.future.function.qa.data.core.auth.AuthData;
 import com.future.function.qa.data.core.resource.ResourceData;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
@@ -27,9 +26,6 @@ import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
 
 public class ResourceSteps extends BaseSteps {
-
-  @Autowired
-  private AuthData authData;
 
   @Steps
   private ResourceAPI resourceAPI;
