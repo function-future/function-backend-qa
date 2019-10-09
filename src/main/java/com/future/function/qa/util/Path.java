@@ -33,4 +33,6 @@ public interface Path {
   String REPORT = "/api/scoring/batches/%s/judgings";
 
   String STUDENTS = "/students";
+
+  String REPORT_DETAIL = "/api/scoring/batches/%s/judgings/%s/comparisons";
 }
