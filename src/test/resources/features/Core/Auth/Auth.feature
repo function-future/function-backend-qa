@@ -3,6 +3,8 @@ Feature: Auth
 
   Background:
     Given user prepare auth request
+    And user hit logout endpoint
+    And user prepare auth request
 
   @Negative @Auth
   Scenario: Get login status before logging in
@@ -21,12 +23,14 @@ Feature: Auth
 
   @Positive @Auth
   Scenario: Get login status after logging in
-    When user hit auth endpoint with cookie
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit auth endpoint with cookie
     Then auth response should be ok and cookie is present
 
   @Positive @Auth
   Scenario: Logout after logging in
-    When user hit logout endpoint
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit logout endpoint
     Then auth response should be ok and cookie is unset
 
   @Negative @Auth

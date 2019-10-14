@@ -1,5 +1,7 @@
 package com.future.function.qa.data.core.auth;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import io.restassured.response.Response;
 import org.springframework.stereotype.Component;
 
 import com.future.function.qa.data.BaseData;
@@ -34,9 +36,9 @@ public class AuthData extends BaseData {
     return request;
   }
 
-  public void setResponse(DataResponse<AuthWebResponse> response) {
+  public void setResponse(Response response) {
 
-    this.response = response;
-    this.responseCode = response.getCode();
+    super.setResponse(response);
+    this.response = asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {});
   }
 }
