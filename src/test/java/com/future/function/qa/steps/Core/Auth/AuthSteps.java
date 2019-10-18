@@ -5,10 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.api.core.auth.AuthAPI;
-import com.future.function.qa.model.response.base.DataResponse;
-import com.future.function.qa.model.response.core.auth.AuthWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -47,7 +44,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.login(authData.createRequest(email, password));
 
-    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
+    authData.setResponse(response);
     authData.setCookie(response.getDetailedCookie(authAPI.getCookieName()));
   }
 
@@ -56,7 +53,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.getLoginStatus(authData.getCookie());
 
-    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
+    authData.setResponse(response);
   }
 
   @When("^user hit auth endpoint with cookie$")
@@ -64,7 +61,7 @@ public class AuthSteps extends BaseSteps {
 
     Response response = authAPI.getLoginStatus(authData.getCookie());
 
-    authData.setResponse(authData.asDataResponse(response, new TypeReference<DataResponse<AuthWebResponse>>() {}));
+    authData.setResponse(response);
     authData.setCookie(response.getDetailedCookie(authAPI.getCookieName()));
   }
 
