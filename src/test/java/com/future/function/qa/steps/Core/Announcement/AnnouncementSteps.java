@@ -48,15 +48,6 @@ public class AnnouncementSteps extends BaseSteps {
     assertThat(errors.get(key), hasItem(value));
   }
 
-  @And("^announcement files should not be empty$")
-  public void announcementFilesShouldNotBeEmpty() throws Throwable {
-
-    DataResponse<AnnouncementWebResponse> createdResponse = announcementData.getCreatedResponse();
-    AnnouncementWebResponse createdResponseData = createdResponse.getData();
-
-    assertThat(createdResponseData.getFiles(), not(empty()));
-  }
-
   @Then("^announcement response code should be (\\d+)$")
   public void announcementResponseCodeShouldBe(int expectedResponseCode) throws Throwable {
 
@@ -72,6 +63,15 @@ public class AnnouncementSteps extends BaseSteps {
     assertThat(pagingResponseData, not(empty()));
   }
 
+  @And("^created announcement files should not be empty$")
+  public void createdAnnouncementFilesShouldNotBeEmpty() throws Throwable {
+
+    DataResponse<AnnouncementWebResponse> createdResponse = announcementData.getCreatedResponse();
+    AnnouncementWebResponse createdResponseData = createdResponse.getData();
+
+    assertThat(createdResponseData.getFiles(), not(empty()));
+  }
+
   @And("^created announcement title should be \"([^\"]*)\" and summary \"([^\"]*)\" and description \"([^\"]*)\"$")
   public void createdAnnouncementTitleShouldBeAndSummaryAndDescription(String title, String summary, String description)
       throws Throwable {
@@ -82,6 +82,15 @@ public class AnnouncementSteps extends BaseSteps {
     assertThat(createdResponseData.getTitle(), equalTo(title));
     assertThat(createdResponseData.getSummary(), equalTo(summary));
     assertThat(createdResponseData.getDescription(), equalTo(description));
+  }
+
+  @And("^retrieved announcement files should not be empty$")
+  public void retrievedAnnouncementFilesShouldNotBeEmpty() throws Throwable {
+
+    DataResponse<AnnouncementWebResponse> retrievedResponse = announcementData.getRetrievedResponse();
+    AnnouncementWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getFiles(), not(empty()));
   }
 
   @And("^retrieved announcement title should be \"([^\"]*)\" and summary \"([^\"]*)\" and description \"([^\"]*)\"$")
@@ -143,6 +152,29 @@ public class AnnouncementSteps extends BaseSteps {
   public void userHitCreateAnnouncementEndpoint() throws Throwable {
 
     Response response = announcementAPI.create(announcementData.getRequest(), authData.getCookie());
+
+    announcementData.setResponse(response);
+  }
+
+  @And("^user hit delete announcement endpoint with recorded id$")
+  public void userHitDeleteAnnouncementEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<AnnouncementWebResponse> createdResponse = announcementData.getCreatedResponse();
+    AnnouncementWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = announcementAPI.delete(createdResponseData.getId(), authData.getCookie());
+
+    announcementData.setResponse(response);
+  }
+
+  @And("^user hit update announcement endpoint with recorded id$")
+  public void userHitUpdateAnnouncementEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<AnnouncementWebResponse> createdResponse = announcementData.getCreatedResponse();
+    AnnouncementWebResponse createdResponseData = createdResponse.getData();
+
+    Response response =
+        announcementAPI.update(createdResponseData.getId(), announcementData.getRequest(), authData.getCookie());
 
     announcementData.setResponse(response);
   }
