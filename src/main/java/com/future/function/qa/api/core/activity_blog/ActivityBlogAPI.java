@@ -129,4 +129,25 @@ public class ActivityBlogAPI extends BaseAPI {
       .put(String.format(PATH_ID, id));
   }
 
+  @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, deleteActivityBlogWithCookie(id, cookie),
+                             deleteActivityBlogWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> deleteActivityBlogWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteActivityBlogWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
 }

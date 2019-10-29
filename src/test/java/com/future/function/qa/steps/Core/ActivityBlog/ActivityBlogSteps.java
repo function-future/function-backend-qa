@@ -207,4 +207,17 @@ public class ActivityBlogSteps extends BaseSteps {
     assertThat(retrievedResponseData.getFiles(), empty());
   }
 
+  @And("^user hit delete activity blog endpoint with recorded id$")
+  public void userHitDeleteActivityBlogEndpointWithRecordedId()
+    throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.delete(
+      createdResponseData.getId(), authData.getCookie());
+    activityBlogData.setResponse(response);
+  }
+
 }
