@@ -42,6 +42,54 @@ public class ActivityBlogAPI extends BaseAPI {
       .post();
   }
 
+  @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             getActivityBlogsWithCookie(page, size, cookie),
+                             getActivityBlogsWithoutCookie(page, size)
+    );
+  }
+
+  private Supplier<Response> getActivityBlogsWithCookie(
+    int page, int size, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
+  private Supplier<Response> getActivityBlogsWithoutCookie(int page, int size) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
+  @Step
+  public Response getDetail(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             getActivityBlogDetailWithCookie(id, cookie),
+                             getActivityBlogDetailWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> getActivityBlogDetailWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .get(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> getActivityBlogDetailWithoutCookie(String id) {
+
+    return () -> base.get(String.format(PATH_ID, id));
+  }
+
   @Override
   public RequestSpecification prepare() {
 
