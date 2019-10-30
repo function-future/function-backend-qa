@@ -99,4 +99,55 @@ public class ActivityBlogAPI extends BaseAPI {
     return base;
   }
 
+  @Step
+  public Response update(
+    String id, ActivityBlogWebRequest request, Cookie cookie
+  ) {
+
+    return doByCookiePresent(cookie,
+                             updateActivityBlogWithCookie(id, request, cookie),
+                             updateActivityBlogWithoutCookie(id, request)
+    );
+  }
+
+  private Supplier<Response> updateActivityBlogWithCookie(
+    String id, ActivityBlogWebRequest request, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .contentType(ContentType.JSON)
+      .body(request)
+      .put(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> updateActivityBlogWithoutCookie(
+    String id, ActivityBlogWebRequest request
+  ) {
+
+    return () -> base.contentType(ContentType.JSON)
+      .body(request)
+      .put(String.format(PATH_ID, id));
+  }
+
+  @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, deleteActivityBlogWithCookie(id, cookie),
+                             deleteActivityBlogWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> deleteActivityBlogWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteActivityBlogWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
 }

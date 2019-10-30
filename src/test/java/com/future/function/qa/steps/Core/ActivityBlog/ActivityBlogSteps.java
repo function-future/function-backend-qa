@@ -182,4 +182,42 @@ public class ActivityBlogSteps extends BaseSteps {
     assertThat(retrievedResponseData.getFiles(), not(empty()));
   }
 
+  @And("^user hit update activity blog endpoint with recorded id$")
+  public void userHitUpdateActivityBlogEndpointWithRecordedId()
+    throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.update(createdResponseData.getId(),
+                                               activityBlogData.getRequest(),
+                                               authData.getCookie()
+    );
+    activityBlogData.setResponse(response);
+  }
+
+  @And("^retrieved activity blog files should be empty$")
+  public void retrievedActivityBlogFilesShouldBeEmpty() throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> retrievedResponse =
+      activityBlogData.getRetrievedResponse();
+    ActivityBlogWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getFiles(), empty());
+  }
+
+  @And("^user hit delete activity blog endpoint with recorded id$")
+  public void userHitDeleteActivityBlogEndpointWithRecordedId()
+    throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.delete(
+      createdResponseData.getId(), authData.getCookie());
+    activityBlogData.setResponse(response);
+  }
+
 }
