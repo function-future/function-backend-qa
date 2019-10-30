@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.core.activity_blog.ActivityBlogWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.activity_blog.ActivityBlogWebResponse;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,9 @@ public class ActivityBlogData extends BaseData {
 
   private DataResponse<ActivityBlogWebResponse> retrievedResponse =
     new DataResponse<>();
+
+  private PagingResponse<ActivityBlogWebResponse> pagingResponse =
+    new PagingResponse<>();
 
   public void addRequestFiles(String resourceId) {
 
@@ -71,6 +75,9 @@ public class ActivityBlogData extends BaseData {
       response, new TypeReference<DataResponse<ActivityBlogWebResponse>>() {});
     this.retrievedResponse = asDataResponse(
       response, new TypeReference<DataResponse<ActivityBlogWebResponse>>() {});
+    this.pagingResponse = asPagingResponse(response,
+                                           new TypeReference<PagingResponse<ActivityBlogWebResponse>>() {}
+    );
   }
 
 }

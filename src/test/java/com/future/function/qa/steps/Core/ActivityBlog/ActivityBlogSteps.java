@@ -5,6 +5,7 @@ import com.future.function.qa.data.core.activity_blog.ActivityBlogData;
 import com.future.function.qa.data.core.resource.ResourceData;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.activity_blog.ActivityBlogWebResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.steps.BaseSteps;
@@ -97,11 +98,11 @@ public class ActivityBlogSteps extends BaseSteps {
   @And("^created activity blog files should not be empty$")
   public void createdActivityBlogFilesShouldNotBeEmpty() throws Throwable {
 
-    DataResponse<ActivityBlogWebResponse> retrievedResponse =
+    DataResponse<ActivityBlogWebResponse> createdResponse =
       activityBlogData.getCreatedResponse();
-    ActivityBlogWebResponse retrievedResponseData = retrievedResponse.getData();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
 
-    assertThat(retrievedResponseData.getFiles(), not(empty()));
+    assertThat(createdResponseData.getFiles(), not(empty()));
   }
 
   @And("^user add resource id \"([^\"]*)\" to activity blog request$")
@@ -121,6 +122,102 @@ public class ActivityBlogSteps extends BaseSteps {
 
     assertThat(errors.get(key), notNullValue());
     assertThat(errors.get(key), hasItem(value));
+  }
+
+  @And("^user hit activity blog endpoint with page (\\d+) and size (\\d+)$")
+  public void userHitActivityBlogEndpointWithPageAndSize(int page, int size)
+    throws Throwable {
+
+    Response response = activityBlogAPI.get(page, size, authData.getCookie());
+
+    activityBlogData.setResponse(response);
+  }
+
+  @And("^activity blog response data should not be empty$")
+  public void activityBlogResponseDataShouldNotBeEmpty() throws Throwable {
+
+    PagingResponse<ActivityBlogWebResponse> pagingResponse =
+      activityBlogData.getPagingResponse();
+    List<ActivityBlogWebResponse> pagingResponseData = pagingResponse.getData();
+
+    assertThat(pagingResponseData, not(empty()));
+  }
+
+  @And("^user hit activity blog endpoint with recorded id$")
+  public void userHitActivityBlogEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.getDetail(
+      createdResponseData.getId(), authData.getCookie());
+
+    activityBlogData.setResponse(response);
+  }
+
+  @And("^retrieved activity blog title should be \"([^\"]*)\" and description" +
+       " \"([^\"]*)\"$")
+  public void retrievedActivityBlogTitleShouldBeAndDescription(
+    String expectedTitle, String expectedDescription
+  ) throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> retrievedResponse =
+      activityBlogData.getRetrievedResponse();
+    ActivityBlogWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getTitle(), equalTo(expectedTitle));
+    assertThat(retrievedResponseData.getDescription(),
+               equalTo(expectedDescription)
+    );
+  }
+
+  @And("^retrieved activity blog files should not be empty$")
+  public void retrievedActivityBlogFilesShouldNotBeEmpty() throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> retrievedResponse =
+      activityBlogData.getRetrievedResponse();
+    ActivityBlogWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getFiles(), not(empty()));
+  }
+
+  @And("^user hit update activity blog endpoint with recorded id$")
+  public void userHitUpdateActivityBlogEndpointWithRecordedId()
+    throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.update(createdResponseData.getId(),
+                                               activityBlogData.getRequest(),
+                                               authData.getCookie()
+    );
+    activityBlogData.setResponse(response);
+  }
+
+  @And("^retrieved activity blog files should be empty$")
+  public void retrievedActivityBlogFilesShouldBeEmpty() throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> retrievedResponse =
+      activityBlogData.getRetrievedResponse();
+    ActivityBlogWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getFiles(), empty());
+  }
+
+  @And("^user hit delete activity blog endpoint with recorded id$")
+  public void userHitDeleteActivityBlogEndpointWithRecordedId()
+    throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = activityBlogAPI.delete(
+      createdResponseData.getId(), authData.getCookie());
+    activityBlogData.setResponse(response);
   }
 
 }
