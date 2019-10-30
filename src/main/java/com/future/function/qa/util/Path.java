@@ -15,4 +15,9 @@ public interface Path {
   String STICKY_NOTE = "/api/core/sticky-notes";
 
   String USER = "/api/core/users";
+
+  String USER_DETAIL = "/api/core/user";
+
+  String PROFILE = USER_DETAIL + "/profile";
+
 }
