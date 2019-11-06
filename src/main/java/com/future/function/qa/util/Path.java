@@ -2,6 +2,8 @@ package com.future.function.qa.util;
 
 public interface Path {
 
+  String ACTIVITY_BLOG = "/api/core/activity-blogs";
+
   String ANNOUNCEMENT = "/api/core/announcements";
 
   String AUTH = "/api/core/auth";
