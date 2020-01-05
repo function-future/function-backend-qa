@@ -41,6 +41,52 @@ public class CourseAPI extends BaseAPI {
       .post();
   }
 
+  @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    return doByCookiePresent(cookie, getCoursesWithCookie(page, size, cookie),
+                             getCoursesWithoutCookie(page, size)
+    );
+  }
+
+  private Supplier<Response> getCoursesWithCookie(
+    int page, int size, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
+  private Supplier<Response> getCoursesWithoutCookie(int page, int size) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
+  @Step
+  public Response getDetail(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, getCourseDetailWithCookie(id, cookie),
+                             getCourseDetailWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> getCourseDetailWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .get(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> getCourseDetailWithoutCookie(String id) {
+
+    return () -> base.get(String.format(PATH_ID, id));
+  }
+
   @Override
   public RequestSpecification prepare() {
 
