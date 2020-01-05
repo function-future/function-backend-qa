@@ -212,4 +212,18 @@ public class CourseSteps extends BaseSteps {
     courseData.setResponse(response);
   }
 
+  @And("^user hit delete course endpoint with recorded id$")
+  public void userHitDeleteCourseEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<CourseWebResponse> createdResponse =
+      courseData.getCreatedResponse();
+    CourseWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = courseAPI.delete(createdResponseData.getId(),
+                                         authData.getCookie()
+    );
+
+    courseData.setResponse(response);
+  }
+
 }
