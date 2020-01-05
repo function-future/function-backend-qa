@@ -10,6 +10,8 @@ public interface Path {
 
   String BATCH = "/api/core/batches";
 
+  String COURSE = "/api/core/courses";
+
   String RESOURCE = "/api/core/resources";
 
   String STICKY_NOTE = "/api/core/sticky-notes";
