@@ -7,6 +7,7 @@ Feature: Course
     And user prepare resource request
     And user prepare batch request
     And user prepare user request
+    And user hit logout endpoint
 
   @Negative @Course
   Scenario: Create course without being logged in
@@ -34,7 +35,8 @@ Feature: Course
 
   @Negative @Course
   Scenario: Create course with incorrect request formats
-    When user create course request with title "" and description ""
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create course request with title "" and description ""
     And user add resource id "" to course request
     And user add resource id "" to course request
     And user hit create course endpoint

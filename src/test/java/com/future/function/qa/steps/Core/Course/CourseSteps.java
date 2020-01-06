@@ -40,7 +40,7 @@ public class CourseSteps extends BaseSteps {
     courseAPI.prepare();
   }
 
-  @When("^user create course request with title \"([^\"]*)\" and description " +
+  @And("^user create course request with title \"([^\"]*)\" and description " +
         "\"([^\"]*)\"$")
   public void userCreateCourseRequestWithTitleAndDescription(
     String title, String description
