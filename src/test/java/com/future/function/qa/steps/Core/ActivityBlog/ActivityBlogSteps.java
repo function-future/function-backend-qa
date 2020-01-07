@@ -220,4 +220,30 @@ public class ActivityBlogSteps extends BaseSteps {
     activityBlogData.setResponse(response);
   }
 
+  @And("^user hit activity blog endpoint with page (\\d+) and size (\\d+) and" +
+       " user id \"([^\"]*)\"$")
+  public void userHitActivityBlogEndpointWithPageAndSizeAndUserId(
+    int page, int size, String userId
+  ) throws Throwable {
+
+    String authorId = userId.equals("current user") ? authData.getResponse()
+      .getData()
+      .getId() : userId;
+
+    Response response = activityBlogAPI.getByAuthorId(
+      page, size, authorId, authData.getCookie());
+
+    activityBlogData.setResponse(response);
+  }
+
+  @And("^activity blog response data should be empty$")
+  public void activityBlogResponseDataShouldBeEmpty() throws Throwable {
+
+    DataResponse<ActivityBlogWebResponse> createdResponse =
+      activityBlogData.getCreatedResponse();
+    ActivityBlogWebResponse createdResponseData = createdResponse.getData();
+
+    assertThat(createdResponseData.getFiles(), empty());
+  }
+
 }
