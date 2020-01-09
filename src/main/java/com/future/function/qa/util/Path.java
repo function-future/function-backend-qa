@@ -22,4 +22,6 @@ public interface Path {
 
   String PROFILE = USER_DETAIL + "/profile";
 
+  String CHANGE_PROFILE_PICTURE = PROFILE + "/picture";
+
 }
