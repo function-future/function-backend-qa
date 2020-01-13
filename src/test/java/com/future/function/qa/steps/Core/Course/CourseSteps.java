@@ -40,7 +40,7 @@ public class CourseSteps extends BaseSteps {
     courseAPI.prepare();
   }
 
-  @When("^user create course request with title \"([^\"]*)\" and description " +
+  @And("^user create course request with title \"([^\"]*)\" and description " +
         "\"([^\"]*)\"$")
   public void userCreateCourseRequestWithTitleAndDescription(
     String title, String description
@@ -206,6 +206,20 @@ public class CourseSteps extends BaseSteps {
 
     Response response = courseAPI.update(createdResponseData.getId(),
                                          courseData.getRequest(),
+                                         authData.getCookie()
+    );
+
+    courseData.setResponse(response);
+  }
+
+  @And("^user hit delete course endpoint with recorded id$")
+  public void userHitDeleteCourseEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<CourseWebResponse> createdResponse =
+      courseData.getCreatedResponse();
+    CourseWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = courseAPI.delete(createdResponseData.getId(),
                                          authData.getCookie()
     );
 

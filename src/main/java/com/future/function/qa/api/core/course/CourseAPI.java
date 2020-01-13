@@ -115,6 +115,25 @@ public class CourseAPI extends BaseAPI {
       .put(String.format(PATH_ID, id));
   }
 
+  @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, deleteCourseWithCookie(id, cookie),
+                             deleteCourseWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> deleteCourseWithCookie(String id, Cookie cookie) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteCourseWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
   @Override
   public RequestSpecification prepare() {
 
