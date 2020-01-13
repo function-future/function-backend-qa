@@ -87,6 +87,53 @@ public class CourseAPI extends BaseAPI {
     return () -> base.get(String.format(PATH_ID, id));
   }
 
+  @Step
+  public Response update(String id, CourseWebRequest request, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             updateCourseWithCookie(id, request, cookie),
+                             updateCourseWithoutCookie(id, request)
+    );
+  }
+
+  private Supplier<Response> updateCourseWithCookie(
+    String id, CourseWebRequest request, Cookie cookie
+  ) {
+
+    return () -> base.body(request)
+      .contentType(ContentType.JSON)
+      .cookie(cookie)
+      .put(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> updateCourseWithoutCookie(
+    String id, CourseWebRequest request
+  ) {
+
+    return () -> base.body(request)
+      .contentType(ContentType.JSON)
+      .put(String.format(PATH_ID, id));
+  }
+
+  @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie, deleteCourseWithCookie(id, cookie),
+                             deleteCourseWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> deleteCourseWithCookie(String id, Cookie cookie) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteCourseWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
   @Override
   public RequestSpecification prepare() {
 

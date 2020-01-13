@@ -40,7 +40,7 @@ public class CourseSteps extends BaseSteps {
     courseAPI.prepare();
   }
 
-  @When("^user create course request with title \"([^\"]*)\" and description " +
+  @And("^user create course request with title \"([^\"]*)\" and description " +
         "\"([^\"]*)\"$")
   public void userCreateCourseRequestWithTitleAndDescription(
     String title, String description
@@ -180,6 +180,50 @@ public class CourseSteps extends BaseSteps {
 
     assertThat(retrievedResponseData.getMaterial(), notNullValue());
     assertThat(retrievedResponseData.getMaterialId(), notNullValue());
+  }
+
+  @And("^user replace course request material with uploaded resource's id$")
+  public void userReplaceCourseRequestMaterialWithUploadedResourceSId()
+    throws Throwable {
+
+    courseData.getRequest()
+      .setMaterial(null);
+
+    DataResponse<FileContentWebResponse> resourceDataCreatedResponse =
+      resourceData.getCreatedResponse();
+    FileContentWebResponse resourceDataCreatedResponseData =
+      resourceDataCreatedResponse.getData();
+
+    courseData.addRequestMaterials(resourceDataCreatedResponseData.getId());
+  }
+
+  @And("^user hit update course endpoint with recorded id$")
+  public void userHitUpdateCourseEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<CourseWebResponse> createdResponse =
+      courseData.getCreatedResponse();
+    CourseWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = courseAPI.update(createdResponseData.getId(),
+                                         courseData.getRequest(),
+                                         authData.getCookie()
+    );
+
+    courseData.setResponse(response);
+  }
+
+  @And("^user hit delete course endpoint with recorded id$")
+  public void userHitDeleteCourseEndpointWithRecordedId() throws Throwable {
+
+    DataResponse<CourseWebResponse> createdResponse =
+      courseData.getCreatedResponse();
+    CourseWebResponse createdResponseData = createdResponse.getData();
+
+    Response response = courseAPI.delete(createdResponseData.getId(),
+                                         authData.getCookie()
+    );
+
+    courseData.setResponse(response);
   }
 
 }
