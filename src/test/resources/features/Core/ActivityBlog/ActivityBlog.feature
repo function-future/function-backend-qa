@@ -129,6 +129,35 @@ Feature: Activity Blog
       | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
       | qa.mentor@mailinator.com | mentorfunctionapp | Mentor | MENTOR | Address | 0815123123123 |
 
+  @Negative @ActivityBlog
+  Scenario: Get activity blog by specific author by author's id without logging in
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create activity blog request with title "Title" and description "Description"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user hit post resource endpoint
+    And user add uploaded resource's id to activity blog request
+    And user hit create activity blog endpoint
+    And user hit logout endpoint
+    And user prepare activity blog request
+    And user hit activity blog endpoint with page 1 and size 5 and user id "random-id"
+    Then activity blog response code should be 200
+    And activity blog response data should be empty
+
+  @Positive @ActivityBlog
+  Scenario: Get activity blog by specific author by author's id after logging in
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create activity blog request with title "Title" and description "Description"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user hit post resource endpoint
+    And user add uploaded resource's id to activity blog request
+    And user hit create activity blog endpoint
+    And user hit logout endpoint
+    And user prepare activity blog request
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit activity blog endpoint with page 1 and size 5 and user id "current user"
+    Then activity blog response code should be 200
+    And activity blog response data should not be empty
+
   @Positive @ActivityBlog
   Scenario: Get activity blog detail without being logged in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"

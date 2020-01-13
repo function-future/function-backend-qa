@@ -69,6 +69,45 @@ public class ActivityBlogAPI extends BaseAPI {
   }
 
   @Step
+  public Response getByAuthorId(
+    int page, int size, String authorId, Cookie cookie
+  ) {
+
+    return doByCookiePresent(cookie,
+                             getSpecifiedAuthorActivityBlogsWithCookie(page,
+                                                                       size,
+                                                                       authorId,
+                                                                       cookie
+                             ),
+                             getSpecifiedAuthorActivityBlogsWithoutCookie(page,
+                                                                          size,
+                                                                          authorId
+                             )
+    );
+  }
+
+  private Supplier<Response> getSpecifiedAuthorActivityBlogsWithCookie(
+    int page, int size, String authorId, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .queryParam("page", page)
+      .queryParam("size", size)
+      .queryParam("userId", authorId)
+      .get();
+  }
+
+  private Supplier<Response> getSpecifiedAuthorActivityBlogsWithoutCookie(
+    int page, int size, String authorId
+  ) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .queryParam("userId", authorId)
+      .get();
+  }
+
+  @Step
   public Response getDetail(String id, Cookie cookie) {
 
     return doByCookiePresent(cookie,
