@@ -18,6 +18,10 @@ public interface Path {
 
   String USER_DETAIL = "/api/core/user";
 
+  String CHANGE_PASSWORD = USER_DETAIL + "/password";
+
   String PROFILE = USER_DETAIL + "/profile";
+
+  String CHANGE_PROFILE_PICTURE = PROFILE + "/picture";
 
 }
