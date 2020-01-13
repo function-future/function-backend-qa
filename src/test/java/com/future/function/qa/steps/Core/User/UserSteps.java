@@ -23,7 +23,6 @@ import com.future.function.qa.model.response.base.paging.Paging;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.model.response.core.user.UserWebResponse;
 import com.future.function.qa.steps.BaseSteps;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -65,11 +64,9 @@ public class UserSteps extends BaseSteps {
       String role, String address, String phone, String avatar, String batchCode, String university) throws Throwable {
 
     String requestAvatarId = Optional.of(avatar)
-        .filter(String::isEmpty)
-        .map(ignored -> resourceData.getCreatedResponse())
-        .map(DataResponse::getData)
-        .map(FileContentWebResponse::getId)
-        .orElse(avatar);
+      .filter("no-avatar"::equals)
+      .map(ignored -> StringUtils.EMPTY)
+      .orElseGet(() -> this.getFromResourceDataOrDefault(avatar));
 
     UserWebRequest request =
         userData.createRequest(null, email, name, role, address, phone, requestAvatarId, batchCode, university);
@@ -77,6 +74,16 @@ public class UserSteps extends BaseSteps {
     Response response = userAPI.create(request, authData.getCookie());
 
     userData.setResponse(response);
+  }
+
+  private String getFromResourceDataOrDefault(String defaultValue) {
+
+    return Optional.of(defaultValue)
+      .filter(String::isEmpty)
+      .map(ignored -> resourceData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(FileContentWebResponse::getId)
+      .orElse(defaultValue);
   }
 
   @And("^user hit delete user endpoint with recorded target user id$")
