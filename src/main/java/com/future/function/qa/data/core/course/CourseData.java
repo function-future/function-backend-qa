@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @Data
 @Builder
 @Component
@@ -32,6 +35,35 @@ public class CourseData extends BaseData {
 
   private PagingResponse<CourseWebResponse> pagingResponse =
     new PagingResponse<>();
+
+  public void addRequestMaterials(String resourceId) {
+
+    if (request == null) {
+
+      request = CourseWebRequest.builder()
+        .material(Arrays.asList(resourceId))
+        .build();
+
+      return;
+    }
+
+    if (request.getMaterial() == null) {
+      request.setMaterial(new ArrayList<>());
+    }
+
+    request.getMaterial()
+      .add(resourceId);
+  }
+
+  public CourseWebRequest createRequest(String title, String description) {
+
+    request = CourseWebRequest.builder()
+      .title(title)
+      .description(description)
+      .build();
+
+    return request;
+  }
 
   @Override
   public void setResponse(Response response) {
