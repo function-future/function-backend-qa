@@ -133,14 +133,24 @@ public class ActivityBlogSteps extends BaseSteps {
     activityBlogData.setResponse(response);
   }
 
-  @And("^activity blog response data should not be empty$")
-  public void activityBlogResponseDataShouldNotBeEmpty() throws Throwable {
+  @And("^retrieved activity blog response data should not be empty$")
+  public void retrievedActivityBlogResponseDataShouldNotBeEmpty() throws Throwable {
 
     PagingResponse<ActivityBlogWebResponse> pagingResponse =
       activityBlogData.getPagingResponse();
     List<ActivityBlogWebResponse> pagingResponseData = pagingResponse.getData();
 
     assertThat(pagingResponseData, not(empty()));
+  }
+
+  @And("^retrieved activity blog response data should be empty$")
+  public void retrievedActivityBlogResponseDataShouldBeEmpty() throws Throwable {
+
+    PagingResponse<ActivityBlogWebResponse> pagingResponse =
+      activityBlogData.getPagingResponse();
+    List<ActivityBlogWebResponse> pagingResponseData = pagingResponse.getData();
+
+    assertThat(pagingResponseData, empty());
   }
 
   @And("^user hit activity blog endpoint with recorded id$")
