@@ -67,3 +67,61 @@ Feature: File
     And user create "FOLDER" "Sample Folder"
     And user hit create file/folder endpoint with parent id "root"
     Then file/folder response code should be 201
+
+  @Negative @File
+  Scenario: Get files/folders as guest
+    When user hit files/folders endpoint with parent id "root"
+    Then file/folder response code should be 401
+
+  @Positive @File
+  Scenario: Get files/folders as logged-in user
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit files/folders endpoint with parent id "root"
+    Then file/folder response code should be 200
+    And file/folder response should not be empty
+    And file/folder response path ids should contain "root"
+
+  @Negative @File
+  Scenario: Get file as guest
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create "FILE" "src/test/resources/samples/UX Function Core.txt"
+    And user hit create file/folder endpoint with parent id "root"
+    And user hit logout endpoint
+    And user prepare file request
+    And user hit get file/folder endpoint with recorded id and parent id "root"
+    Then file/folder response code should be 401
+
+  @Positive @File
+  Scenario: Get file as logged-in user
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create "FILE" "src/test/resources/samples/UX Function Core.txt"
+    And user hit create file/folder endpoint with parent id "root"
+    And user hit logout endpoint
+    And user prepare file request
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get file/folder endpoint with recorded id and parent id "root"
+    Then file/folder response code should be 200
+    And retrieved file/folder name should be "UX Function Core.txt"
+    And retrieved file version should have key 1
+
+  @Negative @File
+  Scenario: Get folder as guest
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create "FOLDER" "Sample Folder"
+    And user hit create file/folder endpoint with parent id "root"
+    And user hit logout endpoint
+    And user prepare file request
+    And user hit get file/folder endpoint with recorded id and parent id "root"
+    Then file/folder response code should be 401
+
+  @Positive @File
+  Scenario: Get folder as logged-in user
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user create "FOLDER" "Sample Folder"
+    And user hit create file/folder endpoint with parent id "root"
+    And user hit logout endpoint
+    And user prepare file request
+    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit get file/folder endpoint with recorded id and parent id "root"
+    Then file/folder response code should be 200
+    And retrieved file/folder name should be "Sample Folder"

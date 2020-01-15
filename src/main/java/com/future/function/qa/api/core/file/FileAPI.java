@@ -66,9 +66,10 @@ public class FileAPI extends BaseAPI {
 
   private Response createFolder(String parentId, String data, Cookie cookie) {
 
-    return doByCookiePresent(cookie, this.createFolderWithCookie(parentId, data,
-                                                                 cookie
-    ), this.createFolderWithoutCookie(parentId, data));
+    return doByCookiePresent(
+      cookie, this.createFolderWithCookie(parentId, data, cookie),
+      this.createFolderWithoutCookie(parentId, data)
+    );
   }
 
   private Supplier<Response> createFolderWithCookie(
@@ -86,6 +87,57 @@ public class FileAPI extends BaseAPI {
 
     return () -> base.multiPart("data", data)
       .post(String.format(PATH_ID, parentId));
+  }
+
+  @Step
+  public Response get(String parentId, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.getFilesFoldersWithCookie(parentId, cookie),
+                             this.getFilesFoldersWithoutCookie(parentId)
+    );
+  }
+
+  private Supplier<Response> getFilesFoldersWithCookie(
+    String parentId, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .get(String.format(PATH_ID, parentId));
+  }
+
+  private Supplier<Response> getFilesFoldersWithoutCookie(String parentId) {
+
+    return () -> base.get(String.format(PATH_ID, parentId));
+  }
+
+  @Step
+  public Response getFileDetail(String id, String parentId, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.getFileDetailWithCookie(id, parentId, cookie),
+                             this.getFileDetailWithoutCookie(id, parentId)
+    );
+  }
+
+  private Supplier<Response> getFileDetailWithCookie(
+    String id, String parentId, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .get(String.format(PATH_ID,
+                         String.join("", parentId, String.format(PATH_ID, id))
+      ));
+  }
+
+  private Supplier<Response> getFileDetailWithoutCookie(
+    String id, String parentId
+  ) {
+
+    return () -> base.get(String.format(PATH_ID, String.join("", parentId,
+                                                             String.format(
+                                                               PATH_ID, id)
+    )));
   }
 
 }
