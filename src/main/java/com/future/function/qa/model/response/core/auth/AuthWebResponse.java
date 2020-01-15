@@ -14,4 +14,6 @@ public class AuthWebResponse {
   private String name;
 
   private String role;
+
+  private String batchCode;
 }
