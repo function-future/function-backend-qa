@@ -14,7 +14,7 @@ public class QuestionAPI extends BaseAPI {
   @Step
   public RequestSpecification prepare(String questionBankId) {
 
-    base = super.prepare().basePath(String.format(Path.QUESTION_BANK + PATH_ID + Path.QUESTION, questionBankId));
+    base = super.prepare().basePath(String.format(Path.QUESTION_BANK_QUESTION, questionBankId));
     return base;
   }
 
