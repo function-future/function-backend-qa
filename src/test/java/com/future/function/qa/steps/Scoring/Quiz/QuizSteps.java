@@ -43,7 +43,7 @@ public class QuizSteps extends BaseSteps {
 
   @When("^user hit create quiz endpoint with title \"([^\"]*)\", description \"([^\"]*)\", trials (\\d+), timeLimit (\\d+),endDate (\\d+), startDate (\\d+), questionCount (\\d+), and question bank ids get from question bank data$")
   public void userHitCreateQuizEndpointWithTitleDescriptionTrialsTimeLimitEndDateStartDateQuestionCountAndQuestionBankIdsGetFromQuestionBankData(
-      String title, String description, int trials, int timeLimit, int endDate, int startDate, int questionCount) throws Throwable {
+      String title, String description, int trials, int timeLimit, long endDate, long startDate, int questionCount) throws Throwable {
 
     List<String> questionBanks = questionBankData.getPagedResponse().getData().stream()
         .map(QuestionBankWebResponse::getId)
@@ -140,7 +140,7 @@ public class QuizSteps extends BaseSteps {
 
   @When("^user hit update quiz endpoint with previous get id, title \"([^\"]*)\", description \"([^\"]*)\", trials (\\d+), timeLimit (\\d+),endDate (\\d+), startDate (\\d+), questionCount (\\d+), and first question bank data$")
   public void userHitUpdateQuizEndpointWithPreviousGetIdTitleDescriptionTrialsTimeLimitEndDateStartDateQuestionCountAndFirstQuestionBankData(
-      String title, String description, int trials, int timeLimit, int endDate, int startDate, int questionCount) throws Throwable {
+      String title, String description, int trials, int timeLimit, long endDate, long startDate, int questionCount) throws Throwable {
     String firstQuestionBankId = questionBankData.getPagedResponse().getData().get(0).getId();
     String quizId = quizData.getSingleResponse().getData().getId();
     QuizWebRequest request = quizData.createRequest(title, description, timeLimit, trials, startDate, endDate, questionCount,
