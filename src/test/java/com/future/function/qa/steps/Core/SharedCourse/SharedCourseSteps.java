@@ -45,12 +45,12 @@ public class SharedCourseSteps extends BaseSteps {
     sharedCourseAPI.prepare(targetBatchCode);
   }
 
-  @And("^user create shared course request for batch \"([^\"]*)\"$")
-  public void userCreateSharedCourseRequestForBatch(String originBatchCode)
+  @And("^user create shared course request from batch \"([^\"]*)\"$")
+  public void userCreateSharedCourseRequestFromBatch(String originBatchCode)
     throws Throwable {
 
-    boolean isCopyFromMaster = StringUtils.isEmpty(originBatchCode);
-    if (isCopyFromMaster) {
+    boolean copyFromMaster = StringUtils.isEmpty(originBatchCode);
+    if (copyFromMaster) {
       originBatchCode = null;
     } else if (originBatchCode.equals("recorded-batch-code")) {
       originBatchCode = batchData.getSingleResponse()
@@ -71,6 +71,11 @@ public class SharedCourseSteps extends BaseSteps {
       CourseWebResponse courseDataCreatedResponseData =
         courseDataCreatedResponse.getData();
       courseId = courseDataCreatedResponseData.getId();
+    } else if (courseId.equals("first-recorded-shared-course-id")) {
+      courseId = sharedCourseData.getCreatedResponse()
+        .getData()
+        .get(0)
+        .getId();
     }
 
     sharedCourseData.addCourseIdToRequest(courseId);
