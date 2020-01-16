@@ -1,9 +1,10 @@
+@Report @Regression
 Feature: Report Feature
 
   Background:
     Given user prepare auth request
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And user prepare report request with batchCode "futur3"
+    And user prepare report request with batchCode "future3"
 
   @Negative @Report
   Scenario: User hit get students within batch without logging in
@@ -16,6 +17,7 @@ Feature: Report Feature
     When user hit get students within batch
     Then student paging response code should be 200
     And student paging response body should not be null
+    And user hit logout endpoint
 
   @Negative @Report
   Scenario: User hit create report without logging in
@@ -31,6 +33,7 @@ Feature: Report Feature
       | name        | NotBlank |
       | description | NotBlank |
       | students    | Size     |
+    And user hit logout endpoint
 
   @Positive @Report
   Scenario: User hit create report without logging in
@@ -57,6 +60,7 @@ Feature: Report Feature
       | name            | ""    |
       | description     | ""    |
       | studentCount    | 1-4   |
+    And user hit logout endpoint
 
   @Negative @Report
   Scenario: User hit get all report without logging in
@@ -72,6 +76,7 @@ Feature: Report Feature
       | name            | ""    |
       | description     | ""    |
       | studentCount    | 1-4   |
+    And user hit logout endpoint
 
   @Negative @Report
   Scenario: User hit update report without logging in
@@ -94,6 +99,7 @@ Feature: Report Feature
     And report error response body should contains these data
       | name        | NotBlank |
       | description | NotBlank |
+    And user hit logout endpoint
 
   @Positive @Report
   Scenario: User hit update report with logging in as admin
@@ -107,6 +113,7 @@ Feature: Report Feature
       | name            | ""    |
       | description     | ""    |
       | studentCount    | 1-4   |
+    And user hit logout endpoint
 
   @Negative @Report
   Scenario: User hit delete report without logging in as admin
@@ -124,6 +131,7 @@ Feature: Report Feature
     Then report base response code should be 200
     When user hit get report with any id from all report response
     Then report error response code should be 404
+    And user hit logout endpoint
 
 
 
