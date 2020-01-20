@@ -31,9 +31,9 @@ public class SummarySteps extends BaseSteps {
   private SummaryAPI summaryAPI;
 
 
-  @And("^user store first student id from all students$")
-  public void userStoreFirstStudentIdFromAllStudents() {
-    String studentId = userData.getPagingResponse().getData().get(0).getId();
+  @And("^user store studentId$")
+  public void userStoreStudentId() {
+    String studentId = authData.getResponse().getData().getId();
     summaryData.setStudentId(studentId);
   }
 

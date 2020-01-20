@@ -5,8 +5,8 @@ Feature: Student Summary
     Given user prepare auth request
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user prepare user request
-    And user hit get users endpoint with role "STUDENT", page 1, size 10
-    And user store first student id from all students
+    And user do login with email "oliver@gmail.com" and password "oliverfunctionapp"
+    And user store studentId
     And user prepare summary request
 
   @Negative @StudentSummary
@@ -18,7 +18,7 @@ Feature: Student Summary
   @Negative @StudentSummary
   Scenario: User as student want to access another student's summary
     Given user hit logout endpoint
-    And user do login with email "david@gmail.com" and password "oliverfunctionapp"
+    And user do login with email "david@gmail.com" and password "davidfunctionapp"
     When user hit get summary endpoint with type "Quiz"
     Then summary error response code should be 403
     And user hit logout endpoint
@@ -31,7 +31,7 @@ Feature: Student Summary
     And summary response body scores should all match type "QUIZ"
     And user hit logout endpoint
 
-  @Positive @StudentSummary
+  @Positive @StudentOwnQuizSummary
   Scenario: User as student want to access his/her own quiz summary
     Given user hit logout endpoint
     And user do login with email "oliver@gmail.com" and password "oliverfunctionapp"
@@ -41,7 +41,7 @@ Feature: Student Summary
     And summary response body scores should all match type "QUIZ"
     And user hit logout endpoint
 
-  @Positive @StudentSummary
+  @Positive @StudentOwnAssignmentSummary
   Scenario: User as student want to access his/her own assignment summary
     Given user hit logout endpoint
     And user do login with email "oliver@gmail.com" and password "oliverfunctionapp"
@@ -51,7 +51,7 @@ Feature: Student Summary
     And summary response body scores should all match type "ASSIGNMENT"
     And user hit logout endpoint
 
-  @Positive @StudentSummary
+  @Positive @MentorAccessStudentSummary
   Scenario: User as Mentor want to access a student's summary
     Given user hit logout endpoint
     And user do login with email "oliver@mentor.com" and password "oliverfunctionapp"
@@ -61,7 +61,7 @@ Feature: Student Summary
     And summary response body scores should all match type "QUIZ"
     And user hit logout endpoint
 
-  @Positive @StudentSummary
+  @Positive @JudgeAccessStudentSummary
   Scenario: User as Judge want to access a student's summary
     Given user hit logout endpoint
     And user do login with email "oliver@judge.com" and password "oliverfunctionapp"
