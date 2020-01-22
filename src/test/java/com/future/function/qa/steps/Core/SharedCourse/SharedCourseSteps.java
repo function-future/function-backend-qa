@@ -8,6 +8,8 @@ import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
 import com.future.function.qa.model.response.core.course.CourseWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -95,6 +97,13 @@ public class SharedCourseSteps extends BaseSteps {
       targetBatchCode, sharedCourseData.getRequest(), authData.getCookie());
 
     sharedCourseData.setResponse(response);
+
+    if (sharedCourseData.getResponseCode() == 201) {
+      for (CourseWebResponse resp : sharedCourseData.getCreatedResponse()
+        .getData()) {
+        cleaner.append(DocumentName.SHARED_COURSE, resp.getId());
+      }
+    }
   }
 
   @Then("^shared course response code should be (\\d+)$")
@@ -115,6 +124,12 @@ public class SharedCourseSteps extends BaseSteps {
 
     assertThat(errors.get(key), notNullValue());
     assertThat(errors.get(key), hasItem(value));
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }
