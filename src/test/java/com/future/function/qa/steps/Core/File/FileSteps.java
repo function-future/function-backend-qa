@@ -136,7 +136,8 @@ public class FileSteps extends BaseSteps {
   }
 
   @And("^retrieved file/folder name should be \"([^\"]*)\"$")
-  public void retrievedFileFolderNameShouldBe(String expectedName) throws Throwable {
+  public void retrievedFileFolderNameShouldBe(String expectedName)
+    throws Throwable {
 
     DataResponse<FileWebResponse<FileContentWebResponse>> retrievedResponse =
       fileData.getRetrievedResponse();
@@ -165,6 +166,47 @@ public class FileSteps extends BaseSteps {
       fileVersions.containsKey(Integer.toUnsignedLong(expectedOwnedKey)),
       equalTo(true)
     );
+  }
+
+  @And("^user hit update file/folder endpoint with recorded id and parent id " +
+       "\"([^\"]*)\"$")
+  public void userHitUpdateFileFolderEndpointWithRecordedIdAndParentId(
+    String parentId
+  ) throws Throwable {
+
+    DataResponse<FileWebResponse<FileContentWebResponse>> createdResponse =
+      fileData.getCreatedResponse();
+    FileWebResponse<FileContentWebResponse> createdResponseData =
+      createdResponse.getData();
+    FileContentWebResponse createdResponseDataContent =
+      createdResponseData.getContent();
+
+    Response response = fileAPI.update(createdResponseDataContent.getId(),
+                                       parentId, fileData.getFile(),
+                                       fileData.getRequestAsJson(),
+                                       authData.getCookie()
+    );
+
+    fileData.setResponse(response);
+  }
+
+  @And("^user hit delete file/folder endpoint with recorded id and parent id " +
+       "\"([^\"]*)\"$")
+  public void userHitDeleteFileFolderEndpointWithRecordedIdAndParentId(
+    String parentId
+  ) throws Throwable {
+
+    DataResponse<FileWebResponse<FileContentWebResponse>> createdResponse =
+      fileData.getCreatedResponse();
+    FileWebResponse<FileContentWebResponse> createdResponseData =
+      createdResponse.getData();
+    FileContentWebResponse createdResponseDataContent =
+      createdResponseData.getContent();
+
+    Response response = fileAPI.delete(
+      createdResponseDataContent.getId(), parentId, authData.getCookie());
+
+    fileData.setResponse(response);
   }
 
 }
