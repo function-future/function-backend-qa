@@ -28,7 +28,7 @@ public class SharedCourseData extends BaseData {
   private DataResponse<List<CourseWebResponse>> createdResponse =
     new DataResponse<>();
 
-  private DataResponse<List<CourseWebResponse>> retrievedResponse =
+  private DataResponse<CourseWebResponse> retrievedResponse =
     new DataResponse<>();
 
   private PagingResponse<CourseWebResponse> pagingResponse =
@@ -63,7 +63,7 @@ public class SharedCourseData extends BaseData {
     this.createdResponse = asDataResponse(
       response, new TypeReference<DataResponse<List<CourseWebResponse>>>() {});
     this.retrievedResponse = asDataResponse(
-      response, new TypeReference<DataResponse<List<CourseWebResponse>>>() {});
+      response, new TypeReference<DataResponse<CourseWebResponse>>() {});
     this.pagingResponse = asPagingResponse(
       response, new TypeReference<PagingResponse<CourseWebResponse>>() {});
   }
