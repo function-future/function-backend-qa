@@ -219,4 +219,34 @@ public class FileAPI extends BaseAPI {
       ));
   }
 
+  @Step
+  public Response delete(String id, String parentId, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.deleteFileFolderWithCookie(id, parentId,
+                                                             cookie
+                             ), this.deleteFileFolderWithoutCookie(id, parentId)
+    );
+  }
+
+  private Supplier<Response> deleteFileFolderWithCookie(
+    String id, String parentId, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, String.join("", parentId,
+                                                 String.format(PATH_ID, id)
+      )));
+  }
+
+  private Supplier<Response> deleteFileFolderWithoutCookie(
+    String id, String parentId
+  ) {
+
+    return () -> base.delete(String.format(PATH_ID, String.join("", parentId,
+                                                                String.format(
+                                                                  PATH_ID, id)
+    )));
+  }
+
 }

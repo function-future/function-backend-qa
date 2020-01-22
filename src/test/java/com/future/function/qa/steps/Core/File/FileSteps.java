@@ -190,4 +190,23 @@ public class FileSteps extends BaseSteps {
     fileData.setResponse(response);
   }
 
+  @And("^user hit delete file/folder endpoint with recorded id and parent id " +
+       "\"([^\"]*)\"$")
+  public void userHitDeleteFileFolderEndpointWithRecordedIdAndParentId(
+    String parentId
+  ) throws Throwable {
+
+    DataResponse<FileWebResponse<FileContentWebResponse>> createdResponse =
+      fileData.getCreatedResponse();
+    FileWebResponse<FileContentWebResponse> createdResponseData =
+      createdResponse.getData();
+    FileContentWebResponse createdResponseDataContent =
+      createdResponseData.getContent();
+
+    Response response = fileAPI.delete(
+      createdResponseDataContent.getId(), parentId, authData.getCookie());
+
+    fileData.setResponse(response);
+  }
+
 }
