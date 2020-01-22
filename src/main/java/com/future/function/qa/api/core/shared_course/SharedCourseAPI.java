@@ -129,4 +129,26 @@ public class SharedCourseAPI extends BaseAPI {
       .put(String.format(PATH_ID, id));
   }
 
+  @Step
+  public Response delete(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.deleteSharedCourseWithCookie(id, cookie),
+                             this.deleteSharedCourseWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> deleteSharedCourseWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .delete(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> deleteSharedCourseWithoutCookie(String id) {
+
+    return () -> base.delete(String.format(PATH_ID, id));
+  }
+
 }
