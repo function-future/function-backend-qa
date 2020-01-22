@@ -24,10 +24,11 @@ public class SharedCourseAPI extends BaseAPI {
     String targetBatchCode, SharedCourseWebRequest request, Cookie cookie
   ) {
 
-    return doByCookiePresent(
-      cookie,
-      this.createSharedCourseWithCookie(targetBatchCode, request, cookie),
-      this.createSharedCourseWithoutCookie(targetBatchCode, request)
+    return doByCookiePresent(cookie,
+                             this.createSharedCourseWithCookie(targetBatchCode,
+                                                               request, cookie
+                             ), this.createSharedCourseWithoutCookie(
+        targetBatchCode, request)
     );
   }
 
@@ -48,6 +49,53 @@ public class SharedCourseAPI extends BaseAPI {
     return () -> base.body(request)
       .contentType(ContentType.JSON)
       .post();
+  }
+
+  @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    return doByCookiePresent(cookie, this.getSharedCoursesWithCookie(page, size,
+                                                                     cookie
+    ), this.getSharedCoursesWithoutCookie(page, size));
+  }
+
+  private Supplier<Response> getSharedCoursesWithCookie(
+    int page, int size, Cookie cookie
+  ) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .cookie(cookie)
+      .get();
+  }
+
+  private Supplier<Response> getSharedCoursesWithoutCookie(int page, int size) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
+  @Step
+  public Response getDetail(String id, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.getSharedCourseDetailWithCookie(id, cookie),
+                             this.getSharedCourseDetailWithoutCookie(id)
+    );
+  }
+
+  private Supplier<Response> getSharedCourseDetailWithCookie(
+    String id, Cookie cookie
+  ) {
+
+    return () -> base.cookie(cookie)
+      .get(String.format(PATH_ID, id));
+  }
+
+  private Supplier<Response> getSharedCourseDetailWithoutCookie(String id) {
+
+    return () -> base.get(String.format(PATH_ID, id));
   }
 
 }

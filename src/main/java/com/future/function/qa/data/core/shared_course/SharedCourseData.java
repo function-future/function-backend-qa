@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.core.shared_course.SharedCourseWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.course.CourseWebResponse;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,12 @@ public class SharedCourseData extends BaseData {
 
   private DataResponse<List<CourseWebResponse>> createdResponse =
     new DataResponse<>();
+
+  private DataResponse<List<CourseWebResponse>> retrievedResponse =
+    new DataResponse<>();
+
+  private PagingResponse<CourseWebResponse> pagingResponse =
+    new PagingResponse<>();
 
   private SharedCourseWebRequest request;
 
@@ -55,6 +62,10 @@ public class SharedCourseData extends BaseData {
     super.setResponse(response);
     this.createdResponse = asDataResponse(
       response, new TypeReference<DataResponse<List<CourseWebResponse>>>() {});
+    this.retrievedResponse = asDataResponse(
+      response, new TypeReference<DataResponse<List<CourseWebResponse>>>() {});
+    this.pagingResponse = asPagingResponse(
+      response, new TypeReference<PagingResponse<CourseWebResponse>>() {});
   }
 
 }
