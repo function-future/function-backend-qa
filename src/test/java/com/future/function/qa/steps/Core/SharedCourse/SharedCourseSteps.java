@@ -126,12 +126,6 @@ public class SharedCourseSteps extends BaseSteps {
     assertThat(errors.get(key), hasItem(value));
   }
 
-  @After
-  public void cleanup() {
-
-    cleaner.flushAll();
-  }
-
   @And("^user hit shared course endpoint with page (\\d+) and size (\\d+)$")
   public void userHitSharedCourseEndpointWithPageAndSize(int page, int size)
     throws Throwable {
@@ -165,6 +159,63 @@ public class SharedCourseSteps extends BaseSteps {
     Response response = sharedCourseAPI.getDetail(id, authData.getCookie());
 
     sharedCourseData.setResponse(response);
+  }
+
+  @And("^user hit update shared course endpoint with \"([^\"]*)\"$")
+  public void userHitUpdateSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.update(
+      id, courseData.getRequest(), authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @And(
+    "^retrieved shared course response data should have title \"([^\"]*)\" " +
+    "and description \"([^\"]*)\"$")
+  public void retrievedSharedCourseResponseDataShouldHaveTitleAndDescription(
+    String expectedTitle, String expectedDescription
+  ) throws Throwable {
+
+    DataResponse<CourseWebResponse> retrievedResponse =
+      sharedCourseData.getRetrievedResponse();
+    CourseWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getTitle(), equalTo(expectedTitle));
+    assertThat(
+      retrievedResponseData.getDescription(), equalTo(expectedDescription));
+  }
+
+  @And("^user hit delete shared course endpoint with \"([^\"]*)\"$")
+  public void userHitDeleteSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.delete(id, authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }
