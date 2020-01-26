@@ -126,12 +126,6 @@ public class SharedCourseSteps extends BaseSteps {
     assertThat(errors.get(key), hasItem(value));
   }
 
-  @After
-  public void cleanup() {
-
-    cleaner.flushAll();
-  }
-
   @And("^user hit shared course endpoint with page (\\d+) and size (\\d+)$")
   public void userHitSharedCourseEndpointWithPageAndSize(int page, int size)
     throws Throwable {
@@ -199,6 +193,29 @@ public class SharedCourseSteps extends BaseSteps {
     assertThat(retrievedResponseData.getTitle(), equalTo(expectedTitle));
     assertThat(
       retrievedResponseData.getDescription(), equalTo(expectedDescription));
+  }
+
+  @And("^user hit delete shared course endpoint with \"([^\"]*)\"$")
+  public void userHitDeleteSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.delete(id, authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }
