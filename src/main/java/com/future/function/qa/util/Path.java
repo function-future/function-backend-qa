@@ -28,4 +28,6 @@ public interface Path {
 
   String SHARED_COURSE = "/api/core/batches/%s/courses";
 
+  String DISCUSSION = "/api/core/batches/%s/courses/%s/discussions";
+
 }
