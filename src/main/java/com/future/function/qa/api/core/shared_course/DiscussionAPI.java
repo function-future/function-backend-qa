@@ -47,4 +47,30 @@ public class DiscussionAPI extends BaseAPI {
       .post();
   }
 
+  @Step
+  public Response get(int page, int size, Cookie cookie) {
+
+    return doByCookiePresent(cookie,
+                             this.getDiscussionsWithCookie(page, size, cookie),
+                             this.getDiscussionsWithoutCookie(page, size)
+    );
+  }
+
+  private Supplier<Response> getDiscussionsWithCookie(
+    int page, int size, Cookie cookie
+  ) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .cookie(cookie)
+      .get();
+  }
+
+  private Supplier<Response> getDiscussionsWithoutCookie(int page, int size) {
+
+    return () -> base.queryParam("page", page)
+      .queryParam("size", size)
+      .get();
+  }
+
 }
