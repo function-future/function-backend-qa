@@ -9,10 +9,11 @@ import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.course.CourseWebResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,13 @@ public class CourseSteps extends BaseSteps {
       courseData.getRequest(), authData.getCookie());
 
     courseData.setResponse(response);
+
+    if (courseData.getResponseCode() == 201) {
+      cleaner.append(
+        DocumentName.COURSE, courseData.getCreatedResponse()
+          .getData()
+          .getId());
+    }
   }
 
   @Then("^course response code should be (\\d+)$")
@@ -224,6 +232,12 @@ public class CourseSteps extends BaseSteps {
     );
 
     courseData.setResponse(response);
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }

@@ -16,7 +16,7 @@ Feature: Change Password
   @Negative @UserDetail @ChangePassword
   Scenario Outline: Change password after logging in as non-student roles with incorrect old password
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user hit logout endpoint
     And user do login with email "<email>" and password "<oldpassword>"
     And user hit change password endpoint with old password "incorrectoldpassword" and new password "newpassword"
@@ -24,9 +24,6 @@ Feature: Change Password
     And user hit logout endpoint
     And user do login with email "<email>" and password "<oldpassword>"
     And auth response should be ok and cookie is present
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | name   | role   | address | phone         | oldpassword       |
       | qa.adm@mailinator.com    | Admin  | ADMIN  | Address | 0815123123123 | adminfunctionapp  |
@@ -45,14 +42,11 @@ Feature: Change Password
     And user hit logout endpoint
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And auth response should be ok and cookie is present
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @UserDetail @ChangePassword
   Scenario Outline: Change password after logging in as non-student roles with incorrect old password
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "", batch code "", university ""
+    And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user hit logout endpoint
     And user do login with email "<email>" and password "<oldpassword>"
     And user hit change password endpoint with old password "<oldpassword>" and new password "newpassword"
@@ -62,9 +56,6 @@ Feature: Change Password
     And auth response should be unauthorized
     And user do login with email "<email>" and password "newpassword"
     And auth response should be ok and cookie is present
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | name   | role   | address | phone         | oldpassword       |
       | qa.adm@mailinator.com    | Admin  | ADMIN  | Address | 0815123123123 | adminfunctionapp  |
@@ -85,6 +76,3 @@ Feature: Change Password
     And auth response should be unauthorized
     And user do login with email "qa.student@mailinator.com" and password "newpassword"
     And auth response should be ok and cookie is present
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id

@@ -23,10 +23,6 @@ Feature: Change Profile Picture
     And user prepare change profile picture request with avatar id "default"
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 401
-    And user prepare batch request
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Negative @UserDetail @ChangeProfilePicture
   Scenario: Change profile picture with multiple avatar id
@@ -47,11 +43,7 @@ Feature: Change Profile Picture
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 400
     And change profile picture error response should have key "avatar" and value "Size"
-    And user prepare batch request
     And qa system do cleanup data for recorded avatars
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Negative @UserDetail @ChangeProfilePicture
   Scenario: Change profile picture without existing file
@@ -69,11 +61,7 @@ Feature: Change Profile Picture
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 400
     And change profile picture error response should have key "avatar" and value "FileMustExist"
-    And user prepare batch request
     And qa system do cleanup data for recorded avatars
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Negative @UserDetail @ChangeProfilePicture
   Scenario: Change profile picture with non-image file
@@ -91,11 +79,7 @@ Feature: Change Profile Picture
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 400
     And change profile picture error response should have key "avatar" and value "FileMustBeImage"
-    And user prepare batch request
     And qa system do cleanup data for recorded avatars
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @UserDetail @ChangeProfilePicture
   Scenario: Change profile picture after logging in as student role
@@ -112,11 +96,7 @@ Feature: Change Profile Picture
     And user prepare change profile picture request with avatar id "default"
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 200
-    And user prepare batch request
     And qa system do cleanup data for recorded avatars
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @UserDetail @ChangeProfilePicture
   Scenario Outline: Change profile picture after logging in as non-student roles
@@ -133,8 +113,6 @@ Feature: Change Profile Picture
     And user hit change profile picture endpoint
     Then change profile picture endpoint response code should be 200
     And qa system do cleanup data for recorded avatars
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | name   | role   | address | phone         | password          |
       | qa.adm@mailinator.com    | Admin  | ADMIN  | Address | 0815123123123 | adminfunctionapp  |

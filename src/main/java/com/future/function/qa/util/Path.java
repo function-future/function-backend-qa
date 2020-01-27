@@ -26,4 +26,8 @@ public interface Path {
 
   String CHANGE_PROFILE_PICTURE = PROFILE + "/picture";
 
+  String SHARED_COURSE = "/api/core/batches/%s/courses";
+
+  String DISCUSSION = "/api/core/batches/%s/courses/%s/discussions";
+
 }

@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import com.future.function.qa.api.core.auth.AuthAPI;
 import com.future.function.qa.steps.BaseSteps;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -79,5 +80,11 @@ public class AuthSteps extends BaseSteps {
   public void userPrepareAuthRequest() throws Throwable {
 
     authAPI.prepare();
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }
