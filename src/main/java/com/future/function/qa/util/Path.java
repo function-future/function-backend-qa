@@ -38,4 +38,14 @@ public interface Path {
   String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
 
   String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
+
+  String COMMENT = "/api/scoring/batches/batchId/assignments/%s/room/%s/comments";
+
+  String STUDENT_QUIZ = "/api/scoring/batches/%s/quizzes/%s/student";
+
+  String STUDENT_QUESTION = "/api/scoring/batches/%s/quizzes/%s/student/questions";
+
+  String REPORT = "/api/scoring/batches/%s/judgings";
+
+  String STUDENTS = "/students";
 }
