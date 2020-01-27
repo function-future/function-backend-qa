@@ -10,6 +10,8 @@ public interface Path {
 
   String STICKY_NOTE = "/api/core/sticky-notes";
 
+  String USER = "/api/core/users";
+
   String QUESTION_BANK = "/api/scoring/question-banks";
 
   String QUESTION = "/questions";
@@ -19,4 +21,6 @@ public interface Path {
   String COPY = "/copy";
 
   String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
+
+  String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
 }
