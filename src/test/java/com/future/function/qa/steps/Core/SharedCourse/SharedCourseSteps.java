@@ -6,6 +6,7 @@ import com.future.function.qa.data.core.course.CourseData;
 import com.future.function.qa.data.core.shared_course.SharedCourseData;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
+import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.course.CourseWebResponse;
 import com.future.function.qa.steps.BaseSteps;
 import com.future.function.qa.util.DocumentName;
@@ -20,11 +21,10 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class SharedCourseSteps extends BaseSteps {
 
@@ -124,6 +124,92 @@ public class SharedCourseSteps extends BaseSteps {
 
     assertThat(errors.get(key), notNullValue());
     assertThat(errors.get(key), hasItem(value));
+  }
+
+  @And("^user hit shared course endpoint with page (\\d+) and size (\\d+)$")
+  public void userHitSharedCourseEndpointWithPageAndSize(int page, int size)
+    throws Throwable {
+
+    Response response = sharedCourseAPI.get(page, size, authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @And("^shared course response data should not be empty$")
+  public void sharedCourseResponseDataShouldNotBeEmpty() throws Throwable {
+
+    PagingResponse<CourseWebResponse> pagingResponse =
+      sharedCourseData.getPagingResponse();
+
+    assertThat(pagingResponse.getData(), not(empty()));
+  }
+
+  @And("^user hit shared course endpoint with \"([^\"]*)\"$")
+  public void userHitSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.getDetail(id, authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @And("^user hit update shared course endpoint with \"([^\"]*)\"$")
+  public void userHitUpdateSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.update(
+      id, courseData.getRequest(), authData.getCookie());
+
+    sharedCourseData.setResponse(response);
+  }
+
+  @And(
+    "^retrieved shared course response data should have title \"([^\"]*)\" " +
+    "and description \"([^\"]*)\"$")
+  public void retrievedSharedCourseResponseDataShouldHaveTitleAndDescription(
+    String expectedTitle, String expectedDescription
+  ) throws Throwable {
+
+    DataResponse<CourseWebResponse> retrievedResponse =
+      sharedCourseData.getRetrievedResponse();
+    CourseWebResponse retrievedResponseData = retrievedResponse.getData();
+
+    assertThat(retrievedResponseData.getTitle(), equalTo(expectedTitle));
+    assertThat(
+      retrievedResponseData.getDescription(), equalTo(expectedDescription));
+  }
+
+  @And("^user hit delete shared course endpoint with \"([^\"]*)\"$")
+  public void userHitDeleteSharedCourseEndpointWith(String sharedCourseId)
+    throws Throwable {
+
+    String id = Optional.of(sharedCourseId)
+      .filter(i -> i.equals("first-recorded-shared-course-id"))
+      .map(ignored -> sharedCourseData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(responses -> responses.get(0))
+      .map(CourseWebResponse::getId)
+      .orElse(sharedCourseId);
+
+    Response response = sharedCourseAPI.delete(id, authData.getCookie());
+
+    sharedCourseData.setResponse(response);
   }
 
   @After
