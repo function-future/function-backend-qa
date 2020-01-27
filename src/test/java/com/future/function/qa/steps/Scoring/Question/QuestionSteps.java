@@ -2,7 +2,7 @@ package com.future.function.qa.steps.Scoring.Question;
 
 import com.future.function.qa.api.scoring.question.QuestionAPI;
 import com.future.function.qa.data.core.auth.AuthData;
-import com.future.function.qa.data.question_bank.QuestionBankData;
+import com.future.function.qa.data.scoring.question_bank.QuestionBankData;
 import com.future.function.qa.data.scoring.option.OptionData;
 import com.future.function.qa.data.scoring.question.QuestionData;
 import com.future.function.qa.model.request.scoring.option.OptionWebRequest;
@@ -10,7 +10,6 @@ import com.future.function.qa.model.request.scoring.question.QuestionWebRequest;
 import com.future.function.qa.model.response.scoring.option.OptionWebResponse;
 import com.future.function.qa.model.response.scoring.question.QuestionWebResponse;
 import com.future.function.qa.steps.BaseSteps;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
