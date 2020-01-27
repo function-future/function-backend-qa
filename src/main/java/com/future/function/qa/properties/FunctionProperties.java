@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Component
 @NoArgsConstructor
@@ -19,4 +21,6 @@ public class FunctionProperties {
   private String host;
 
   private String port;
+
+  private Map<String, Object> database;
 }

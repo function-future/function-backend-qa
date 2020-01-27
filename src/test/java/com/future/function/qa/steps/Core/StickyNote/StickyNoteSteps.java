@@ -1,29 +1,30 @@
 package com.future.function.qa.steps.Core.StickyNote;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.future.function.qa.api.core.sticky_note.StickyNoteAPI;
 import com.future.function.qa.data.core.sticky_note.StickyNoteData;
 import com.future.function.qa.model.response.base.ErrorResponse;
 import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.sticky_note.StickyNoteWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class StickyNoteSteps extends BaseSteps {
 
@@ -74,6 +75,13 @@ public class StickyNoteSteps extends BaseSteps {
         stickyNoteAPI.createStickyNote(stickyNoteData.createRequest(title, description), authData.getCookie());
 
     stickyNoteData.setResponse(response);
+
+    if (stickyNoteData.getResponseCode() == 201) {
+      cleaner.append(
+        DocumentName.STICKY_NOTE, stickyNoteData.getCreatedResponse()
+          .getData()
+          .getId());
+    }
   }
 
   @When("^user hit sticky note endpoint$")
@@ -88,6 +96,12 @@ public class StickyNoteSteps extends BaseSteps {
   public void userPrepareStickyNoteRequest() throws Throwable {
 
     stickyNoteAPI.prepare();
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }
 
