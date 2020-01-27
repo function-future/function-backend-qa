@@ -1,4 +1,4 @@
-package com.future.function.qa.model.response.scoring.assignment;
+package com.future.function.qa.model.response.core.course;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssignmentWebResponse {
+public class CourseWebResponse {
 
   private String id;
 
@@ -17,14 +17,9 @@ public class AssignmentWebResponse {
 
   private String description;
 
-  private long deadline;
+  private String material;
 
-  private String batchCode;
-
-  private String file;
-
-  private String fileId;
-
-  private long uploadedDate;
+  private String materialId;
 
 }
+

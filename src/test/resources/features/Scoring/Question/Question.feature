@@ -21,6 +21,7 @@ Feature: Question in Question Bank
     Then question error response code should be 400
     And question error response body with key "label" should be with value "NotBlank"
     And question error response body with key "options" should be with value "Size"
+    And user hit logout endpoint
 
   @Positive @Question
   Scenario: Create question with logging in as admin
@@ -29,6 +30,7 @@ Feature: Question in Question Bank
     And question response body label should be "Question Label"
     And question response body options size should be inputted options size
     And question response body id should not be null
+    And user hit logout endpoint
 
   @Negative @Question
   Scenario: Get all question without logging in
@@ -42,6 +44,7 @@ Feature: Question in Question Bank
     Then question paging response data size should not be zero
     And question paging response data should contains label "Question Label"
     And question paging response paging object should not be null
+    And user hit logout endpoint
 
   @Negative @Question
   Scenario: Get question without logging in
@@ -54,12 +57,14 @@ Feature: Question in Question Bank
     When user hit get question endpoint with random id
     Then question error response code should be 404
     And question error response status should be "NOT_FOUND"
+    And user hit logout endpoint
 
   @Positive @Question
   Scenario: Get question by previous created id
     When user hit get question endpoint
     Then question response body label should be "Question Label"
     And question response body id should not be null
+    And user hit logout endpoint
 
   @Negative @Question
   Scenario: Update question without logging in
@@ -72,6 +77,7 @@ Feature: Question in Question Bank
     When user hit update question endpoint with persisted id, label "", and options label prefix ""
     Then question error response code should be 400
     And question error response body with key "label" should be with value "NotBlank"
+    And user hit logout endpoint
 
   @Positive @Question
   Scenario: Update question with logging in as admin
@@ -79,6 +85,7 @@ Feature: Question in Question Bank
     Then question response code should be 200
     And question response body label should be "Question Label 2"
     And question response body options should contains prefix "PREFIX-"
+    And user hit logout endpoint
 
   @Negative @Question
   Scenario: Delete question without logging in
@@ -91,6 +98,7 @@ Feature: Question in Question Bank
     When user hit delete question endpoint with "id"
     Then question base response code should be 200
     And question base response status should be "OK"
+    And user hit logout endpoint
 
   @Positive @Question
   Scenario: Delete question with logging as admin
@@ -100,3 +108,4 @@ Feature: Question in Question Bank
     When user hit get question endpoint
     Then question error response code should be 404
     And question error response status should be "NOT_FOUND"
+    And user hit logout endpoint
