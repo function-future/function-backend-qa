@@ -81,7 +81,7 @@ Feature: Activity Blog
     And user prepare activity blog request
     And user hit activity blog endpoint with page 1 and size 5
     Then activity blog response code should be 200
-    And activity blog response data should not be empty
+    And retrieved activity blog response data should not be empty
 
   @Positive @ActivityBlog
   Scenario: Get activity blogs after logging in as student role
@@ -98,7 +98,7 @@ Feature: Activity Blog
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user hit activity blog endpoint with page 1 and size 5
     Then activity blog response code should be 200
-    And activity blog response data should not be empty
+    And retrieved activity blog response data should not be empty
     And user prepare batch request
     And user hit logout endpoint
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
@@ -119,7 +119,7 @@ Feature: Activity Blog
     And user do login with email "<email>" and password "<password>"
     And user hit activity blog endpoint with page 1 and size 5
     Then activity blog response code should be 200
-    And activity blog response data should not be empty
+    And retrieved activity blog response data should not be empty
     And user hit logout endpoint
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And qa system do cleanup data for user with name "<name>" and email "<email>"
@@ -141,7 +141,7 @@ Feature: Activity Blog
     And user prepare activity blog request
     And user hit activity blog endpoint with page 1 and size 5 and user id "random-id"
     Then activity blog response code should be 200
-    And activity blog response data should be empty
+    And retrieved activity blog response data should be empty
 
   @Positive @ActivityBlog
   Scenario: Get activity blog by specific author by author's id after logging in
@@ -156,7 +156,7 @@ Feature: Activity Blog
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit activity blog endpoint with page 1 and size 5 and user id "current user"
     Then activity blog response code should be 200
-    And activity blog response data should not be empty
+    And retrieved activity blog response data should not be empty
 
   @Positive @ActivityBlog
   Scenario: Get activity blog detail without being logged in
