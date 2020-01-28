@@ -12,6 +12,8 @@ public interface Path {
 
   String COURSE = "/api/core/courses";
 
+  String FILE = "/api/core/files";
+
   String RESOURCE = "/api/core/resources";
 
   String STICKY_NOTE = "/api/core/sticky-notes";
