@@ -1,27 +1,28 @@
 package com.future.function.qa.steps.Core.Batch;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.future.function.qa.api.core.batch.BatchAPI;
 import com.future.function.qa.data.core.batch.BatchData;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.base.ErrorResponse;
 import com.future.function.qa.model.response.core.batch.BatchWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class BatchSteps extends BaseSteps {
 
@@ -114,6 +115,12 @@ public class BatchSteps extends BaseSteps {
     Response response = batchAPI.create(batchData.createRequest(null, name, code), authData.getCookie());
 
     batchData.setResponse(response);
+
+    if (batchData.getResponseCode() == 201) {
+      cleaner.append(DocumentName.BATCH, batchData.getSingleResponse()
+        .getData()
+        .getId());
+    }
   }
 
   @And("^user hit delete batch endpoint with recorded id$")
@@ -143,5 +150,11 @@ public class BatchSteps extends BaseSteps {
   public void userPrepareBatchRequest() throws Throwable {
 
     batchAPI.prepare();
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }
