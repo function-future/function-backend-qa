@@ -15,7 +15,7 @@
         <serenity.cucumber.version>1.9.20</serenity.cucumber.version>
         <webdriver.driver>chrome</webdriver.driver>
         <slf4j-simple.version>1.7.7</slf4j-simple.version>
-        <jackson-databind.version>2.9.6</jackson-databind.version>
+        <jackson-databind.version>2.9.10.1</jackson-databind.version>
         <junit.version>4.12</junit.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
