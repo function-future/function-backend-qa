@@ -26,8 +26,6 @@ Feature: Profile
     Then profile response code should be 200
     And profile response email should be "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>"
     And profile response picture should not be empty
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | name   | role   | address | phone         | password          |
       | qa.adm@mailinator.com    | Admin  | ADMIN  | Address | 0815123123123 | adminfunctionapp  |
@@ -45,6 +43,3 @@ Feature: Profile
     Then profile response code should be 200
     And profile response email should be "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123"
     And profile response picture should be empty
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id

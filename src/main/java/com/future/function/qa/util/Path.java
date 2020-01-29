@@ -12,6 +12,8 @@ public interface Path {
 
   String COURSE = "/api/core/courses";
 
+  String FILE = "/api/core/files";
+
   String RESOURCE = "/api/core/resources";
 
   String STICKY_NOTE = "/api/core/sticky-notes";
@@ -25,5 +27,31 @@ public interface Path {
   String PROFILE = USER_DETAIL + "/profile";
 
   String CHANGE_PROFILE_PICTURE = PROFILE + "/picture";
+
+  String SHARED_COURSE = "/api/core/batches/%s/courses";
+
+  String DISCUSSION = "/api/core/batches/%s/courses/%s/discussions";
+  
+  String QUESTION_BANK = "/api/scoring/question-banks";
+
+  String QUESTION_BANK_QUESTION = QUESTION_BANK + "/%s/" + "questions";
+
+  String QUIZ = "/api/scoring/batches/%s/quizzes";
+
+  String COPY = "/copy";
+
+  String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
+
+  String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
+
+  String COMMENT = "/api/scoring/batches/batchId/assignments/%s/room/%s/comments";
+
+  String STUDENT_QUIZ = "/api/scoring/batches/%s/quizzes/%s/student";
+
+  String STUDENT_QUESTION = "/api/scoring/batches/%s/quizzes/%s/student/questions";
+
+  String REPORT = "/api/scoring/batches/%s/judgings";
+
+  String STUDENTS = "/students";
 
 }

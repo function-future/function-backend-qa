@@ -9,6 +9,8 @@ import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.announcement.AnnouncementWebResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -21,11 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class AnnouncementSteps extends BaseSteps {
 
@@ -154,6 +152,13 @@ public class AnnouncementSteps extends BaseSteps {
     Response response = announcementAPI.create(announcementData.getRequest(), authData.getCookie());
 
     announcementData.setResponse(response);
+
+    if (announcementData.getResponseCode() == 201) {
+      cleaner.append(
+        DocumentName.ANNOUNCEMENT, announcementData.getCreatedResponse()
+          .getData()
+          .getId());
+    }
   }
 
   @And("^user hit delete announcement endpoint with recorded id$")
@@ -183,5 +188,11 @@ public class AnnouncementSteps extends BaseSteps {
   public void userPrepareAnnouncementRequest() throws Throwable {
 
     announcementAPI.prepare();
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }

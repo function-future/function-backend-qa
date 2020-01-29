@@ -27,11 +27,6 @@ Feature: Course
     When user create course request with title "Title" and description "Description"
     And user hit create course endpoint
     Then course response code should be 403
-    And user prepare batch request
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Negative @Course
   Scenario: Create course with incorrect request formats
@@ -62,8 +57,6 @@ Feature: Course
     Then course response code should be 201
     And created course title should be "Title" and description "Description"
     And created course material and material id should not be null
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.adm@mailinator.com    | adminfunctionapp  | Admin  | ADMIN  | Address | 0815123123123 |
@@ -100,11 +93,6 @@ Feature: Course
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user hit course endpoint with page 1 and size 5
     Then course response code should be 403
-    And user prepare batch request
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @Course
   Scenario Outline: Get courses after logging in as either admin, judge, or mentor role
@@ -123,8 +111,6 @@ Feature: Course
     And user hit course endpoint with page 1 and size 5
     Then course response code should be 200
     And course response data should not be empty
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.adm@mailinator.com    | adminfunctionapp  | Admin  | ADMIN  | Address | 0815123123123 |
@@ -161,11 +147,6 @@ Feature: Course
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user hit course endpoint with recorded id
     Then course response code should be 403
-    And user prepare batch request
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @Course
   Scenario Outline: Get course detail after logging in as either admin, judge, or mentor role
@@ -185,8 +166,6 @@ Feature: Course
     Then course response code should be 200
     And retrieved course title should be "Title" and description "Description"
     And retrieved course material and material id should not be null
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.adm@mailinator.com    | adminfunctionapp  | Admin  | ADMIN  | Address | 0815123123123 |
@@ -229,11 +208,6 @@ Feature: Course
     And user replace course request material with uploaded resource's id
     And user hit update course endpoint with recorded id
     Then course response code should be 403
-    And user prepare batch request
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @Course
   Scenario Outline: Update course after logging in as either admin, judge, or mentor role
@@ -258,8 +232,6 @@ Feature: Course
     Then course response code should be 200
     And retrieved course title should be "Title Updated" and description "Description Updated"
     And retrieved course material and material id should not be null
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.adm@mailinator.com    | adminfunctionapp  | Admin  | ADMIN  | Address | 0815123123123 |
@@ -297,11 +269,6 @@ Feature: Course
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user hit delete course endpoint with recorded id
     Then course response code should be 403
-    And user prepare batch request
-    And user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
-    And user hit delete batch endpoint with recorded id
 
   @Positive @Course
   Scenario Outline: Delete course after logging in as either admin, judge, or mentor role
@@ -320,8 +287,6 @@ Feature: Course
     And user do login with email "<email>" and password "<password>"
     And user hit delete course endpoint with recorded id
     Then course response code should be 200
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.adm@mailinator.com    | adminfunctionapp  | Admin  | ADMIN  | Address | 0815123123123 |

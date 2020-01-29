@@ -9,6 +9,8 @@ import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.activity_blog.ActivityBlogWebResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -56,6 +58,13 @@ public class ActivityBlogSteps extends BaseSteps {
       activityBlogData.getRequest(), authData.getCookie());
 
     activityBlogData.setResponse(response);
+
+    if (activityBlogData.getResponseCode() == 201) {
+      cleaner.append(
+        DocumentName.ACTIVITY_BLOG, activityBlogData.getCreatedResponse()
+          .getData()
+          .getId());
+    }
   }
 
   @Then("^activity blog response code should be (\\d+)$")
@@ -133,14 +142,24 @@ public class ActivityBlogSteps extends BaseSteps {
     activityBlogData.setResponse(response);
   }
 
-  @And("^activity blog response data should not be empty$")
-  public void activityBlogResponseDataShouldNotBeEmpty() throws Throwable {
+  @And("^retrieved activity blog response data should not be empty$")
+  public void retrievedActivityBlogResponseDataShouldNotBeEmpty() throws Throwable {
 
     PagingResponse<ActivityBlogWebResponse> pagingResponse =
       activityBlogData.getPagingResponse();
     List<ActivityBlogWebResponse> pagingResponseData = pagingResponse.getData();
 
     assertThat(pagingResponseData, not(empty()));
+  }
+
+  @And("^retrieved activity blog response data should be empty$")
+  public void retrievedActivityBlogResponseDataShouldBeEmpty() throws Throwable {
+
+    PagingResponse<ActivityBlogWebResponse> pagingResponse =
+      activityBlogData.getPagingResponse();
+    List<ActivityBlogWebResponse> pagingResponseData = pagingResponse.getData();
+
+    assertThat(pagingResponseData, empty());
   }
 
   @And("^user hit activity blog endpoint with recorded id$")
@@ -244,6 +263,12 @@ public class ActivityBlogSteps extends BaseSteps {
     ActivityBlogWebResponse createdResponseData = createdResponse.getData();
 
     assertThat(createdResponseData.getFiles(), empty());
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }
