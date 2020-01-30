@@ -1,5 +1,5 @@
-@StudentQuestion @Regression
-Feature: Student Question
+@StudentQuestion @Scoring @Regression
+Feature: Student Question Feature
 
   Background:
     Given user prepare auth request

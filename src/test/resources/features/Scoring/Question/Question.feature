@@ -1,5 +1,5 @@
-@Question @Regression
-Feature: Question in Question Bank
+@Question @Scoring @Regression
+Feature: Question in Question Bank Feature
 
   Background:
     Given user prepare auth request
