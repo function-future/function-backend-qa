@@ -1,17 +1,5 @@
 package com.future.function.qa.steps.Core.User;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.future.function.qa.api.core.user.UserAPI;
 import com.future.function.qa.data.core.resource.ResourceData;
 import com.future.function.qa.data.core.user.UserData;
@@ -23,12 +11,24 @@ import com.future.function.qa.model.response.base.paging.Paging;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.model.response.core.user.UserWebResponse;
 import com.future.function.qa.steps.BaseSteps;
-import cucumber.api.PendingException;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class UserSteps extends BaseSteps {
 
@@ -40,14 +40,6 @@ public class UserSteps extends BaseSteps {
 
   @Autowired
   private UserData userData;
-
-  @And("^qa system do cleanup data for user with name \"([^\"]*)\" and email \"([^\"]*)\"$")
-  public void qaSystemDoCleanupDataForUserWithNameAndEmail(String name, String email) throws Throwable {
-
-    userAPI.prepare();
-    userObtainUserIdWithNameAndEmail(name, email);
-    userHitDeleteUserEndpointWithRecordedId();
-  }
 
   @And("^user error response has key \"([^\"]*)\" and value \"([^\"]*)\"$")
   public void userErrorResponseHasKeyAndValue(String key, String value) throws Throwable {
@@ -65,11 +57,9 @@ public class UserSteps extends BaseSteps {
       String role, String address, String phone, String avatar, String batchCode, String university) throws Throwable {
 
     String requestAvatarId = Optional.of(avatar)
-        .filter(String::isEmpty)
-        .map(ignored -> resourceData.getCreatedResponse())
-        .map(DataResponse::getData)
-        .map(FileContentWebResponse::getId)
-        .orElse(avatar);
+      .filter("no-avatar"::equals)
+      .map(ignored -> StringUtils.EMPTY)
+      .orElseGet(() -> this.getFromResourceDataOrDefault(avatar));
 
     UserWebRequest request =
         userData.createRequest(null, email, name, role, address, phone, requestAvatarId, batchCode, university);
@@ -77,6 +67,22 @@ public class UserSteps extends BaseSteps {
     Response response = userAPI.create(request, authData.getCookie());
 
     userData.setResponse(response);
+
+    if (userData.getResponseCode() == 201) {
+      cleaner.append(DocumentName.USER, userData.getCreatedResponse()
+        .getData()
+        .getId());
+    }
+  }
+
+  private String getFromResourceDataOrDefault(String defaultValue) {
+
+    return Optional.of(defaultValue)
+      .filter(String::isEmpty)
+      .map(ignored -> resourceData.getCreatedResponse())
+      .map(DataResponse::getData)
+      .map(FileContentWebResponse::getId)
+      .orElse(defaultValue);
   }
 
   @And("^user hit delete user endpoint with recorded target user id$")
@@ -123,8 +129,16 @@ public class UserSteps extends BaseSteps {
     UserWebResponse createdResponseData = createdResponse.getData();
     String createdUserId = createdResponseData.getId();
 
-    UserWebRequest request =
-        userData.createRequest(createdUserId, email, name, role, address, phone, avatar, batchCode, university);
+    String requestAvatarId = Optional.of(avatar)
+      .filter("no-avatar"::equals)
+      .map(ignored -> StringUtils.EMPTY)
+      .orElseGet(() -> this.getFromResourceDataOrDefault(avatar));
+
+    UserWebRequest request = userData.createRequest(createdUserId, email, name,
+                                                    role, address, phone,
+                                                    requestAvatarId, batchCode,
+                                                    university
+    );
 
     Response response = userAPI.update(request, authData.getCookie());
 
@@ -179,5 +193,11 @@ public class UserSteps extends BaseSteps {
     Paging paging = pagingResponse.getPaging();
 
     assertThat(paging.getTotalRecords(), equalTo(Integer.toUnsignedLong(totalElementSize)));
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }

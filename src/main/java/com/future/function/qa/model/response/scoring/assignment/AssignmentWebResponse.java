@@ -11,20 +11,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignmentWebResponse {
 
-  private String id;
+    private String id;
 
-  private String title;
+    private String title;
 
-  private String description;
+    private String description;
 
-  private long deadline;
+    private long deadline;
 
-  private String batchCode;
+    private String batchCode;
 
-  private String file;
+    private String file;
 
-  private String fileId;
+    private String fileId;
 
-  private long uploadedDate;
+    private long uploadedDate;
 
 }

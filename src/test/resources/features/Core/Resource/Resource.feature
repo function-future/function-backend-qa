@@ -4,18 +4,17 @@ Feature: Resource
   Background:
     Given user prepare resource request
     And user prepare auth request
+    And user hit logout endpoint
 
   @Negative @Resource
   Scenario: Post resource without being logged in
-    When user hit logout endpoint
-    And user select file "src/test/resources/samples/UX Function Core.txt" to be uploaded to origin "user"
+    When user select file "src/test/resources/samples/UX Function Core.txt" to be uploaded to origin "user"
     And user hit post resource endpoint
     Then resource response code should be 401
 
   @Positive @Resource
   Scenario: Post resource text after logging in as admin
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user select file "src/test/resources/samples/UX Function Core.txt" to be uploaded to origin "user"
     And user hit post resource endpoint
     Then resource response code should be 201
@@ -24,8 +23,7 @@ Feature: Resource
 
   @Positive @Resource
   Scenario: Post resource image after logging in as admin
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "user"
     And user hit post resource endpoint
     Then resource response code should be 201
@@ -34,8 +32,7 @@ Feature: Resource
 
   @Positive @Resource
   Scenario: Get resource text after logging in as admin
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user select file "src/test/resources/samples/UX Function Core.txt" to be uploaded to origin "user"
     And user hit post resource endpoint
     And user get last uploaded file path "full"
@@ -43,8 +40,7 @@ Feature: Resource
 
   @Positive @Resource
   Scenario: Get resource image full url after logging in as admin
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "user"
     And user hit post resource endpoint
     And user get last uploaded file path "full"
@@ -52,8 +48,7 @@ Feature: Resource
 
   @Positive @Resource
   Scenario: Get resource image thumbnail url after logging in as admin
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "user"
     And user hit post resource endpoint
     And user get last uploaded file path "thumbnail"

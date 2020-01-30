@@ -36,8 +36,8 @@ public class AssignmentSteps extends BaseSteps {
   }
 
   @When("^user hit create assignment endpoint with title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and empty list of files$")
-  public void userHitCreateAssignmentEndpointWithTitleDescriptionDeadlineLAndEmptyListOfFiles(String title, String description, int deadline) throws Throwable {
-    AssignmentWebRequest request = assignmentData.createRequest(title, description, (long) deadline, null);
+  public void userHitCreateAssignmentEndpointWithTitleDescriptionDeadlineLAndEmptyListOfFiles(String title, String description, long deadline) throws Throwable {
+    AssignmentWebRequest request = assignmentData.createRequest(title, description, deadline, null);
     Response response = assignmentAPI.createAssignment(request, authData.getCookie());
     assignmentData.setResponse(response);
   }
@@ -69,8 +69,8 @@ public class AssignmentSteps extends BaseSteps {
   }
 
   @And("^assignment response body deadline should be (\\d+)$")
-  public void assignmentResponseBodyDeadlineShouldBe(int deadline) {
-    assertEquals(assignmentData.getSingleResponse().getData().getDeadline(), (long) deadline);
+  public void assignmentResponseBodyDeadlineShouldBe(long deadline) {
+    assertEquals(assignmentData.getSingleResponse().getData().getDeadline(), deadline);
   }
 
   @When("^user hit get all assignment endpoint$")
@@ -110,8 +110,8 @@ public class AssignmentSteps extends BaseSteps {
   }
 
   @When("^user hit update assignment endpoint with previous get id, title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and empty list of files$")
-  public void userHitUpdateAssignmentEndpointWithPreviousGetIdTitleDescriptionDeadlineAndEmptyListOfFiles(String arg0, String arg1, int arg2) throws Throwable {
-    AssignmentWebRequest request = assignmentData.createRequest(arg0, arg1, (long) arg2, null);
+  public void userHitUpdateAssignmentEndpointWithPreviousGetIdTitleDescriptionDeadlineAndEmptyListOfFiles(String title, String description, long deadline) throws Throwable {
+    AssignmentWebRequest request = assignmentData.createRequest(title, description, deadline, null);
     String id = assignmentData.getSingleResponse().getData().getId();
     Response response = assignmentAPI.updateAssignment(id, request, authData.getCookie());
     assignmentData.setResponse(response);
