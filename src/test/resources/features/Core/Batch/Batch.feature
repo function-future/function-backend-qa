@@ -3,17 +3,16 @@ Feature: Batch
 
   Background:
     Given user prepare batch request
+    And user prepare auth request
+    And user hit logout endpoint
 
   @Negative @Batch
   Scenario: Create batch without logging in
-    And user prepare auth request
-    When user hit logout endpoint
-    And user hit create batch endpoint with name "Batch Name" and code "Batch3"
+    When user hit create batch endpoint with name "Batch Name" and code "Batch3"
     Then batch response code should be 401
 
   @Negative @Batch
   Scenario: Create batch with empty name and empty code after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "" and code ""
     Then batch response code should be 400
@@ -23,7 +22,6 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Create batch with name and code has space and non alphanumeric after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name" and code "Batch 3~"
     Then batch response code should be 400
@@ -32,30 +30,27 @@ Feature: Batch
 
   @Positive @Batch
   Scenario: Create batch after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name" and code "Batch3"
     Then batch response code should be 201
 
   @Negative @Batch
   Scenario: Create batch with existing code after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "Batch Name" and code "Batch3"
     And user hit create batch endpoint with name "Batch Name" and code "Batch3"
     Then batch response code should be 400
     And batch error response has key "code" and value "UniqueBatchCode"
 
   @Negative @Batch
   Scenario: Get batches after logging out
-    And user prepare auth request
-    When user hit logout endpoint
-    And user hit batch endpoint with page 1 and size 5
+    When user hit batch endpoint with page 1 and size 5
     Then batch response code should be 401
 
   @Positive @Batch
   Scenario: Get batches after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    And user hit create batch endpoint with name "Batch Name" and code "Batch3"
     And user hit batch endpoint with page 1 and size 5
     Then batch response code should be 200
     And batch response should contain name "Batch Name"
@@ -63,16 +58,15 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Get batch detail after logging out
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name 4" and code "Batch4"
     And user hit logout endpoint
+    And user prepare batch request
     And user hit batch detail endpoint with recorded id
     Then batch response code should be 401
 
   @Positive @Batch
   Scenario: Get batch detail after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name 5" and code "Batch5"
     And user hit batch detail endpoint with recorded id
@@ -82,16 +76,12 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Edit batch without being logged in
-    And user prepare auth request
-    When user hit logout endpoint
-    And user hit edit batch endpoint with recorded id and name "Batch Name 5 Updated" and code "Batch5Updated"
+    When user hit edit batch endpoint with recorded id and name "Batch Name 5 Updated" and code "Batch5Updated"
     Then batch response code should be 401
 
   @Negative @Batch
   Scenario: Edit batch with empty name and empty code after logging in as admin
-    And user prepare auth request
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "" and code ""
     Then batch response code should be 400
     And batch error response has key "name" and value "NotBlank"
@@ -100,9 +90,7 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Edit batch with name and code has space and non alphanumeric after logging in as admin
-    And user prepare auth request
-    When user hit logout endpoint
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
+    When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name 6" and code "Batch 6~"
     Then batch response code should be 400
     And batch error response has key "code" and value "NoSpace"
@@ -110,8 +98,6 @@ Feature: Batch
 
   @Positive @Batch
   Scenario: Edit batch after logging in as admin
-    And user prepare auth request
-    And user hit logout endpoint
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name 6" and code "Batch6"
     And user hit edit batch endpoint with recorded id and name "Batch Name 6 Updated" and code "Batch6Updated"
@@ -121,14 +107,11 @@ Feature: Batch
 
   @Negative @Batch
   Scenario: Delete batch without being logged in
-    And user prepare auth request
-    When user hit logout endpoint
-    And user hit delete batch endpoint with recorded id
+    When user hit delete batch endpoint with recorded id
     Then batch response code should be 401
 
   @Positive @Batch
   Scenario: Delete batch after logging in as admin
-    And user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create batch endpoint with name "Batch Name 7" and code "Batch7"
     And user hit delete batch endpoint with recorded id

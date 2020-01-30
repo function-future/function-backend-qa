@@ -1,29 +1,25 @@
 package com.future.function.qa.steps.Core.Resource;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.future.function.qa.api.core.resource.ResourceAPI;
 import com.future.function.qa.data.core.resource.ResourceData;
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Steps;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class ResourceSteps extends BaseSteps {
 
@@ -88,6 +84,12 @@ public class ResourceSteps extends BaseSteps {
         resourceAPI.post("file", resourceData.getFile(), resourceData.getOrigin(), authData.getCookie());
 
     resourceData.setResponse(response);
+
+    if (resourceData.getResponseCode() == 201) {
+      cleaner.append(DocumentName.FILE, resourceData.getCreatedResponse()
+        .getData()
+        .getId());
+    }
   }
 
   @Given("^user prepare resource request$")
@@ -100,5 +102,11 @@ public class ResourceSteps extends BaseSteps {
   public void userSelectFileToBeUploadedToOrigin(String filePath, String origin) throws Throwable {
 
     resourceData.createRequest(filePath, origin);
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 }

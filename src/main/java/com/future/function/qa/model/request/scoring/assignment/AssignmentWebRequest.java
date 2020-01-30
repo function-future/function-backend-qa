@@ -1,10 +1,11 @@
 package com.future.function.qa.model.request.scoring.assignment;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -12,12 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignmentWebRequest {
 
-  private String title;
+    private String title;
 
-  private String description;
+    private String description;
 
-  private Long deadline;
+    private Long deadline;
 
-  private List<String> files;
+    private List<String> files;
 
 }

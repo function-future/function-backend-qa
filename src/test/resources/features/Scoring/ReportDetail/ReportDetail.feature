@@ -1,4 +1,4 @@
-@ReportDetail
+@ReportDetail @Scoring @Regression
 Feature: Report Detail
 
   Background:

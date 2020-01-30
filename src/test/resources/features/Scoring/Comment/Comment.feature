@@ -1,3 +1,4 @@
+@Comment @Regression
 Feature: Comment Feature
 
   Background:
@@ -15,6 +16,7 @@ Feature: Comment Feature
   Scenario: User create comment with logging in as admin
     When user hit create comment endpoint with comment "Comment 1"
     Then comment error response code should be 403
+    And user hit logout endpoint
 
   @Negative @Comment
   Scenario: User create comment without logging in
@@ -30,6 +32,7 @@ Feature: Comment Feature
     Then comment response code should be 201
     And comment response body comment should be "Comment 1"
     And comment response body author name should be "Oliver"
+    And user hit logout endpoint
 
   @Negative @Comment
   Scenario: User get all comment without logging in
@@ -42,3 +45,4 @@ Feature: Comment Feature
     When user hit get all comment endpoint
     Then comment paging response code should be 200
     And comment paging response body should contains comment "Comment 1" and author name "Oliver"
+    And user hit logout endpoint
