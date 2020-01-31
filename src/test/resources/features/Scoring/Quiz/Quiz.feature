@@ -1,5 +1,5 @@
-@Quiz @Regression
-Feature: Quiz
+@Quiz @Scoring @Regression
+Feature: Quiz Feature
 
   Background:
     Given user prepare auth request
@@ -17,13 +17,15 @@ Feature: Quiz
   @Negative @Quiz
   Scenario: Create quiz with blank attributes
     When user hit get all question banks endpoint
-    And user hit create quiz endpoint with title "", description "", trials 0, timeLimit 0,endDate 1679150333148, startDate 1679150333148, questionCount 0, and question bank ids get from question bank data
+    And user hit create quiz endpoint with title "", description "", trials 0, timeLimit 0,endDate 1500000, startDate 1500000, questionCount 0, and question bank ids get from question bank data
     Then quiz error response code should be 400
     And quiz error response code body should have key "title" and value "NotBlank"
     And quiz error response code body should have key "description" and value "NotBlank"
     And quiz error response code body should have key "timeLimit" and value "MinimalOnePositiveNumber"
     And quiz error response code body should have key "trials" and value "MinimalOnePositiveNumber"
     And quiz error response code body should have key "questionCount" and value "MinimalOnePositiveNumber"
+    And quiz error response code body should have key "endDate" and value "DateNotPassed"
+    And quiz error response code body should have key "startDate" and value "DateNotPassed"
     And user hit logout endpoint
 
   @Positive @Quiz

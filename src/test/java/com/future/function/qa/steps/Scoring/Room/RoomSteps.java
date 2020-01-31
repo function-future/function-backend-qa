@@ -47,9 +47,9 @@ public class RoomSteps extends BaseSteps {
     roomData.setStudentId(studentId);
   }
 
-  @Then("^user prepare room request$")
-  public void userPrepareRoomRequest() {
-    roomAPI.prepare(roomData.getAssignmentId(), roomData.getStudentId());
+  @Then("^user prepare room request with batchCode \"([^\"]*)\"$")
+  public void userPrepareRoomRequest(String batchCode) {
+    roomAPI.prepare(batchCode, roomData.getAssignmentId(), roomData.getStudentId());
   }
 
   @When("^user hit get or create room endpoint$")
