@@ -55,4 +55,8 @@ public interface Path {
   String STUDENTS = "/students";
 
   String REPORT_DETAIL = "/api/scoring/batches/%s/judgings/%s/comparisons";
+
+  String SUMMARY = "/api/scoring/summary/%s";
+
+  String SUMMARY_WITHOUT_ID = "/api/scoring/summary";
 }

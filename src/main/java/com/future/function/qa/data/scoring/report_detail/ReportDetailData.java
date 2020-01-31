@@ -7,8 +7,6 @@ import com.future.function.qa.model.request.scoring.report_detail.ScoreStudentWe
 import com.future.function.qa.model.response.base.DataResponse;
 import com.future.function.qa.model.response.scoring.report_detail.ReportDetailWebResponse;
 import io.restassured.response.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReportDetailData extends BaseData {
 
-  private DataResponse<List<ReportDetailWebResponse>> listedResponse;
+  private DataResponse<ReportDetailWebResponse> singleResponse;
 
   private String reportId;
 
@@ -36,13 +34,13 @@ public class ReportDetailData extends BaseData {
         .build();
   }
 
-  @Override
-  public void setResponse(Response response) {
-    super.setResponse(response);
-    this.listedResponse = Optional.of(response)
-        .map(res -> asDataResponse(res, new TypeReference<DataResponse<List<ReportDetailWebResponse>>>() {}))
-        .filter(res -> Objects.nonNull(res.getData()) && res.getData().size() > 0)
-        .orElse(this.listedResponse);
+  public void setResponse(Response responses) {
+    super.setResponse(responses);
+    this.singleResponse = Optional.of(responses)
+        .map(res -> asDataResponse(res, new TypeReference<DataResponse<ReportDetailWebResponse>>() {
+        }))
+        .filter(res -> Objects.nonNull(res.getData()))
+        .orElse(null);
 
   }
 
