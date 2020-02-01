@@ -43,7 +43,6 @@ public class ChatroomSteps extends BaseSteps {
 
   @After
   public void cleanup() {
-    System.out.println("CLEAN UP");
     cleaner.flushAll();
   }
 
