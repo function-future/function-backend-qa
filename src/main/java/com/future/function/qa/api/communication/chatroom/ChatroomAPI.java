@@ -193,13 +193,32 @@ public class ChatroomAPI extends BaseAPI {
     return () -> base
             .cookie(cookie)
             .queryParam("messageId", messageId)
-            .get(String.format(PATH_ID + "/messages", chatroomId));
+            .get(String.format(PATH_ID + "/messages/_before", chatroomId));
   }
 
   private Supplier<Response> getMessagesBeforePivotWithoutCookie(String chatroomId, String messageId) {
     return () -> base
             .queryParam("messageId", messageId)
-            .get(String.format(PATH_ID + "/messages", chatroomId));
+            .get(String.format(PATH_ID + "/messages/_before", chatroomId));
+  }
+
+  @Step
+  public Response getMessagesAfterPivot(String chatroomId, String messageId, Cookie cookie) {
+    return doByCookiePresent(cookie, getMessagesAfterPivotWithCookie(chatroomId, messageId, cookie),
+            getMessagesAfterPivotWithoutCookie(chatroomId, messageId));
+  }
+
+  private Supplier<Response> getMessagesAfterPivotWithCookie(String chatroomId, String messageId, Cookie cookie) {
+    return () -> base
+            .cookie(cookie)
+            .queryParam("messageId", messageId)
+            .get(String.format(PATH_ID + "/messages/_after", chatroomId));
+  }
+
+  private Supplier<Response> getMessagesAfterPivotWithoutCookie(String chatroomId, String messageId) {
+    return () -> base
+            .queryParam("messageId", messageId)
+            .get(String.format(PATH_ID + "/messages/_after", chatroomId));
   }
 
   @Step
