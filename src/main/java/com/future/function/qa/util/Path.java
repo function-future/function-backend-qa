@@ -54,4 +54,6 @@ public interface Path {
 
   String STUDENTS = "/students";
 
+  String CHATROOMS = "/api/communication/chatrooms";
+
 }
