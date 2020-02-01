@@ -54,4 +54,5 @@ public interface Path {
 
   String STUDENTS = "/students";
 
+  String LOGGINGROOM = "/api/communications/logging-rooms";
 }
