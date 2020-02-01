@@ -58,4 +58,6 @@ public interface Path {
 
   String NOTIFICATIONS = "/api/communication/notifications";
 
+  String REMINDERS = "/api/communication/reminders";
+
 }
