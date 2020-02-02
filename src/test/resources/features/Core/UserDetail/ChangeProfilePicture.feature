@@ -1,4 +1,4 @@
-@UserDetail @ChangeProfilePicture @Regression
+@UserDetail @ChangeProfilePicture @Core @Regression
 Feature: Change Profile Picture
 
   Background:

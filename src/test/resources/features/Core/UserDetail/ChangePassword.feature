@@ -1,4 +1,4 @@
-@UserDetail @ChangePassword @Regression
+@UserDetail @ChangePassword @Core @Regression
 Feature: Change Password
 
   Background:

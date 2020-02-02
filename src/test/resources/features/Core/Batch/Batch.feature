@@ -1,4 +1,4 @@
-@Batch @Regression
+@Batch @Core @Regression
 Feature: Batch
 
   Background:

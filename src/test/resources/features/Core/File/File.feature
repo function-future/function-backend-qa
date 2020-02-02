@@ -1,4 +1,4 @@
-@File @Regression
+@File @Core @Regression
 Feature: File
 
   Background:
