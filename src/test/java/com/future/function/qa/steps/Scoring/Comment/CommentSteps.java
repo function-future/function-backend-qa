@@ -39,9 +39,9 @@ public class CommentSteps extends BaseSteps {
   @Steps
   private CommentAPI commentAPI;
 
-  @And("^user prepare comment request$")
-  public void userPrepareCommentRequest() {
-    commentAPI.prepare(roomData.getStudentId(), roomData.getAssignmentId());
+  @And("^user prepare comment request with batchCode \"([^\"]*)\"$")
+  public void userPrepareCommentRequest(String batchCode) {
+    commentAPI.prepare(batchCode, roomData.getStudentId(), roomData.getAssignmentId());
   }
 
   @When("^user hit create comment endpoint with comment \"([^\"]*)\"$")

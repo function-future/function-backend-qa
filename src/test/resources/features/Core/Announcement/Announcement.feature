@@ -1,4 +1,4 @@
-@Announcement @Regression
+@Announcement @Core @Regression
 Feature: Announcement
 
   Background:

@@ -1,4 +1,4 @@
-@ActivityBlog @Regression
+@ActivityBlog @Core @Regression
 Feature: Activity Blog
 
   Background:
@@ -34,7 +34,7 @@ Feature: Activity Blog
     And user hit logout endpoint
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -49,7 +49,7 @@ Feature: Activity Blog
     And user prepare auth request
     And user do login with email "<email>" and password "<password>"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -66,7 +66,7 @@ Feature: Activity Blog
   Scenario: Get activity blogs without being logged in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -82,7 +82,7 @@ Feature: Activity Blog
     And user hit create batch endpoint with name "QA Batch Name" and code "BatchCodeAutomation"
     And user hit create user endpoint with email "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123", avatar "no-avatar", batch code "BatchCodeAutomation", university "University"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -101,7 +101,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -123,7 +123,7 @@ Feature: Activity Blog
   Scenario: Get activity blog by specific author by author's id without logging in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -137,7 +137,7 @@ Feature: Activity Blog
   Scenario: Get activity blog by specific author by author's id after logging in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -152,7 +152,7 @@ Feature: Activity Blog
   Scenario: Get activity blog detail without being logged in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -169,7 +169,7 @@ Feature: Activity Blog
     And user hit create batch endpoint with name "QA Batch Name" and code "BatchCodeAutomation"
     And user hit create user endpoint with email "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123", avatar "no-avatar", batch code "BatchCodeAutomation", university "University"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -186,7 +186,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -207,7 +207,7 @@ Feature: Activity Blog
   Scenario: Update activity blog without being logged in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -223,7 +223,7 @@ Feature: Activity Blog
     And user hit create batch endpoint with name "QA Batch Name" and code "BatchCodeAutomation"
     And user hit create user endpoint with email "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123", avatar "no-avatar", batch code "BatchCodeAutomation", university "University"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -239,7 +239,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -259,7 +259,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -283,12 +283,12 @@ Feature: Activity Blog
     And user hit logout endpoint
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
     And user create activity blog request with title "Title Updated" and description "Description Updated"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit update activity blog endpoint with recorded id
@@ -303,7 +303,7 @@ Feature: Activity Blog
     And user hit logout endpoint
     And user do login with email "<email>" and password "<password>"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -322,7 +322,7 @@ Feature: Activity Blog
   Scenario: Delete activity blog without being logged in
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -337,7 +337,7 @@ Feature: Activity Blog
     And user hit create batch endpoint with name "QA Batch Name" and code "BatchCodeAutomation"
     And user hit create user endpoint with email "qa.student@mailinator.com", name "Student", role "STUDENT", address "Address", phone "0815123123123", avatar "no-avatar", batch code "BatchCodeAutomation", university "University"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -352,7 +352,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -371,7 +371,7 @@ Feature: Activity Blog
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
     And user hit create user endpoint with email "<email>", name "<name>", role "<role>", address "<address>", phone "<phone>", avatar "no-avatar", batch code "", university ""
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -392,7 +392,7 @@ Feature: Activity Blog
     And user hit logout endpoint
     And user do login with email "qa.student@mailinator.com" and password "studentfunctionapp"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint
@@ -406,7 +406,7 @@ Feature: Activity Blog
     And user hit logout endpoint
     And user do login with email "<email>" and password "<password>"
     And user create activity blog request with title "Title" and description "Description"
-    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blogs"
+    And user select file "src/test/resources/samples/Screenshot (96).png" to be uploaded to origin "blog"
     And user hit post resource endpoint
     And user add uploaded resource's id to activity blog request
     And user hit create activity blog endpoint

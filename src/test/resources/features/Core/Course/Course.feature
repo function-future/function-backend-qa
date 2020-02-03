@@ -1,4 +1,4 @@
-@ActivityBlog @Regression
+@Course @Core @Regression
 Feature: Course
 
   Background:

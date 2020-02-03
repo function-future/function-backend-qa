@@ -11,10 +11,10 @@ import net.thucydides.core.annotations.Step;
 
 public class RoomAPI extends BaseAPI {
 
-  public RequestSpecification prepare(String assignmentId, String studentId) {
+  public RequestSpecification prepare(String batchCode, String assignmentId, String studentId) {
 
     base = super.prepare()
-        .basePath(String.format(Path.ROOM, assignmentId, studentId));
+        .basePath(String.format(Path.ROOM, batchCode, assignmentId, studentId));
     return base;
   }
 

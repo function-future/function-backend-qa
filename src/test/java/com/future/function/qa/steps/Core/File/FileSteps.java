@@ -10,6 +10,8 @@ import com.future.function.qa.model.response.core.file.PathWebResponse;
 import com.future.function.qa.model.response.core.resource.FileContentWebResponse;
 import com.future.function.qa.model.response.embedded.VersionWebResponse;
 import com.future.function.qa.steps.BaseSteps;
+import com.future.function.qa.util.DocumentName;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -48,6 +50,13 @@ public class FileSteps extends BaseSteps {
     );
 
     fileData.setResponse(response);
+
+    if (fileData.getResponseCode() == 201) {
+      cleaner.append(DocumentName.FILE, fileData.getCreatedResponse()
+        .getData()
+        .getContent()
+        .getId());
+    }
   }
 
   @Then("^file/folder response code should be (\\d+)$")
@@ -207,6 +216,12 @@ public class FileSteps extends BaseSteps {
       createdResponseDataContent.getId(), parentId, authData.getCookie());
 
     fileData.setResponse(response);
+  }
+
+  @After
+  public void cleanup() {
+
+    cleaner.flushAll();
   }
 
 }

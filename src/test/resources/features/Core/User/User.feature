@@ -1,4 +1,4 @@
-@User @Regression
+@User @Core @Regression
 Feature: User
 
   Background:
