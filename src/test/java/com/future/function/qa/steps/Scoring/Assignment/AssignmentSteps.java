@@ -2,6 +2,7 @@ package com.future.function.qa.steps.Scoring.Assignment;
 
 import com.future.function.qa.api.scoring.assignment.AssignmentAPI;
 import com.future.function.qa.data.core.auth.AuthData;
+import com.future.function.qa.data.core.resource.ResourceData;
 import com.future.function.qa.data.scoring.assignment.AssignmentData;
 import com.future.function.qa.model.request.scoring.assignment.AssignmentWebRequest;
 import com.future.function.qa.model.request.scoring.assignment.CopyAssignmentWebRequest;
@@ -29,6 +30,9 @@ public class AssignmentSteps extends BaseSteps {
   @Steps
   private AssignmentAPI assignmentAPI;
 
+  @Autowired
+  private ResourceData resourceData;
+
 
   @And("^user prepare assignment request with batchCode \"([^\"]*)\"$")
   public void userPrepareAssignmentRequestWithBatchCode(String batchCode) throws Throwable {
@@ -50,7 +54,8 @@ public class AssignmentSteps extends BaseSteps {
   @And("^assignment error response body should have key \"([^\"]*)\" and value \"([^\"]*)\"$")
   public void assignmentErrorResponseBodyShouldHaveKeyAndValue(String key, String value) throws Throwable {
     assertTrue(assignmentData.getErrorResponse().getErrors().containsKey(key));
-    assertEquals(value, assignmentData.getErrorResponse().getErrors().get(key).get(0));
+    assertTrue(assignmentData.getErrorResponse().getErrors().get(key).stream()
+        .anyMatch(errorValue -> errorValue.equals(value)));
   }
 
   @Then("^assignment response code should be (\\d+)$")
@@ -146,6 +151,26 @@ public class AssignmentSteps extends BaseSteps {
   public void userHitCopyAssignmentWithBatchCodeAndRandomAssignmentId(String batchCode) throws Throwable {
     CopyAssignmentWebRequest request = assignmentData.createCopyRequest("random-id", batchCode);
     Response response = assignmentAPI.copyAssignment(request, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @When("^user hit create assignment endpoint with title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and uploaded file$")
+  public void userHitCreateAssignmentEndpointWithTitleDescriptionDeadlineAndUploadedFile(String title,
+      String description, long deadline) throws Throwable {
+    String fileId = resourceData.getCreatedResponse().getData().getId();
+    AssignmentWebRequest request = assignmentData.createRequest(title, description, deadline,
+        Collections.singletonList(fileId));
+    Response response = assignmentAPI.createAssignment(request, authData.getCookie());
+    assignmentData.setResponse(response);
+  }
+
+  @When("^user hit create assignment endpoint with title \"([^\"]*)\", description \"([^\"]*)\", deadline (\\d+), and non-exist file$")
+  public void userHitCreateAssignmentEndpointWithTitleDescriptionDeadlineAndNonExistFile(String title,
+      String description, long deadline) throws Throwable {
+    String fileId = "abc";
+    AssignmentWebRequest request = assignmentData.createRequest(title, description, deadline,
+        Collections.singletonList(fileId));
+    Response response = assignmentAPI.createAssignment(request, authData.getCookie());
     assignmentData.setResponse(response);
   }
 }

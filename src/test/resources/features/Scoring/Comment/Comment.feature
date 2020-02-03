@@ -1,16 +1,16 @@
-@Comment @Regression
+@Comment @Scoring @Regression
 Feature: Comment Feature
 
   Background:
     Given user prepare auth request
     When user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And user prepare assignment request with batchCode "futur3"
+    And user prepare assignment request with batchCode "future3"
     And user hit get all assignment endpoint
     And user get first assignment id and store id
     And user prepare user request
     And user hit get users endpoint with role "STUDENT", page 1, size 10
     And user get first student id and store id
-    And user prepare comment request
+    And user prepare comment request with batchCode "future3"
 
   @Negative @Comment
   Scenario: User create comment with logging in as admin
@@ -24,7 +24,7 @@ Feature: Comment Feature
     When user hit create comment endpoint with comment "Comment 1"
     Then comment error response code should be 401
 
-  @Positive @Comment
+  @Positive @CreateCommentAsMentor
   Scenario: User create comment with logging in as mentor
     Given user hit logout endpoint
     And user do login with email "oliver@mentor.com" and password "oliverfunctionapp"

@@ -11,10 +11,10 @@ import net.thucydides.core.annotations.Step;
 
 public class CommentAPI extends BaseAPI {
 
-  public RequestSpecification prepare(String studentId, String assignmentId) {
+  public RequestSpecification prepare(String batchCode, String studentId, String assignmentId) {
 
     base = super.prepare()
-        .basePath(String.format(Path.COMMENT, assignmentId, studentId));
+        .basePath(String.format(Path.COMMENT, batchCode, assignmentId, studentId));
     return base;
   }
 
