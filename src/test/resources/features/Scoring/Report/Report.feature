@@ -1,4 +1,4 @@
-@Report @Regression
+@Report @Scoring @Regression
 Feature: Report Feature
 
   Background:
@@ -36,12 +36,20 @@ Feature: Report Feature
     And user hit logout endpoint
 
   @Positive @Report
-  Scenario: User hit create report without logging in
+  Scenario: User hit create report with logging in as admin
     When user hit create report with name "Final Judging Session 1" and description "Final Judging Session 1 Description" and "students"
     Then report response code should be 201
     And report response body should have these data
       | name        | Final Judging Session 1             |
       | description | Final Judging Session 1 Description |
+
+  @Negative @CreateReportWithNonExistStudents
+  Scenario: User hit create report with logging in as admin and non-exist students
+    When user hit create report with name "Final Judging Session 1" and description "Final Judging Session 1 Description" and non-exist students
+    Then report error response code should be 400
+    And report error response body should contains these data
+      | students    | StudentListMustExist     |
+    And user hit logout endpoint
 
   @Negative @Report
   Scenario: User hit get report without logging in

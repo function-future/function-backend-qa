@@ -78,6 +78,16 @@ public class ReportSteps extends BaseSteps {
     reportData.setResponse(response);
   }
 
+  @When("^user hit create report with name \"([^\"]*)\" and description \"([^\"]*)\" and non-exist students$")
+  public void userHitCreateReportWithNameAndDescriptionAndPreviousFetchedStudents(String name, String description) throws Throwable {
+    List<String> studentIds = new ArrayList<>();
+    studentIds.add("a");
+    studentIds.add("b");
+    ReportWebRequest request = reportData.createRequest(name, description, studentIds);
+    Response response = reportAPI.createReport(request, authData.getCookie());
+    reportData.setResponse(response);
+  }
+
   @Then("^report response code should be (\\d+)$")
   public void reportResponseCodeShouldBe(int code) {
     if(reportData.getSingleResponse() == null) {
