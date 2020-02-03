@@ -1,4 +1,4 @@
-@UserDetail @Profile @Regression
+@UserDetail @Profile @Core @Regression
 Feature: Profile
 
   Background:

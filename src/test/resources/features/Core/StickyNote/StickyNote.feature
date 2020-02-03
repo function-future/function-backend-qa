@@ -1,4 +1,4 @@
-@StickyNote @Regression
+@StickyNote @Core @Regression
 Feature: Sticky Notes
 
   Background:

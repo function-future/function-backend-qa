@@ -1,4 +1,4 @@
-@Discussion @SharedCourse @Regression
+@Discussion @SharedCourse @Core @Regression
 Feature: Discussion
 
   Background:

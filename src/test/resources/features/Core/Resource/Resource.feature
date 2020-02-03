@@ -1,4 +1,4 @@
-@Resource @Regression
+@Resource @Core @Regression
 Feature: Resource
 
   Background:

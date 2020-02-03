@@ -1,4 +1,4 @@
-@Auth @Regression
+@Auth @Core @Regression
 Feature: Auth
 
   Background:

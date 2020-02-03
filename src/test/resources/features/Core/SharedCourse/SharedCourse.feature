@@ -1,4 +1,4 @@
-@SharedCourse @Regression
+@SharedCourse @Core @Regression
 Feature: Shared Course
 
   Background:
