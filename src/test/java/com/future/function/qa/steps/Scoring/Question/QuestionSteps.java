@@ -194,5 +194,4 @@ public class QuestionSteps extends BaseSteps {
   public void questionBaseResponseStatusShouldBe(String expectedStatus) throws Throwable {
     assertEquals(expectedStatus, questionData.getBaseResponse().getStatus());
   }
-
 }
