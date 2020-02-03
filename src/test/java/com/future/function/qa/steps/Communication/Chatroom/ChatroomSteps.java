@@ -5,6 +5,7 @@ import com.future.function.qa.data.communication.chatroom.ChatroomData;
 import com.future.function.qa.data.core.user.UserData;
 import com.future.function.qa.model.request.communication.chatroom.ChatroomLimitWebRequest;
 import com.future.function.qa.model.request.communication.chatroom.ChatroomWebRequest;
+import com.future.function.qa.model.request.communication.chatroom.MessageWebRequest;
 import com.future.function.qa.model.response.communication.chatroom.ChatroomDetailWebResponse;
 import com.future.function.qa.model.response.core.user.UserWebResponse;
 import com.future.function.qa.model.response.embedded.ParticipantDetailWebResponse;
@@ -60,7 +61,7 @@ public class ChatroomSteps extends BaseSteps {
     ChatroomWebRequest request = chatroomData.createChatroomRequest(chatroomName, null, members);
 
     Response response = chatroomAPI.create(request, authData.getCookie());
-    chatroomData.setResponse(response);
+    chatroomData.setDetailResponse(response);
 
     if (chatroomData.getResponseCode() == 200) {
       cleaner.append(DocumentName.CHATROOM, chatroomData.getDetailResponse()
@@ -99,7 +100,7 @@ public class ChatroomSteps extends BaseSteps {
     String chatroomId = chatroomData.getDetailResponse().getData().getId();
 
     Response response = chatroomAPI.getChatroomDetail(chatroomId, authData.getCookie());
-    chatroomData.setResponse(response);
+    chatroomData.setDetailResponse(response);
   }
 
   @Then("^chatroom has member with name \"([^\"]*)\"$")
@@ -125,6 +126,72 @@ public class ChatroomSteps extends BaseSteps {
     ChatroomWebRequest request = chatroomData.createChatroomRequest(name, pictureUrl.isEmpty() ? null : pictureUrl, members);
 
     Response response = chatroomAPI.updateChatroom(chatroomDetail.getId(), request, authData.getCookie());
+    chatroomData.setDetailResponse(response);
+  }
+
+  @When("^user hit enter chatroom endpoint$")
+  public void userHitEnterChatroomEndpoint() {
+    Response response = chatroomAPI.enterChatroom(chatroomData.getDetailResponse().getData().getId(), authData.getCookie());
+    chatroomData.setResponse(response);
+  }
+
+  @When("^user hit leave chatroom endpoint$")
+  public void userHitLeaveChatroomEndpoint() {
+    Response response = chatroomAPI.leaveChatroom(chatroomData.getDetailResponse().getData().getId(), authData.getCookie());
+    chatroomData.setResponse(response);
+  }
+
+  @And("^user hit create message with content \"([^\"]*)\"$")
+  public void userHitCreateMessageWithContent(String message) throws Throwable {
+    MessageWebRequest request = chatroomData.createMessageRequest(message);
+    String chatroomId = chatroomData.getDetailResponse().getData().getId();
+
+    Response response = chatroomAPI.createMessages(chatroomId, request, authData.getCookie());
+    if (response.getStatusCode() == 201) {
+      chatroomData.setMessagePagingResponse(chatroomAPI.getMessages(chatroomId, authData.getCookie()));
+      String lastMessageId = chatroomData.getMessagePagingResponse().getData().get(0).getId();
+      cleaner.append(DocumentName.MESSAGE, lastMessageId);
+      cleaner.append(DocumentName.MESSAGE_STATUS, lastMessageId);
+    }
+    chatroomData.setResponse(response);
+  }
+
+  @When("^user hit get messages$")
+  public void userHitGetMessages() {
+    Response response = chatroomAPI.getMessages(chatroomData.getDetailResponse().getData().getId(), authData.getCookie());
+    chatroomData.setMessagePagingResponse(response);
+  }
+
+  @Then("^last message should be \"([^\"]*)\"$")
+  public void lastMessageShouldBe(String message) {
+    String lastMessage = chatroomData.getMessagePagingResponse().getData().get(0).getText();
+    assertThat(lastMessage, equalTo(message));
+  }
+
+  @When("^user hit get messages after pivot$")
+  public void userHitGetMessagesAfterPivot() {
+    String pivotMessageId = chatroomData.getMessagePagingResponse().getData().get(1).getId();
+
+    Response response = chatroomAPI.getMessagesAfterPivot(chatroomData.getDetailResponse().getData().getId(),
+            pivotMessageId, authData.getCookie());
+    chatroomData.setMessagePagingResponse(response);
+  }
+
+  @When("^user hit get messages before pivot$")
+  public void userHitGetMessagesBeforePivot() {
+    String pivotMessageId = chatroomData.getMessagePagingResponse().getData().get(0).getId();
+
+    Response response = chatroomAPI.getMessagesBeforePivot(chatroomData.getDetailResponse().getData().getId(),
+            pivotMessageId, authData.getCookie());
+    chatroomData.setMessagePagingResponse(response);
+  }
+
+  @When("^user hit update message status$")
+  public void userHitUpdateMessageStatus() {
+    String pivotMessageId = chatroomData.getMessagePagingResponse().getData().get(0).getId();
+    String chatroomId = chatroomData.getDetailResponse().getData().getId();
+
+    Response response = chatroomAPI.updateMessageStatus(chatroomId, pivotMessageId, authData.getCookie());
     chatroomData.setResponse(response);
   }
 }

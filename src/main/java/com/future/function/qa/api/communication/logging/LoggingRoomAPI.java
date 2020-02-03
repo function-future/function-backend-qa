@@ -1,4 +1,4 @@
-package com.future.function.qa.api.communication.logging.logging_room;
+package com.future.function.qa.api.communication.logging;
 
 /**
  * Author: RickyKennedy

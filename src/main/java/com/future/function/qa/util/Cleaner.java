@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.print.Doc;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,10 +39,12 @@ public class Cleaner {
   public void flushAll() {
 
     sourcesAndIds.forEach((collectionName, ids) -> ids.forEach(id -> {
-      if (!collectionName.equals(DocumentName.FILE)) {
-        this.hardDeleteFromDatabase(collectionName, id);
-      } else {
+      if (collectionName.equals(DocumentName.FILE)) {
         this.setMarkUsedFalse(collectionName, id);
+      } else if (collectionName.equals(DocumentName.MESSAGE_STATUS)) {
+        this.hardDeleteMessageStatus(id);
+      } else {
+        this.hardDeleteFromDatabase(collectionName, id);
       }
       sourcesAndIds.get(collectionName)
         .remove(id);
@@ -59,6 +62,11 @@ public class Cleaner {
 
     mongoDatabase.getCollection(collectionName)
       .updateOne(new BasicDBObject("_id", id), Updates.set("used", false));
+  }
+
+  public void hardDeleteMessageStatus(String messageId) {
+    mongoDatabase.getCollection(DocumentName.MESSAGE_STATUS)
+            .deleteMany(new BasicDBObject("message.$id", ObjectId.isValid(messageId) ? new ObjectId(messageId) : messageId));
   }
 
 }

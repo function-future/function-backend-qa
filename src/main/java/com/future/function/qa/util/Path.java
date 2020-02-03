@@ -58,4 +58,8 @@ public interface Path {
 
   String LOGGINGROOM = "/api/communications/logging-rooms";
 
+  String NOTIFICATIONS = "/api/communication/notifications";
+
+  String REMINDERS = "/api/communication/reminders";
+
 }
