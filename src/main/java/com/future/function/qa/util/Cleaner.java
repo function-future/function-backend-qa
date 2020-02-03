@@ -64,7 +64,7 @@ public class Cleaner {
       .updateOne(new BasicDBObject("_id", id), Updates.set("used", false));
   }
 
-  public void hardDeleteMessageStatus(String messageId) {
+  private void hardDeleteMessageStatus(String messageId) {
     mongoDatabase.getCollection(DocumentName.MESSAGE_STATUS)
             .deleteMany(new BasicDBObject("message.$id", ObjectId.isValid(messageId) ? new ObjectId(messageId) : messageId));
   }

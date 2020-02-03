@@ -31,7 +31,7 @@ public interface Path {
   String SHARED_COURSE = "/api/core/batches/%s/courses";
 
   String DISCUSSION = "/api/core/batches/%s/courses/%s/discussions";
-  
+
   String QUESTION_BANK = "/api/scoring/question-banks";
 
   String QUESTION_BANK_QUESTION = QUESTION_BANK + "/%s/" + "questions";
@@ -42,9 +42,9 @@ public interface Path {
 
   String ASSIGNMENT = "/api/scoring/batches/%s/assignments";
 
-  String ROOM = "/api/scoring/batches/batchId/assignments/%s/room/%s";
+  String ROOM = "/api/scoring/batches/%s/assignments/%s/room/%s";
 
-  String COMMENT = "/api/scoring/batches/batchId/assignments/%s/room/%s/comments";
+  String COMMENT = "/api/scoring/batches/%s/assignments/%s/room/%s/comments";
 
   String STUDENT_QUIZ = "/api/scoring/batches/%s/quizzes/%s/student";
 
@@ -62,4 +62,9 @@ public interface Path {
 
   String REMINDERS = "/api/communication/reminders";
 
+  String REPORT_DETAIL = "/api/scoring/batches/%s/judgings/%s/comparisons";
+
+  String SUMMARY = "/api/scoring/summary/%s";
+
+  String SUMMARY_WITHOUT_ID = "/api/scoring/summary";
 }

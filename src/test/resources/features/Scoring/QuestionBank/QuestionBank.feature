@@ -1,5 +1,5 @@
-@QuestionBank @Regression
-Feature: Question Bank
+@QuestionBank @Scoring @Regression
+Feature: Question Bank Feature
 
   Background:
     Given user prepare question bank request

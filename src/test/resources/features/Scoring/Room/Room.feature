@@ -1,5 +1,5 @@
-@Room @Regression
-Feature: Room
+@Room @Scoring @Regression
+Feature: Room Feature
 
     Background:
         Given user prepare auth request
@@ -10,7 +10,7 @@ Feature: Room
         And user prepare user request
         And user hit get users endpoint with role "STUDENT", page 1, size 10
         And user get first student id and store id
-        Then user prepare room request
+        Then user prepare room request with batchCode "future3"
 
     @Negative @Room
     Scenario: Get or Create Room without logging in

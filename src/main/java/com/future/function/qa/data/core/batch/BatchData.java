@@ -1,12 +1,9 @@
 package com.future.function.qa.data.core.batch;
 
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.future.function.qa.data.BaseData;
 import com.future.function.qa.model.request.core.batch.BatchWebRequest;
 import com.future.function.qa.model.response.base.DataResponse;
-import com.future.function.qa.model.response.base.PagingResponse;
 import com.future.function.qa.model.response.core.batch.BatchWebResponse;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
@@ -14,6 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class BatchData extends BaseData {
 
-  private PagingResponse<BatchWebResponse> pagedResponse = new PagingResponse<>();
+  private DataResponse<List<BatchWebResponse>> pagedResponse = new DataResponse<>();
 
   private BatchWebRequest request;
 
@@ -47,7 +47,8 @@ public class BatchData extends BaseData {
   public void setResponse(Response response) {
 
     super.setResponse(response);
-    this.pagedResponse = asPagingResponse(response, new TypeReference<PagingResponse<BatchWebResponse>>() {});
+    this.pagedResponse = asDataResponse(
+      response, new TypeReference<DataResponse<List<BatchWebResponse>>>() {});
     this.singleResponse = asDataResponse(response, new TypeReference<DataResponse<BatchWebResponse>>() {});
   }
 }

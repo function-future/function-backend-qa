@@ -58,7 +58,6 @@ Feature: File
     And user hit create file/folder endpoint with parent id "root"
     Then file/folder response code should be 403
     And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Student" and email "qa.student@mailinator.com"
     And user hit delete batch endpoint with recorded id
 
   @Positive @File
@@ -151,8 +150,6 @@ Feature: File
     And user create "FILE" "src/test/resources/samples/Screenshot (96).png"
     And user hit update file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 403
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
@@ -191,8 +188,6 @@ Feature: File
     And retrieved file/folder name should be "Screenshot (96).png"
     And retrieved file version should have key 1
     And retrieved file version should have key 2
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Admin" and email "qa.adm@mailinator.com"
 
   @Negative @File
   Scenario: Update folder as guest
@@ -219,8 +214,6 @@ Feature: File
     And user create "FOLDER" "Sample Folder Updated"
     And user hit update file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 403
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
@@ -255,8 +248,6 @@ Feature: File
     And user hit update file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 200
     And retrieved file/folder name should be "Sample Folder Updated"
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Admin" and email "qa.adm@mailinator.com"
 
   @Negative @File
   Scenario: Delete file as guest
@@ -281,8 +272,6 @@ Feature: File
     And user do login with email "<email>" and password "<password>"
     And user hit delete file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 403
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
@@ -313,8 +302,6 @@ Feature: File
     And user do login with email "qa.adm@mailinator.com" and password "adminfunctionapp"
     And user hit delete file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 200
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Admin" and email "qa.adm@mailinator.com"
 
   @Negative @File
   Scenario: Delete folder as guest
@@ -339,8 +326,6 @@ Feature: File
     And user do login with email "<email>" and password "<password>"
     And user hit delete file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 403
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "<name>" and email "<email>"
     Examples:
       | email                    | password          | name   | role   | address | phone         |
       | qa.judge@mailinator.com  | judgefunctionapp  | Judge  | JUDGE  | Address | 0815123123123 |
@@ -371,5 +356,3 @@ Feature: File
     And user do login with email "qa.adm@mailinator.com" and password "adminfunctionapp"
     And user hit delete file/folder endpoint with recorded id and parent id "root"
     Then file/folder response code should be 200
-    And user do login with email "admin@admin.com" and password "administratorfunctionapp"
-    And qa system do cleanup data for user with name "Admin" and email "qa.adm@mailinator.com"

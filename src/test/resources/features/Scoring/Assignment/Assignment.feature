@@ -1,4 +1,5 @@
-Feature: Assignment
+@Assignment @Scoring @Regression
+Feature: Assignment Feature
 
   Background:
     Given user prepare auth request
@@ -11,7 +12,7 @@ Feature: Assignment
     When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1679171744868, and empty list of files
     Then assignment error response code should be 401
 
-  @Negative @Assignment
+  @Negative @CreateAssignmentWithNotValidRequest
   Scenario: user create assignment with empty title and description
     When user hit create assignment endpoint with title "", description "", deadline 1679171744868, and empty list of files
     Then assignment error response code should be 400
@@ -19,13 +20,51 @@ Feature: Assignment
     And assignment error response body should have key "description" and value "NotBlank"
     And user hit logout endpoint
 
-  @Positive @Assignment
+  @Positive @CreateAssignmentWithNoFile
   Scenario: user create assignment with logging in as admin
     When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1679171744868, and empty list of files
     Then assignment response code should be 201
     And assignment response body title should be "Assignment Title"
     And assignment response body description should be "Assignment Description"
     And assignment response body deadline should be 1679171744868
+    And user hit logout endpoint
+
+  @Negative @CreateAssignmentWithPassedDeadline
+  Scenario: user create assignment with passed deadline and logging in as admin
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 15000000, and empty list of files
+    Then assignment response code should be 201
+    And assignment response body title should be "Assignment Title"
+    And assignment response body description should be "Assignment Description"
+    And assignment response body deadline should be 1679171744868
+    And user hit logout endpoint
+
+  @Positive @CreateAssignmentWithFile
+  Scenario: user create assignment with file and logging in as admin
+    When user prepare resource request
+    And user select file "src/test/resources/samples/Sample.docx" to be uploaded to origin "user"
+    And user hit post resource endpoint
+    Then resource response code should be 201
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1679171744868, and uploaded file
+    Then assignment error response code should be 400
+    And assignment error response body should have key "deadline" and value "DateNotPassed"
+    And user hit logout endpoint
+
+  @Negative @CreateAssignmentWithWrongExtensionFile
+  Scenario: user create assignment with wrong extension file and logging in as admin
+    When user prepare resource request
+    And user select file "src/test/resources/samples/Screenshot (42).png" to be uploaded to origin "user"
+    And user hit post resource endpoint
+    Then resource response code should be 201
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1679171744868, and uploaded file
+    Then assignment error response code should be 400
+    And assignment error response body should have key "files" and value "ExtensionMustBeValid"
+    And user hit logout endpoint
+
+  @Negative @CreateAssignmentWithNonExistFile
+  Scenario: user create assignment with non-exist file and logging in as admin
+    When user hit create assignment endpoint with title "Assignment Title", description "Assignment Description", deadline 1679171744868, and non-exist file
+    Then assignment error response code should be 400
+    And assignment error response body should have key "files" and value "FileMustExist"
     And user hit logout endpoint
 
   @Negative @Assignment
