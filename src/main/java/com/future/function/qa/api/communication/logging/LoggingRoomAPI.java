@@ -10,7 +10,6 @@ import com.future.function.qa.api.BaseAPI;
 import com.future.function.qa.model.request.communication.logging.LogMessageWebRequest;
 import com.future.function.qa.model.request.communication.logging.LoggingRoomWebRequest;
 import com.future.function.qa.model.request.communication.logging.TopicWebRequest;
-import com.future.function.qa.model.request.core.user.UserWebRequest;
 import com.future.function.qa.util.Path;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookie;
@@ -30,7 +29,6 @@ public class LoggingRoomAPI extends BaseAPI {
 
   @Step
   public Response getLoggingRooms(Cookie cookie) {
-
     return doByCookiePresent(cookie,
       () -> base.cookie(cookie).get(),
       () -> base.get());
@@ -145,20 +143,20 @@ public class LoggingRoomAPI extends BaseAPI {
   public Response createLoggingRoom(LoggingRoomWebRequest request, Cookie cookie){
     return doByCookiePresent(cookie,
       createLoggingRoomWithCookie(request, cookie),
-      createLoggingRoomWitoutCookie( request));
+      createLoggingRoomWithoutCookie(request));
   }
 
   private Supplier<Response> createLoggingRoomWithCookie(LoggingRoomWebRequest request, Cookie cookie) {
     return () -> base.cookie(cookie)
       .body(request)
       .contentType(ContentType.JSON)
-      .post(String.format(PATH_ID));
+      .post();
   }
 
-  private Supplier<Response> createLoggingRoomWitoutCookie(LoggingRoomWebRequest request) {
+  private Supplier<Response> createLoggingRoomWithoutCookie(LoggingRoomWebRequest request) {
     return () -> base.body(request)
       .contentType(ContentType.JSON)
-      .post(String.format(PATH_ID));
+      .post();
   }
 
   @Step
