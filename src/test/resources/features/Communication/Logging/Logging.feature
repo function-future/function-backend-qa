@@ -15,6 +15,7 @@ Feature: Logging
 
   @Negative
   Scenario: Create logging room without login
+    And user prepare auth request
     When user hit create logging room with title "title" and description "description" and member "STUDENT"
     Then logging room response code should be 401
 
@@ -24,8 +25,9 @@ Feature: Logging
     And user hit create logging room with title "title" and description "description" and member "STUDENT"
     Then logging room response code should be 201
     And user hit logout endpoint
+    And user prepare logging room request
     And user hit get logging rooms
-    Then logging room response code should be 400
+    Then logging room response code should be 401
 
   @Negative
   Scenario: create topic without login
@@ -36,6 +38,7 @@ Feature: Logging
     Then logging room response code should be 200
     And  logging room paging response size equal 1
     And  user hit logout endpoint
+    And user prepare logging room request
     And  user hit create topic on logging room with title "topic title"
     Then logging room response code should be 401
 
@@ -51,8 +54,56 @@ Feature: Logging
     Then logging room response code should be 201
     And topic paging response size equal 1
     And user hit logout endpoint
+    And user prepare auth request
     And user hit get topic detail
     Then topic title is "topic title"
+
+  @Negative
+  Scenario: create log message without login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit logout endpoint
+    When user do login with email "student@mail.com" and password "studentfunctionapp"
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit logout endpoint
+    And  user prepare logging room request
+    And user hit create log message with text "log message"
+    Then logging room response code should be 401
+
+  @Negative
+  Scenario: get log message without login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit logout endpoint
+    And user prepare logging room request
+    And user hit create log message with text "log message"
+    Then logging room response code should be 401
 
   @Positive
   Scenario: Create logging room with login
@@ -107,7 +158,7 @@ Feature: Logging
     And user hit get topic detail
     Then topic title is "topic title"
 
-  @Positive @BugLogging
+  @Positive
   Scenario: create log message with login
     When user do login with email "agung@gmail.com" and password "agungfunctionapp"
     And  user hit create logging room with title "title" and description "description" and member "STUDENT"
@@ -131,6 +182,7 @@ Feature: Logging
     And user hit get topic detail
     Then topic title is "topic title"
     And user hit logout endpoint
+    And  user prepare logging room request
     When user do login with email "student@mail.com" and password "studentfunctionapp"
     And  user hit get logging rooms
     And user hit get topics
@@ -155,6 +207,7 @@ Feature: Logging
     And user hit get topic detail
     Then topic title is "topic title"
     And user hit logout endpoint
+    And user prepare logging room request
     When user do login with email "student@mail.com" and password "studentfunctionapp"
     And  user hit get logging rooms
     Then logging room response code should be 200
@@ -168,3 +221,69 @@ Feature: Logging
     And user hit get log messages
     Then log messages paging response size equal 1
     And log message text is "log message"
+
+  @Positive
+  Scenario: update logging room detail with login
+    And user prepare logging room request
+    And user prepare user request
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And user hit get logging room detail
+    Then logging room title is "title" and description "description"
+    And user hit update logging room with title to "updated title" and description to "updated description"
+    Then logging room response code should be 200
+    Then logging room title is "updated title" and description "updated description"
+
+  @Positive
+  Scenario: delete logging room detail with login
+    And user prepare logging room request
+    And user prepare user request
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And user hit get logging room detail
+    Then logging room title is "title" and description "description"
+    And user hit delete logging room
+    Then logging room response code should be 200
+
+  @Positive @LoggingNew
+  Scenario: update topic detail with login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit update topic with title "updated title"
+    Then logging room response code should be 200
+    Then topic title is "updated title"
+
+  @Positive @LoggingNew
+  Scenario: delete topic detail with login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit delete topic
+    Then logging room response code should be 200

@@ -151,6 +151,55 @@ public class LoggingRoomSteps extends BaseSteps {
     loggingRoomData.setLogMessagesPagingResponse(response);
   }
 
+  @When("^user hit update logging room with title to \"([^\"]*)\" and description to \"([^\"]*)\"$")
+  public void userUpdateLoggingRoom(String newTitle, String newDescription){
+    String loggingRoomId = loggingRoomData.getLoggingRoomPagingResponse().getData().get(0).getId();
+
+    String roleStudent = "STUDENT";
+
+    List<String> members = userData.getPagingResponse().getData().stream()
+      .filter(user -> roleStudent.equals(user.getRole()))
+      .map(UserWebResponse::getId)
+      .collect(Collectors.toList());
+
+    System.out.println(members);
+
+    LoggingRoomWebRequest request =
+      loggingRoomData.createLoggingRoomRequest(newTitle, newDescription, members);
+
+    Response response = loggingRoomAPI.updateLoggingRoom(loggingRoomId, request, authData.getCookie());
+    loggingRoomData.setLoggingRoomDataResponse(response);
+  }
+
+  @When("^user hit delete logging room$")
+  public void userDeleteLoggingRoom(){
+    String loggingRoomId = loggingRoomData.getLoggingRoomPagingResponse().getData().get(0).getId();
+
+    Response response = loggingRoomAPI.deleteLoggingRoom(loggingRoomId, authData.getCookie());
+    loggingRoomData.setLoggingRoomDataResponse(response);
+  }
+
+  @When("^user hit update topic with title \"([^\"]*)\"$")
+  public void userUpdateTopic(String newTitle){
+    String logggingRoomId = loggingRoomData.getLoggingRoomPagingResponse().getData().get(0).getId();
+    String topicId = loggingRoomData.getTopicPagingResponse().getData().get(0).getId();
+
+    TopicWebRequest request = loggingRoomData.createTopicRequest(newTitle);
+
+    Response response = loggingRoomAPI.updateTopic(logggingRoomId, topicId, request, authData.getCookie());
+    loggingRoomData.setTopicDataResponse(response);
+  }
+
+  @When("^user hit delete topic")
+  public void userDeleteTopic(){
+    String logggingRoomId = loggingRoomData.getLoggingRoomPagingResponse().getData().get(0).getId();
+    String topicId = loggingRoomData.getTopicPagingResponse().getData().get(0).getId();
+
+    Response response = loggingRoomAPI.deleteTopic(logggingRoomId, topicId, authData.getCookie());
+    loggingRoomData.setResponse(response);
+  }
+
+
   @Then("^log message text is \"([^\"]*)\"$")
   public void logMessageShouldBe(String text) {
     assertThat(loggingRoomData.getLogMessagePagingResponse().getData().get(0).getText(), equalTo(text));
