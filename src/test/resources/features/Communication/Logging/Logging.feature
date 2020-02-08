@@ -105,6 +105,79 @@ Feature: Logging
     And user hit create log message with text "log message"
     Then logging room response code should be 401
 
+  @Negative
+  Scenario: update logging room detail without login
+    And user prepare logging room request
+    And user prepare user request
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And user hit get logging room detail
+    Then logging room title is "title" and description "description"
+    And user hit logout endpoint
+    And user prepare logging room request
+    And user hit update logging room with title to "updated title" and description to "updated description"
+    Then logging room response code should be 401
+
+  @Negative
+  Scenario: delete logging room detail without login
+    And user prepare logging room request
+    And user prepare user request
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And user hit get logging room detail
+    Then logging room title is "title" and description "description"
+    And user hit logout endpoint
+    And user prepare logging room request
+    And user hit delete logging room
+    Then logging room response code should be 401
+
+  @Negative
+  Scenario: update topic detail without login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit logout endpoint
+    And user prepare logging room request
+    And user hit update topic with title "updated title"
+    Then logging room response code should be 401
+
+  @Negative
+  Scenario: delete topic detail without login
+    When user do login with email "agung@gmail.com" and password "agungfunctionapp"
+    And  user hit create logging room with title "title" and description "description" and member "STUDENT"
+    Then logging room response code should be 201
+    And  user hit get logging rooms
+    Then logging room response code should be 200
+    And  logging room paging response size equal 1
+    And  user hit create topic on logging room with title "topic title"
+    Then logging room response code should be 201
+    And user hit get topics
+    Then topic paging response size equal 1
+    And user hit get topic detail
+    Then topic title is "topic title"
+    And user hit logout endpoint
+    And user prepare logging room request
+    And user hit delete topic
+    Then logging room response code should be 401
+
+
   @Positive
   Scenario: Create logging room with login
     When user do login with email "agung@gmail.com" and password "agungfunctionapp"
@@ -253,7 +326,7 @@ Feature: Logging
     And user hit delete logging room
     Then logging room response code should be 200
 
-  @Positive @LoggingNew
+  @Positive
   Scenario: update topic detail with login
     When user do login with email "agung@gmail.com" and password "agungfunctionapp"
     And  user hit create logging room with title "title" and description "description" and member "STUDENT"
@@ -271,7 +344,7 @@ Feature: Logging
     Then logging room response code should be 200
     Then topic title is "updated title"
 
-  @Positive @LoggingNew
+  @Positive
   Scenario: delete topic detail with login
     When user do login with email "agung@gmail.com" and password "agungfunctionapp"
     And  user hit create logging room with title "title" and description "description" and member "STUDENT"
