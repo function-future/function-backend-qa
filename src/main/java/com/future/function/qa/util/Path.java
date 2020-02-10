@@ -56,6 +56,8 @@ public interface Path {
 
   String CHATROOMS = "/api/communication/chatrooms";
 
+  String LOGGINGROOM = "/api/communication/logging-rooms";
+
   String NOTIFICATIONS = "/api/communication/notifications";
 
   String REMINDERS = "/api/communication/reminders";
